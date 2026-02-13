@@ -2,14 +2,38 @@
 title: "Portfolio 1: Pixar Movie Ratings"
 ---
 
-### Goal 
+## Overview
 
-### Data
+#### Goal:
 
-### Product
+From a collection of datasets about Pixar movies, I aim to answer a series of questions about the movies' performance in the box office, audience reviews, and critic reviews. Research questions are distributed throughout the document below. Personally, my goal is to get more practice using R to visualize data with corresponding statistical tests. 
 
-### Interpretation
 
+#### Data:
+
+The datasets are from Tidy Tuesday and can be found at this link: https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md 
+
+Each dataset contains the same list of Pixar films.
+
+'pixar_films' contains the following variables: release date, run time, and rating (ex. G, PG, etc.)
+
+'public_response' contains the following variables: rotten tomatoes rating, metacritic rating, cinema score, and critics' choice rating
+
+'box_office' contains the following variables: budget, box office performance in the US and Canada, box office performance in other countries, and worldwide box office performance
+
+
+#### Product:
+
+I've included a series of tables and scatterplots below to answer my research questions.
+
+
+#### Interpretation:
+
+Interpretations of the results are included throughout the document, concluding with my main takeaways.
+
+---
+
+### Loading packages
 
 ```{r load-packages, warning = FALSE, message=FALSE}
 library(tidyverse) 
@@ -19,12 +43,15 @@ library(pixarfilms)
 ```
 
 
+### Reading in data
+
 ```{r read-data}
 tuesdata <- tidytuesdayR::tt_load('2025-03-11')
 pixar_films <- tuesdata$pixar_films
 public_response <- tuesdata$public_response
 box_office <- pixarfilms::box_office
 ```
+
 
 ## According to each rating system, which Pixar movie is the best?
 
@@ -34,18 +61,24 @@ public_response %>%
   arrange(desc(rotten_tomatoes))
 ```
 
+Toy Story and Toy Story 2 are tied for the highest Rotten Tomatoes score. 
+
 ```{r MC-fav}
 public_response %>%
   count(film, metacritic) %>%
   arrange(desc(metacritic))
 ```
 
+Ratatouille had the highest Metacritic rating.
 
 ```{r CC-fav}
 public_response %>%
   count(film, critics_choice) %>%
   arrange(desc(critics_choice))
 ```
+
+Toy Story 2 had the highest Critics' Choice score.
+
 
 ## Do audiences and critics tend to agree?
 
@@ -60,12 +93,17 @@ ggplot(
   geom_point() + 
   
   labs(x = "Rotten Tomatoes Score",
-       y = "Critic's Choice") 
+       y = "Critics' Choice Score") 
 ```
 
 ```{r RT-CC-cor}
 cor.test(public_response$rotten_tomatoes, public_response$critics_choice)
 ```
+
+Rotten Tomatoes and Critics' Choice scores are significantly positively correlated (r = .85, p < .001), indicating that audiences and critics largely agree in their assessments of Pixar movies. 
+
+One notable difference is that the lowest Rotten Tomatoes score (40, Cars 2) is considerably lower than the lowest Critics' Choice score (66, Cars 3).
+
 
 ## Which Pixar movie had the highest budget?
 
@@ -75,6 +113,9 @@ box_office %>%
   arrange(desc(budget))
 ```
 
+Cars 2 had the highest budget, tied with Finding Dory, Incredibles 2, Monsters University, Toy Story 3, and Toy Story 4. (Interesting that these are all sequels!)
+
+
 ## Which Pixar movies performed the best at the box office?
 
 ```{r box-US-CA}
@@ -83,11 +124,15 @@ box_office %>%
   arrange(desc(box_office_us_canada))
 ```
 
+The Incredibles 2 performed the best at the box office in the US and Canada.
+
 ```{r box-other}
 box_office %>%
   count(film, box_office_other) %>%
   arrange(desc(box_office_other))
 ```
+
+Toy Story 3 performed the best at the box office in countries outside of the US and Canada.
 
 ```{r box-global}
 box_office %>%
@@ -95,13 +140,17 @@ box_office %>%
   arrange(desc(box_office_worldwide))
 ```
 
+The Incredibles 2 performed the best in the box office worldwide. 
+
+
 ## Do higher-budget movies receive higher audience ratings? Critic ratings?
+
+#### Joining box_office and public_response 
 
 ```{r join-boxoffice-ratings}
 box_office_ratings <- full_join(box_office, public_response,
   by = "film"
 )
-box_office_ratings
 ```
 
 
@@ -123,6 +172,7 @@ ggplot(
 cor.test(box_office_ratings$budget, box_office_ratings$rotten_tomatoes)
 ```
 
+
 ```{r scatter-budget-CC, warning=FALSE}
 ggplot(
   data = box_office_ratings,
@@ -134,14 +184,17 @@ ggplot(
   geom_point() + 
   
   labs(x = "Budget",
-       y = "Critic's Choice") 
+       y = "Critics' Choice Score") 
 ```
 
 ```{r cor-budget-CC}
 cor.test(box_office_ratings$budget, box_office_ratings$critics_choice)
 ```
 
-## Do box office numbers correspond with audience ratings? Critics' ratings?
+Budget is not significantly correlated with audience ratings or critic ratings, so spending more on a movie does not seem to predict a more positive or negative public response.
+
+
+## Do box office numbers correspond with audience ratings? Critic ratings?
 
 ```{r scatter-BO-RT, warning=FALSE}
 ggplot(
@@ -153,9 +206,14 @@ ggplot(
 ) +
   geom_point() + 
   
-  labs(x = "Worldwide box office",
-       y = "Rotten Tomatoes") 
+  labs(x = "Worldwide Box Office Performance",
+       y = "Rotten Tomatoes Score") 
 ```
+
+```{r cor-BO-RT}
+cor.test(box_office_ratings$box_office_worldwide, box_office_ratings$rotten_tomatoes)
+```
+
 
 ```{r scatter-BO-CC, warning=FALSE}
 ggplot(
@@ -167,7 +225,71 @@ ggplot(
 ) +
   geom_point() + 
   
-  labs(x = "Worldwide box office",
-       y = "Critics' Choice") 
+  labs(x = "Worldwide Box Office Performance",
+       y = "Critics' Choice Score") 
 ```
 
+```{r cor-BO-CC}
+cor.test(box_office_ratings$box_office_worldwide, box_office_ratings$critics_choice)
+```
+
+Worldwide box office numbers are not significantly correlated with audience or critic ratings, indicating that popularity does not necessarily predict positive ratings.
+
+
+## Do longer movies perform better with audiences? With critics?
+
+#### Joining pixar_films and public_response
+
+```{r join-films-ratings}
+films_ratings <- full_join(pixar_films, public_response,
+  by = "film"
+)
+```
+
+```{r scatter-runtime-RT, warning=FALSE}
+ggplot(
+  data = films_ratings,
+  mapping = aes(
+    x = run_time,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Run Time",
+       y = "Rotten Tomatoes Score") 
+```
+
+```{r cor-runtime-RT}
+cor.test(films_ratings$run_time, films_ratings$rotten_tomatoes)
+```
+
+```{r scatter-runtime-CC, warning=FALSE}
+ggplot(
+  data = films_ratings,
+  mapping = aes(
+    x = run_time,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Run Time",
+       y = "Critics' Choice Score") 
+```
+
+```{r cor-runtime-CC}
+cor.test(films_ratings$run_time, films_ratings$critics_choice)
+```
+
+The length of a movie is not significantly correlated with audience or critic ratings.
+
+## Main Takeaways
+
+- Broadly, audiences and critics tend to rate Pixar movies similarly.
+
+- Budget, box office performance, and run time are not significantly correlated with audience or critic ratings of Pixar movies. 
+
+- I was surprised that box office numbers were not more closely related to audience ratings.
+
+- As I continue practicing exploratory data analysis in my portfolio, I hope to create more complex visualizations and to get more practice cleaning data. (Thanks to tidy tuesday, I didn't have to do much to work with these Pixar datasets!)

@@ -295,21 +295,51 @@ $(document).ready(function () {
 </div>
 
 
-<div id="goal" class="section level3">
-<h3>Goal</h3>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>From a collection of datasets about Pixar movies, I aim to answer a
+series of questions about the movies’ performance in the box office,
+audience reviews, and critic reviews. Research questions are distributed
+throughout the document below. Personally, my goal is to get more
+practice using R to visualize data with corresponding statistical
+tests.</p>
 </div>
-<div id="data" class="section level3">
-<h3>Data</h3>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>The datasets are from Tidy Tuesday and can be found at this link: <a
+href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md"
+class="uri">https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md</a></p>
+<p>Each dataset contains the same list of Pixar films.</p>
+<p>‘pixar_films’ contains the following variables: release date, run
+time, and rating (ex. G, PG, etc.)</p>
+<p>‘public_response’ contains the following variables: rotten tomatoes
+rating, metacritic rating, cinema score, and critics’ choice rating</p>
+<p>‘box_office’ contains the following variables: budget, box office
+performance in the US and Canada, box office performance in other
+countries, and worldwide box office performance</p>
 </div>
-<div id="product" class="section level3">
-<h3>Product</h3>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>I’ve included a series of tables and scatterplots below to answer my
+research questions.</p>
 </div>
-<div id="interpretation" class="section level3">
-<h3>Interpretation</h3>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>Interpretations of the results are included throughout the document,
+concluding with my main takeaways.</p>
+<hr />
+</div>
+<div id="loading-packages" class="section level3">
+<h3>Loading packages</h3>
 <pre class="r"><code>library(tidyverse) 
 library(tidyr)
 library(tidytuesdayR)
 library(pixarfilms)</code></pre>
+</div>
+<div id="reading-in-data" class="section level3">
+<h3>Reading in data</h3>
 <pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2025-03-11&#39;)</code></pre>
 <pre><code>## ---- Compiling #TidyTuesday Information for 2025-03-11 ----
 ## --- There are 2 files available ---
@@ -322,6 +352,7 @@ library(pixarfilms)</code></pre>
 <pre class="r"><code>pixar_films &lt;- tuesdata$pixar_films
 public_response &lt;- tuesdata$public_response
 box_office &lt;- pixarfilms::box_office</code></pre>
+</div>
 </div>
 <div id="according-to-each-rating-system-which-pixar-movie-is-the-best"
 class="section level2">
@@ -343,6 +374,8 @@ class="section level2">
 ##  9 Toy Story 4                  97     1
 ## 10 Monsters, Inc.               96     1
 ## # ℹ 14 more rows</code></pre>
+<p>Toy Story and Toy Story 2 are tied for the highest Rotten Tomatoes
+score.</p>
 <pre class="r"><code>public_response %&gt;%
   count(film, metacritic) %&gt;%
   arrange(desc(metacritic))</code></pre>
@@ -360,6 +393,7 @@ class="section level2">
 ##  9 Up                      88     1
 ## 10 Toy Story 4             84     1
 ## # ℹ 14 more rows</code></pre>
+<p>Ratatouille had the highest Metacritic rating.</p>
 <pre class="r"><code>public_response %&gt;%
   count(film, critics_choice) %&gt;%
   arrange(desc(critics_choice))</code></pre>
@@ -377,6 +411,7 @@ class="section level2">
 ##  9 Ratatouille                91     1
 ## 10 WALL-E                     90     1
 ## # ℹ 14 more rows</code></pre>
+<p>Toy Story 2 had the highest Critics’ Choice score.</p>
 </div>
 <div id="do-audiences-and-critics-tend-to-agree" class="section level2">
 <h2>Do audiences and critics tend to agree?</h2>
@@ -390,7 +425,7 @@ class="section level2">
   geom_point() + 
   
   labs(x = &quot;Rotten Tomatoes Score&quot;,
-       y = &quot;Critic&#39;s Choice&quot;) </code></pre>
+       y = &quot;Critics&#39; Choice Score&quot;) </code></pre>
 <p><img src="p01_files/figure-html/scatter-RT-CC-1.png" width="672" /></p>
 <pre class="r"><code>cor.test(public_response$rotten_tomatoes, public_response$critics_choice)</code></pre>
 <pre><code>## 
@@ -404,6 +439,12 @@ class="section level2">
 ## sample estimates:
 ##       cor 
 ## 0.8521907</code></pre>
+<p>Rotten Tomatoes and Critics’ Choice scores are significantly
+positively correlated (r = .85, p &lt; .001), indicating that audiences
+and critics largely agree in their assessments of Pixar movies.</p>
+<p>One notable difference is that the lowest Rotten Tomatoes score (40,
+Cars 2) is considerably lower than the lowest Critics’ Choice score (66,
+Cars 3).</p>
 </div>
 <div id="which-pixar-movie-had-the-highest-budget"
 class="section level2">
@@ -425,6 +466,9 @@ class="section level2">
 ##  9 Cars 3              175000000     1
 ## 10 Coco                175000000     1
 ## # ℹ 14 more rows</code></pre>
+<p>Cars 2 had the highest budget, tied with Finding Dory, Incredibles 2,
+Monsters University, Toy Story 3, and Toy Story 4. (Interesting that
+these are all sequels!)</p>
 </div>
 <div id="which-pixar-movies-performed-the-best-at-the-box-office"
 class="section level2">
@@ -446,6 +490,8 @@ class="section level2">
 ##  9 Monsters University            268492764     1
 ## 10 The Incredibles                261441092     1
 ## # ℹ 14 more rows</code></pre>
+<p>The Incredibles 2 performed the best at the box office in the US and
+Canada.</p>
 <pre class="r"><code>box_office %&gt;%
   count(film, box_office_other) %&gt;%
   arrange(desc(box_office_other))</code></pre>
@@ -463,6 +509,8 @@ class="section level2">
 ##  9 Up                         442094918     1
 ## 10 Ratatouille                417280431     1
 ## # ℹ 14 more rows</code></pre>
+<p>Toy Story 3 performed the best at the box office in countries outside
+of the US and Canada.</p>
 <pre class="r"><code>box_office %&gt;%
   count(film, box_office_worldwide) %&gt;%
   arrange(desc(box_office_worldwide))</code></pre>
@@ -480,32 +528,18 @@ class="section level2">
 ##  9 Up                             735099082     1
 ## 10 Monsters, Inc.                 632316649     1
 ## # ℹ 14 more rows</code></pre>
+<p>The Incredibles 2 performed the best in the box office worldwide.</p>
 </div>
 <div
 id="do-higher-budget-movies-receive-higher-audience-ratings-critic-ratings"
 class="section level2">
 <h2>Do higher-budget movies receive higher audience ratings? Critic
 ratings?</h2>
+<div id="joining-box_office-and-public_response" class="section level4">
+<h4>Joining box_office and public_response</h4>
 <pre class="r"><code>box_office_ratings &lt;- full_join(box_office, public_response,
   by = &quot;film&quot;
-)
-box_office_ratings</code></pre>
-<pre><code>## # A tibble: 24 × 9
-##    film        budget box_office_us_canada box_office_other box_office_worldwide
-##    &lt;chr&gt;        &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;                &lt;dbl&gt;
-##  1 Toy Story   3   e7            191796233        181757800            373554033
-##  2 A Bug&#39;s Li… 1.20e8            162798565        200460294            363258859
-##  3 Toy Story 2 9   e7            245852179        251522597            497374776
-##  4 Monsters, … 1.15e8            289916256        342400393            632316649
-##  5 Finding Ne… 9.40e7            339714978        531300000            871014978
-##  6 The Incred… 9.2 e7            261441092        370165621            631606713
-##  7 Cars        1.20e8            244082982        217900167            461983149
-##  8 Ratatouille 1.5 e8            206445654        417280431            623726085
-##  9 WALL-E      1.80e8            223808164        297503696            521311860
-## 10 Up          1.75e8            293004164        442094918            735099082
-## # ℹ 14 more rows
-## # ℹ 4 more variables: rotten_tomatoes &lt;dbl&gt;, metacritic &lt;dbl&gt;,
-## #   cinema_score &lt;chr&gt;, critics_choice &lt;dbl&gt;</code></pre>
+)</code></pre>
 <pre class="r"><code>ggplot(
   data = box_office_ratings,
   mapping = aes(
@@ -540,7 +574,7 @@ box_office_ratings</code></pre>
   geom_point() + 
   
   labs(x = &quot;Budget&quot;,
-       y = &quot;Critic&#39;s Choice&quot;) </code></pre>
+       y = &quot;Critics&#39; Choice Score&quot;) </code></pre>
 <p><img src="p01_files/figure-html/scatter-budget-CC-1.png" width="672" /></p>
 <pre class="r"><code>cor.test(box_office_ratings$budget, box_office_ratings$critics_choice)</code></pre>
 <pre><code>## 
@@ -554,11 +588,15 @@ box_office_ratings</code></pre>
 ## sample estimates:
 ##        cor 
 ## -0.3844311</code></pre>
+<p>Budget is not significantly correlated with audience ratings or
+critic ratings, so spending more on a movie does not seem to predict a
+more positive or negative public response.</p>
+</div>
 </div>
 <div
-id="do-box-office-numbers-correspond-with-audience-ratings-critics-ratings"
+id="do-box-office-numbers-correspond-with-audience-ratings-critic-ratings"
 class="section level2">
-<h2>Do box office numbers correspond with audience ratings? Critics’
+<h2>Do box office numbers correspond with audience ratings? Critic
 ratings?</h2>
 <pre class="r"><code>ggplot(
   data = box_office_ratings,
@@ -569,9 +607,21 @@ ratings?</h2>
 ) +
   geom_point() + 
   
-  labs(x = &quot;Worldwide box office&quot;,
-       y = &quot;Rotten Tomatoes&quot;) </code></pre>
+  labs(x = &quot;Worldwide Box Office Performance&quot;,
+       y = &quot;Rotten Tomatoes Score&quot;) </code></pre>
 <p><img src="p01_files/figure-html/scatter-BO-RT-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(box_office_ratings$box_office_worldwide, box_office_ratings$rotten_tomatoes)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  box_office_ratings$box_office_worldwide and box_office_ratings$rotten_tomatoes
+## t = 1.2769, df = 21, p-value = 0.2156
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.1616814  0.6128106
+## sample estimates:
+##      cor 
+## 0.268409</code></pre>
 <pre class="r"><code>ggplot(
   data = box_office_ratings,
   mapping = aes(
@@ -581,9 +631,101 @@ ratings?</h2>
 ) +
   geom_point() + 
   
-  labs(x = &quot;Worldwide box office&quot;,
-       y = &quot;Critics&#39; Choice&quot;) </code></pre>
+  labs(x = &quot;Worldwide Box Office Performance&quot;,
+       y = &quot;Critics&#39; Choice Score&quot;) </code></pre>
 <p><img src="p01_files/figure-html/scatter-BO-CC-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(box_office_ratings$box_office_worldwide, box_office_ratings$critics_choice)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  box_office_ratings$box_office_worldwide and box_office_ratings$critics_choice
+## t = 1.7524, df = 19, p-value = 0.09583
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.06993456  0.69309467
+## sample estimates:
+##       cor 
+## 0.3730134</code></pre>
+<p>Worldwide box office numbers are not significantly correlated with
+audience or critic ratings, indicating that popularity does not
+necessarily predict positive ratings.</p>
+</div>
+<div id="do-longer-movies-perform-better-with-audiences-with-critics"
+class="section level2">
+<h2>Do longer movies perform better with audiences? With critics?</h2>
+<div id="joining-pixar_films-and-public_response"
+class="section level4">
+<h4>Joining pixar_films and public_response</h4>
+<pre class="r"><code>films_ratings &lt;- full_join(pixar_films, public_response,
+  by = &quot;film&quot;
+)</code></pre>
+<pre class="r"><code>ggplot(
+  data = films_ratings,
+  mapping = aes(
+    x = run_time,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Run Time&quot;,
+       y = &quot;Rotten Tomatoes Score&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-runtime-RT-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(films_ratings$run_time, films_ratings$rotten_tomatoes)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  films_ratings$run_time and films_ratings$rotten_tomatoes
+## t = -1.0295, df = 21, p-value = 0.315
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.5790755  0.2121789
+## sample estimates:
+##        cor 
+## -0.2191941</code></pre>
+<pre class="r"><code>ggplot(
+  data = films_ratings,
+  mapping = aes(
+    x = run_time,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Run Time&quot;,
+       y = &quot;Critics&#39; Choice Score&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-runtime-CC-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(films_ratings$run_time, films_ratings$critics_choice)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  films_ratings$run_time and films_ratings$critics_choice
+## t = -0.56724, df = 19, p-value = 0.5772
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.5311437  0.3204953
+## sample estimates:
+##        cor 
+## -0.1290454</code></pre>
+<p>The length of a movie is not significantly correlated with audience
+or critic ratings.</p>
+</div>
+</div>
+<div id="main-takeaways" class="section level2">
+<h2>Main Takeaways</h2>
+<ul>
+<li><p>Broadly, audiences and critics tend to rate Pixar movies
+similarly.</p></li>
+<li><p>Budget, box office performance, and run time are not
+significantly correlated with audience or critic ratings of Pixar
+movies.</p></li>
+<li><p>I was surprised that box office numbers were not more closely
+related to audience ratings.</p></li>
+<li><p>As I continue practicing exploratory data analysis in my
+portfolio, I hope to create more complex visualizations and to get more
+practice cleaning data. (Thanks to tidy tuesday, I didn’t have to do
+much to work with these Pixar datasets!)</p></li>
+</ul>
 </div>
 
 
