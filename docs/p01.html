@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 1</title>
+<title>Portfolio 1: Pixar Movie Ratings</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,81 +290,301 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 1</h1>
+<h1 class="title toc-ignore">Portfolio 1: Pixar Movie Ratings</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="goal" class="section level3">
+<h3>Goal</h3>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+</div>
+<div id="product" class="section level3">
+<h3>Product</h3>
+</div>
+<div id="interpretation" class="section level3">
+<h3>Interpretation</h3>
 <pre class="r"><code>library(tidyverse) 
 library(tidyr)
-data(fish_encounters)</code></pre>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-eget nibh vel est aliquet iaculis at placerat sem. Aenean faucibus
-iaculis ultricies. Nullam consequat odio in ultricies ullamcorper. Etiam
-venenatis in est vitae ullamcorper. Nam vitae urna ut dolor rhoncus
-aliquet at vel neque. Quisque tristique leo finibus nisi interdum, sit
-amet tempor risus viverra. Donec mollis vulputate sodales. Nunc ornare,
-leo quis euismod eleifend, eros mi maximus felis, vel varius lacus dui
-eget nibh. Duis vitae nunc nisl. Donec accumsan aliquam elit, eu
-fringilla quam pulvinar eget.</p>
-<p>Mauris in ligula mauris. Curabitur facilisis pharetra metus eget
-lobortis. In egestas nibh sit amet faucibus eleifend. Suspendisse
-imperdiet viverra blandit. Phasellus consectetur tincidunt eros eu
-facilisis. Quisque maximus, orci eget sodales aliquam, velit lorem
-semper dolor, nec convallis erat ipsum mattis velit. Pellentesque
-porttitor, mauris vitae aliquam mattis, metus nisl viverra turpis, vel
-convallis metus sapien et ex. Nunc consequat ipsum id dolor eleifend,
-sit amet semper eros sodales. Pellentesque consectetur, dui quis
-venenatis malesuada, nunc lorem lacinia libero, vitae malesuada dui arcu
-in augue. Aliquam id sagittis libero. Vestibulum aliquet sagittis
-libero, non posuere odio molestie ut. Curabitur lacus enim, viverra vel
-odio non, pretium efficitur elit. Mauris posuere efficitur interdum.
-Nunc sed bibendum turpis, quis fringilla velit. Phasellus eu lorem
-lobortis eros molestie laoreet.</p>
-<pre class="r"><code># Create a barplot of the number of fish encounters by species
-ggplot(data = fish_encounters, aes(x = station, y = seen)) +
-  geom_bar(stat = &quot;identity&quot;) +
-  labs(x = &quot;Species&quot;, y = &quot;Number of Fish Encounters&quot;)</code></pre>
-<p><img src="p01_files/figure-html/unnamed-chunk-1-1.png" alt="" width="672" /></p>
-<p>Sed mollis purus faucibus leo finibus, ut pharetra nibh elementum.
-Nulla id orci lorem. Mauris sollicitudin mi eget tellus vehicula, ut
-convallis lorem mollis. In blandit nulla diam, a malesuada sem volutpat
-interdum. Ut elementum elit at velit maximus, ac tempor odio porttitor.
-Suspendisse lobortis sollicitudin tortor, ut pharetra libero luctus a.
-Sed hendrerit faucibus metus. Sed rutrum purus vel pellentesque
-euismod.</p>
-<pre class="r"><code># Create a barplot of the number of fish encounters by species
-ggplot(data = fish_encounters, aes(x = station, y = seen)) +
-  geom_bar(stat = &quot;identity&quot;) +
-  labs(x = &quot;Species&quot;, y = &quot;Number of Fish Encounters&quot;)</code></pre>
-<p><img src="p01_files/figure-html/unnamed-chunk-2-1.png" alt="" width="672" /></p>
-<p>Mauris placerat in velit a pharetra. Nulla viverra bibendum lectus,
-ut lobortis nibh. Aenean malesuada, orci vitae dictum placerat, enim
-justo aliquet leo, ac tincidunt augue ipsum et mi. Nullam in pharetra
-metus, nec molestie felis. Duis varius rhoncus pulvinar. Integer semper
-urna sed tellus rhoncus, vel suscipit odio iaculis. Mauris iaculis neque
-pellentesque ex convallis venenatis. Sed ultrices euismod fermentum. Ut
-feugiat risus at turpis tincidunt viverra.</p>
-<pre class="r"><code># Create a barplot of the number of fish encounters by species
-ggplot(data = fish_encounters, aes(x = station, y = seen)) +
-  geom_bar(stat = &quot;identity&quot;) +
-  labs(x = &quot;Species&quot;, y = &quot;Number of Fish Encounters&quot;)</code></pre>
-<p><img src="p01_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
-<p>Donec sagittis suscipit orci in ultrices. Vivamus iaculis eleifend
-est et dictum. Fusce non urna at lacus dapibus tincidunt ac sed nibh.
-Donec luctus lectus elit, ac ultrices tortor mollis sit amet. Nulla
-finibus lacinia arcu. Proin sollicitudin non odio et pulvinar. Maecenas
-finibus faucibus finibus. Ut elementum metus velit, a sodales sapien
-commodo et. Vivamus pulvinar, sapien et porta cursus, elit est luctus
-nisi, eget fringilla odio diam et enim. Sed sodales suscipit bibendum.
-Morbi ut metus semper, laoreet felis sodales, consequat dolor.</p>
+library(tidytuesdayR)
+library(pixarfilms)</code></pre>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2025-03-11&#39;)</code></pre>
+<pre><code>## ---- Compiling #TidyTuesday Information for 2025-03-11 ----
+## --- There are 2 files available ---
+## 
+## 
+## ── Downloading files ───────────────────────────────────────────────────────────
+## 
+##   1 of 2: &quot;pixar_films.csv&quot;
+##   2 of 2: &quot;public_response.csv&quot;</code></pre>
+<pre class="r"><code>pixar_films &lt;- tuesdata$pixar_films
+public_response &lt;- tuesdata$public_response
+box_office &lt;- pixarfilms::box_office</code></pre>
+</div>
+<div id="according-to-each-rating-system-which-pixar-movie-is-the-best"
+class="section level2">
+<h2>According to each rating system, which Pixar movie is the best?</h2>
+<pre class="r"><code>public_response %&gt;%
+  count(film, rotten_tomatoes) %&gt;%
+  arrange(desc(rotten_tomatoes))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film            rotten_tomatoes     n
+##    &lt;chr&gt;                     &lt;dbl&gt; &lt;int&gt;
+##  1 Toy Story                   100     1
+##  2 Toy Story 2                 100     1
+##  3 Finding Nemo                 99     1
+##  4 Inside Out                   98     1
+##  5 Toy Story 3                  98     1
+##  6 Up                           98     1
+##  7 Coco                         97     1
+##  8 The Incredibles              97     1
+##  9 Toy Story 4                  97     1
+## 10 Monsters, Inc.               96     1
+## # ℹ 14 more rows</code></pre>
+<pre class="r"><code>public_response %&gt;%
+  count(film, metacritic) %&gt;%
+  arrange(desc(metacritic))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film            metacritic     n
+##    &lt;chr&gt;                &lt;dbl&gt; &lt;int&gt;
+##  1 Ratatouille             96     1
+##  2 Toy Story               95     1
+##  3 WALL-E                  95     1
+##  4 Inside Out              94     1
+##  5 Toy Story 3             92     1
+##  6 Finding Nemo            90     1
+##  7 The Incredibles         90     1
+##  8 Toy Story 2             88     1
+##  9 Up                      88     1
+## 10 Toy Story 4             84     1
+## # ℹ 14 more rows</code></pre>
+<pre class="r"><code>public_response %&gt;%
+  count(film, critics_choice) %&gt;%
+  arrange(desc(critics_choice))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film           critics_choice     n
+##    &lt;chr&gt;                   &lt;dbl&gt; &lt;int&gt;
+##  1 Toy Story 2               100     1
+##  2 Finding Nemo               97     1
+##  3 Toy Story 3                97     1
+##  4 Up                         95     1
+##  5 Toy Story 4                94     1
+##  6 Inside Out                 93     1
+##  7 Soul                       93     1
+##  8 Monsters, Inc.             92     1
+##  9 Ratatouille                91     1
+## 10 WALL-E                     90     1
+## # ℹ 14 more rows</code></pre>
+</div>
+<div id="do-audiences-and-critics-tend-to-agree" class="section level2">
+<h2>Do audiences and critics tend to agree?</h2>
+<pre class="r"><code>ggplot(
+  data = public_response,
+  mapping = aes(
+    x = rotten_tomatoes,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Rotten Tomatoes Score&quot;,
+       y = &quot;Critic&#39;s Choice&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-RT-CC-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(public_response$rotten_tomatoes, public_response$critics_choice)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  public_response$rotten_tomatoes and public_response$critics_choice
+## t = 7.0994, df = 19, p-value = 9.419e-07
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.6652273 0.9385896
+## sample estimates:
+##       cor 
+## 0.8521907</code></pre>
+</div>
+<div id="which-pixar-movie-had-the-highest-budget"
+class="section level2">
+<h2>Which Pixar movie had the highest budget?</h2>
+<pre class="r"><code>box_office %&gt;%
+  count(film, budget) %&gt;%
+  arrange(desc(budget))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film                   budget     n
+##    &lt;chr&gt;                   &lt;dbl&gt; &lt;int&gt;
+##  1 Cars 2              200000000     1
+##  2 Finding Dory        200000000     1
+##  3 Incredibles 2       200000000     1
+##  4 Monsters University 200000000     1
+##  5 Toy Story 3         200000000     1
+##  6 Toy Story 4         200000000     1
+##  7 Brave               185000000     1
+##  8 WALL-E              180000000     1
+##  9 Cars 3              175000000     1
+## 10 Coco                175000000     1
+## # ℹ 14 more rows</code></pre>
+</div>
+<div id="which-pixar-movies-performed-the-best-at-the-box-office"
+class="section level2">
+<h2>Which Pixar movies performed the best at the box office?</h2>
+<pre class="r"><code>box_office %&gt;%
+  count(film, box_office_us_canada) %&gt;%
+  arrange(desc(box_office_us_canada))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film                box_office_us_canada     n
+##    &lt;chr&gt;                              &lt;dbl&gt; &lt;int&gt;
+##  1 Incredibles 2                  608581744     1
+##  2 Finding Dory                   486295561     1
+##  3 Toy Story 4                    434038008     1
+##  4 Toy Story 3                    415004880     1
+##  5 Inside Out                     356461711     1
+##  6 Finding Nemo                   339714978     1
+##  7 Up                             293004164     1
+##  8 Monsters, Inc.                 289916256     1
+##  9 Monsters University            268492764     1
+## 10 The Incredibles                261441092     1
+## # ℹ 14 more rows</code></pre>
+<pre class="r"><code>box_office %&gt;%
+  count(film, box_office_other) %&gt;%
+  arrange(desc(box_office_other))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film                box_office_other     n
+##    &lt;chr&gt;                          &lt;dbl&gt; &lt;int&gt;
+##  1 Toy Story 3                651964823     1
+##  2 Toy Story 4                639356585     1
+##  3 Incredibles 2              634223615     1
+##  4 Coco                       597356181     1
+##  5 Finding Dory               542275328     1
+##  6 Finding Nemo               531300000     1
+##  7 Inside Out                 501149463     1
+##  8 Monsters University        475066843     1
+##  9 Up                         442094918     1
+## 10 Ratatouille                417280431     1
+## # ℹ 14 more rows</code></pre>
+<pre class="r"><code>box_office %&gt;%
+  count(film, box_office_worldwide) %&gt;%
+  arrange(desc(box_office_worldwide))</code></pre>
+<pre><code>## # A tibble: 24 × 3
+##    film                box_office_worldwide     n
+##    &lt;chr&gt;                              &lt;dbl&gt; &lt;int&gt;
+##  1 Incredibles 2                 1242805359     1
+##  2 Toy Story 4                   1073394593     1
+##  3 Toy Story 3                   1066969703     1
+##  4 Finding Dory                  1028570889     1
+##  5 Finding Nemo                   871014978     1
+##  6 Inside Out                     857611174     1
+##  7 Coco                           807082196     1
+##  8 Monsters University            743559607     1
+##  9 Up                             735099082     1
+## 10 Monsters, Inc.                 632316649     1
+## # ℹ 14 more rows</code></pre>
+</div>
+<div
+id="do-higher-budget-movies-receive-higher-audience-ratings-critic-ratings"
+class="section level2">
+<h2>Do higher-budget movies receive higher audience ratings? Critic
+ratings?</h2>
+<pre class="r"><code>box_office_ratings &lt;- full_join(box_office, public_response,
+  by = &quot;film&quot;
+)
+box_office_ratings</code></pre>
+<pre><code>## # A tibble: 24 × 9
+##    film        budget box_office_us_canada box_office_other box_office_worldwide
+##    &lt;chr&gt;        &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;                &lt;dbl&gt;
+##  1 Toy Story   3   e7            191796233        181757800            373554033
+##  2 A Bug&#39;s Li… 1.20e8            162798565        200460294            363258859
+##  3 Toy Story 2 9   e7            245852179        251522597            497374776
+##  4 Monsters, … 1.15e8            289916256        342400393            632316649
+##  5 Finding Ne… 9.40e7            339714978        531300000            871014978
+##  6 The Incred… 9.2 e7            261441092        370165621            631606713
+##  7 Cars        1.20e8            244082982        217900167            461983149
+##  8 Ratatouille 1.5 e8            206445654        417280431            623726085
+##  9 WALL-E      1.80e8            223808164        297503696            521311860
+## 10 Up          1.75e8            293004164        442094918            735099082
+## # ℹ 14 more rows
+## # ℹ 4 more variables: rotten_tomatoes &lt;dbl&gt;, metacritic &lt;dbl&gt;,
+## #   cinema_score &lt;chr&gt;, critics_choice &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = budget,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Budget&quot;,
+       y = &quot;Rotten Tomatoes Score&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-budget-RT-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(box_office_ratings$budget, box_office_ratings$rotten_tomatoes)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  box_office_ratings$budget and box_office_ratings$rotten_tomatoes
+## t = -1.581, df = 21, p-value = 0.1288
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.65084378  0.09943172
+## sample estimates:
+##        cor 
+## -0.3261375</code></pre>
+<pre class="r"><code>ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = budget,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Budget&quot;,
+       y = &quot;Critic&#39;s Choice&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-budget-CC-1.png" width="672" /></p>
+<pre class="r"><code>cor.test(box_office_ratings$budget, box_office_ratings$critics_choice)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  box_office_ratings$budget and box_office_ratings$critics_choice
+## t = -1.8152, df = 19, p-value = 0.08531
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.69995728  0.05665837
+## sample estimates:
+##        cor 
+## -0.3844311</code></pre>
+</div>
+<div
+id="do-box-office-numbers-correspond-with-audience-ratings-critics-ratings"
+class="section level2">
+<h2>Do box office numbers correspond with audience ratings? Critics’
+ratings?</h2>
+<pre class="r"><code>ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = box_office_worldwide,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Worldwide box office&quot;,
+       y = &quot;Rotten Tomatoes&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-BO-RT-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = box_office_worldwide,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = &quot;Worldwide box office&quot;,
+       y = &quot;Critics&#39; Choice&quot;) </code></pre>
+<p><img src="p01_files/figure-html/scatter-BO-CC-1.png" width="672" /></p>
+</div>
 
 
 

@@ -2,17 +2,13 @@
 title: "Portfolio 1: Pixar Movie Ratings"
 ---
 
-### Goal: 
+### Goal 
 
-### Data:
+### Data
 
-### Product:
+### Product
 
-### Interpretation:
-
-```{r install-packages}
-install.packages("tidytuesdayR")
-```
+### Interpretation
 
 
 ```{r load-packages, warning = FALSE, message=FALSE}
@@ -29,6 +25,29 @@ pixar_films <- tuesdata$pixar_films
 public_response <- tuesdata$public_response
 box_office <- pixarfilms::box_office
 ```
+
+## According to each rating system, which Pixar movie is the best?
+
+```{r RT-fav}
+public_response %>%
+  count(film, rotten_tomatoes) %>%
+  arrange(desc(rotten_tomatoes))
+```
+
+```{r MC-fav}
+public_response %>%
+  count(film, metacritic) %>%
+  arrange(desc(metacritic))
+```
+
+
+```{r CC-fav}
+public_response %>%
+  count(film, critics_choice) %>%
+  arrange(desc(critics_choice))
+```
+
+## Do audiences and critics tend to agree?
 
 ```{r scatter-RT-CC, warning=FALSE}
 ggplot(
@@ -48,8 +67,107 @@ ggplot(
 cor.test(public_response$rotten_tomatoes, public_response$critics_choice)
 ```
 
-```{r faves-by-type}
-public_response %>%
-  count(film,)
+## Which Pixar movie had the highest budget?
+
+```{r budget}
+box_office %>%
+  count(film, budget) %>%
+  arrange(desc(budget))
+```
+
+## Which Pixar movies performed the best at the box office?
+
+```{r box-US-CA}
+box_office %>%
+  count(film, box_office_us_canada) %>%
+  arrange(desc(box_office_us_canada))
+```
+
+```{r box-other}
+box_office %>%
+  count(film, box_office_other) %>%
+  arrange(desc(box_office_other))
+```
+
+```{r box-global}
+box_office %>%
+  count(film, box_office_worldwide) %>%
+  arrange(desc(box_office_worldwide))
+```
+
+## Do higher-budget movies receive higher audience ratings? Critic ratings?
+
+```{r join-boxoffice-ratings}
+box_office_ratings <- full_join(box_office, public_response,
+  by = "film"
+)
+box_office_ratings
+```
+
+
+```{r scatter-budget-RT, warning=FALSE}
+ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = budget,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Budget",
+       y = "Rotten Tomatoes Score") 
+```
+
+```{r cor-budget-RT}
+cor.test(box_office_ratings$budget, box_office_ratings$rotten_tomatoes)
+```
+
+```{r scatter-budget-CC, warning=FALSE}
+ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = budget,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Budget",
+       y = "Critic's Choice") 
+```
+
+```{r cor-budget-CC}
+cor.test(box_office_ratings$budget, box_office_ratings$critics_choice)
+```
+
+## Do box office numbers correspond with audience ratings? Critics' ratings?
+
+```{r scatter-BO-RT, warning=FALSE}
+ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = box_office_worldwide,
+    y = rotten_tomatoes
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Worldwide box office",
+       y = "Rotten Tomatoes") 
+```
+
+```{r scatter-BO-CC, warning=FALSE}
+ggplot(
+  data = box_office_ratings,
+  mapping = aes(
+    x = box_office_worldwide,
+    y = critics_choice
+  )
+) +
+  geom_point() + 
+  
+  labs(x = "Worldwide box office",
+       y = "Critics' Choice") 
 ```
 
