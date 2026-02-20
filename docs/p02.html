@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 2</title>
+<title>Portfolio 2: Changes In Perceptions of Teens Over Time</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,792 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 2</h1>
+<h1 class="title toc-ignore">Portfolio 2: Changes In Perceptions of
+Teens Over Time</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>I’m working on a poster for the upcoming SRA conference. The project
+I’m presenting is an intervention study in which we presented
+participants with counterstereotyped information about teens with the
+goal of improving their perceptions of adolescence. There were 4 total
+conditions: 3 received different presentations of teen
+counterstereotypes and 1 control group completed an unrelated activity
+about COVID and medical ethics. We measured their views of teens on
+several dimensions (e.g., risk-taking behavior, academic engagement,
+emotional responsibility) with a pre-test and a post-test (about one
+month later). I will focus on two main findings in my presentation:</p>
+<ul>
+<li><p>Overall, participants ended the study with more positive views of
+teens, even those in the control group. We got the outcome we wanted,
+but it doesn’t seem that the intervention was driving that
+effect.</p></li>
+<li><p>Changes in views of teens predicted positive behavioral
+intentions among the participants themselves. For example, participants
+who had more positive perceptions of teens’ relationships with their
+family members at the end of the study also reported that they were more
+likely to express gratitude to a family member themselves.</p></li>
+</ul>
+<p>For this portfolio piece, I will focus on the first finding (overall
+changes in views of teens over time) and try to find the best way to
+present this main effect visually with my poster.</p>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>This project produced a very large dataset, but for the purposes of
+this piece I subsetted it to include only the following variables:</p>
+<div id="participant-info" class="section level5">
+<h5>Participant info:</h5>
+<ul>
+<li><p>RespID: participant ID number</p></li>
+<li><p>Demographic variables: Gender, Ethnicity, Race, Age</p></li>
+<li><p>ExperimentalTreatment (1-4): The condition to which a participant
+was assigned, with 1-3 representing different types of interventions and
+4 representing the control group.</p>
+<ul>
+<li><p>Condition 1: Research-focused presentation of teen
+counterstereotyping information</p></li>
+<li><p>Condition 2: Casual presentation of teen counterstereotyping
+information</p></li>
+<li><p>Condition 3: Research-focused presentation of college student
+(late adolescence/early emerging adulthood) counterstereotyping
+information</p></li>
+<li><p>Condition 4: Control group (COVID medical ethics
+reading)</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="pre--and-post-test-measures-of-teen-stereotypes"
+class="section level5">
+<h5>Pre- and post-test measures of teen stereotypes:</h5>
+<ul>
+<li>“VoT_MS” corresponds with measures taken at pre-test</li>
+<li>“VOT_P2” corresponds with measures taken at post-test</li>
+<li>Antisocial: perceptions of teens’ antisocial behavior (e.g.,
+stealing)</li>
+<li>NEB: perceptions of teens’ normalized externalizing behavior (e.g.,
+swearing)</li>
+<li>RT: perceptions of teens’ risk-taking behavior (e.g., general
+recklessness)</li>
+<li>AE: perceptions of teens’ academic engagement (e.g., paying
+attention in class)</li>
+<li>ER: perceptions of teens’ emotional responsibility (e.g.,
+discipline)</li>
+<li>PAL/PATL: perceptions of teens’ positive approach to life (e.g.,
+open-mindedness)</li>
+<li>PFI: perceptions of teens’ positive family influence (e.g., helping
+around the house)</li>
+<li>NA: percpetions of teens’ negative autonomy (e.g., disrespecting
+parents)</li>
+<li>PI: perceptions of teens’ peer influence (e.g., trying to fit
+in)</li>
+</ul>
+<p>Throughout this document, I also completed a series of wide-to-long
+transformations to allow for analyses using time (pre- to post-test) as
+an independent variable.</p>
+</div>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>A series of descriptive tables and mixed two-way ANOVAs with figures
+to represent the change in perceptions of teens over time.</p>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>Although the ANOVAs showed a consistent main effect of time on
+perceptions of teens, the plots do not necessarily show consistent,
+meaningful changes in views of teens after breaking down the results by
+condition.</p>
+<div id="sources" class="section level5">
+<h5>Sources:</h5>
+<p>I followed this tutorial to complete the ANOVAs: <a
+href="https://www.datanovia.com/en/lessons/mixed-anova-in-r/"
+class="uri">https://www.datanovia.com/en/lessons/mixed-anova-in-r/</a></p>
+<hr />
+</div>
+</div>
+<div id="loading-packages" class="section level3">
+<h3>Loading packages</h3>
+<pre class="r"><code>library(haven)
+library(tidyverse)
+library(car)
+library(rstatix)</code></pre>
+</div>
+<div id="reading-in-data" class="section level3">
+<h3>Reading in data</h3>
+<pre class="r"><code>counterstereotype_data &lt;- read_sav(&quot;/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav&quot;)</code></pre>
+</div>
+<div
+id="subsetting-the-data-to-work-only-with-the-necessary-variables-filtering-out-participants-with-missing-information-on-experimentaltreatment-condition"
+class="section level3">
+<h3>Subsetting the data to work only with the necessary variables +
+filtering out participants with missing information on
+ExperimentalTreatment (condition)</h3>
+<pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
+  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %&gt;%
+  filter(!is.na(ExperimentalTreatment))</code></pre>
+</div>
+<div
+id="descriptives-for-the-participants-views-of-teens-before-and-after-the-experimental-treatment-broken-out-by-condition-and-overall"
+class="section level3">
+<h3>Descriptives for the participants’ views of teens before and after
+the experimental treatment, broken out by condition and overall</h3>
+<div id="antisocial-by-condition" class="section level5">
+<h5>Antisocial, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_antisocial_pre = mean(VoT_MS_Antisocial, na.rm = TRUE), mean_antisocial_post = mean(VOT_P2EB_ANTISOCIAL, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_antisocial_pre mean_antisocial_post
+##                   &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;
+## 1                     1                4.37                 3.93
+## 2                     2                4.41                 3.25
+## 3                     3                4.79                 3.77
+## 4                     4                5.17                 3.90</code></pre>
+</div>
+<div id="antisocial-overall" class="section level5">
+<h5>Antisocial, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_antisocial_pre = mean(VoT_MS_Antisocial, na.rm = TRUE), mean_antisocial_post = mean(VOT_P2EB_ANTISOCIAL, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_antisocial_pre mean_antisocial_post
+##                 &lt;dbl&gt;                &lt;dbl&gt;
+## 1                4.69                 3.70</code></pre>
+</div>
+<div id="normalized-externalizing-behavior-by-condition"
+class="section level5">
+<h5>Normalized externalizing behavior, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_NEB_pre = mean(VoT_MS_NEB, na.rm = TRUE), mean_NEB_post = mean(VOT_P2EB_NEB, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_NEB_pre mean_NEB_post
+##                   &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+## 1                     1         6.51          6.13
+## 2                     2         6.58          5.41
+## 3                     3         7.10          5.44
+## 4                     4         7.05          5.60</code></pre>
+</div>
+<div id="normalized-externalizing-behavior-overall"
+class="section level5">
+<h5>Normalized externalizing behavior, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_NEB_pre = mean(VoT_MS_NEB, na.rm = TRUE), mean_NEB_post = mean(VOT_P2EB_NEB, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_NEB_pre mean_NEB_post
+##          &lt;dbl&gt;         &lt;dbl&gt;
+## 1         6.81          5.63</code></pre>
+</div>
+<div id="risk-taking-by-condition" class="section level5">
+<h5>Risk-taking, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_risktaking_pre = mean(VoT_MS_RT, na.rm = TRUE), mean_risktaking_post = mean(VOT_P2EB_RT, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_risktaking_pre mean_risktaking_post
+##                   &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;
+## 1                     1                6.97                 6.74
+## 2                     2                6.54                 5.73
+## 3                     3                7.36                 6.77
+## 4                     4                6.82                 5.96</code></pre>
+</div>
+<div id="risk-taking-overall" class="section level5">
+<h5>Risk-taking, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_RT_pre = mean(VoT_MS_RT, na.rm = TRUE), mean_RT_post = mean(VOT_P2EB_RT, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_RT_pre mean_RT_post
+##         &lt;dbl&gt;        &lt;dbl&gt;
+## 1        6.93         6.29</code></pre>
+</div>
+<div id="academic-engagement-by-condition" class="section level5">
+<h5>Academic engagement, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_academicengagement_pre = mean(VoT_MS_AE, na.rm = TRUE), mean_academicengagement_post = mean(VOT_P2AE, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_academicengagement_pre mean_academicengagement_post
+##                   &lt;dbl&gt;                       &lt;dbl&gt;                        &lt;dbl&gt;
+## 1                     1                        6.35                         6.01
+## 2                     2                        6.36                         6.75
+## 3                     3                        5.90                         6.69
+## 4                     4                        5.94                         6.19</code></pre>
+</div>
+<div id="academic-engagement-overall" class="section level5">
+<h5>Academic engagement, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_AE_pre = mean(VoT_MS_AE, na.rm = TRUE), mean_RT_post = mean(VOT_P2AE, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_AE_pre mean_RT_post
+##         &lt;dbl&gt;        &lt;dbl&gt;
+## 1        6.14         6.42</code></pre>
+</div>
+<div id="emotional-responsibility-by-condition" class="section level5">
+<h5>Emotional responsibility, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_emotionalresponsibility_pre = mean(VoT_MS_ER, na.rm = TRUE), mean_emotionalresponsibility_post = mean(VOT_P2PA_ER, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_emotionalresponsibility_pre mean_emotionalrespons…¹
+##                   &lt;dbl&gt;                            &lt;dbl&gt;                   &lt;dbl&gt;
+## 1                     1                             6.60                    6.43
+## 2                     2                             6.42                    6.85
+## 3                     3                             5.93                    6.74
+## 4                     4                             6.14                    6.63
+## # ℹ abbreviated name: ¹​mean_emotionalresponsibility_post</code></pre>
+</div>
+<div id="emotional-responsibility-overall" class="section level5">
+<h5>Emotional responsibility, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_ER_pre = mean(VoT_MS_ER, na.rm = TRUE), mean_ER_post = mean(VOT_P2PA_ER, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_ER_pre mean_ER_post
+##         &lt;dbl&gt;        &lt;dbl&gt;
+## 1        6.27         6.67</code></pre>
+</div>
+<div id="positive-approach-to-life-by-condition" class="section level5">
+<h5>Positive approach to life, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_positiveapproach_pre = mean(VoT_MS_PAL, na.rm = TRUE), mean_risktaking_post = mean(VOT_P2PA_PATL, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_positiveapproach_pre mean_risktaking_post
+##                   &lt;dbl&gt;                     &lt;dbl&gt;                &lt;dbl&gt;
+## 1                     1                      6.67                 6.45
+## 2                     2                      6.45                 6.83
+## 3                     3                      6.15                 6.82
+## 4                     4                      6.35                 6.36</code></pre>
+</div>
+<div id="positive-approach-to-life-overall" class="section level5">
+<h5>Positive approach to life, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_PAL_pre = mean(VoT_MS_PAL, na.rm = TRUE), mean_PAL_post = mean(VOT_P2PA_PATL, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_PAL_pre mean_PAL_post
+##          &lt;dbl&gt;         &lt;dbl&gt;
+## 1         6.40          6.62</code></pre>
+</div>
+<div id="positive-family-influence-by-condition" class="section level5">
+<h5>Positive family influence, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_PFI_pre = mean(VoT_MS_PFI, na.rm = TRUE), mean_PFI_post = mean(VOT_P2_PFI, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_PFI_pre mean_PFI_post
+##                   &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+## 1                     1         6.64          6.46
+## 2                     2         6.57          7.12
+## 3                     3         6.24          6.88
+## 4                     4         6.40          6.78</code></pre>
+</div>
+<div id="positive-family-influence-overall" class="section level5">
+<h5>Positive family influence, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_PFI_pre = mean(VoT_MS_PFI, na.rm = TRUE), mean_PFI_post = mean(VOT_P2_PFI, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_PFI_pre mean_PFI_post
+##          &lt;dbl&gt;         &lt;dbl&gt;
+## 1         6.46          6.82</code></pre>
+</div>
+<div id="negative-autonomy-by-condition" class="section level5">
+<h5>Negative autonomy, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_negativeautonomy_pre = mean(VoT_MS_NA, na.rm = TRUE), mean_negativeautonomy_post = mean(VOT_P2_NA, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_negativeautonomy_pre mean_negativeautonomy_post
+##                   &lt;dbl&gt;                     &lt;dbl&gt;                      &lt;dbl&gt;
+## 1                     1                      5.87                       5.64
+## 2                     2                      5.51                       4.90
+## 3                     3                      6.04                       5.47
+## 4                     4                      5.86                       5.09</code></pre>
+</div>
+<div id="negative-autonomy-overall" class="section level5">
+<h5>Negative autonomy, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_NA_pre = mean(VoT_MS_NA, na.rm = TRUE), mean_NA_post = mean(VOT_P2_NA, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_NA_pre mean_NA_post
+##         &lt;dbl&gt;        &lt;dbl&gt;
+## 1        5.82         5.27</code></pre>
+</div>
+<div id="peer-influence-by-condition" class="section level5">
+<h5>Peer influence, by condition</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  group_by(ExperimentalTreatment) %&gt;%
+  summarize(mean_peerinfluence_pre = mean(VoT_MS_PI, na.rm = TRUE), mean_peerinfluence_post = mean(VOT_P2_PI, na.rm = TRUE)) %&gt;%
+  ungroup()</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   ExperimentalTreatment mean_peerinfluence_pre mean_peerinfluence_post
+##                   &lt;dbl&gt;                  &lt;dbl&gt;                   &lt;dbl&gt;
+## 1                     1                   8.71                    7.68
+## 2                     2                   8.40                    7.34
+## 3                     3                   8.77                    7.37
+## 4                     4                   8.89                    7.42</code></pre>
+</div>
+<div id="peer-influence-overall" class="section level5">
+<h5>Peer influence, overall</h5>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  summarize(mean_PI_pre = mean(VoT_MS_PI, na.rm = TRUE), mean_PI_post = mean(VOT_P2_PI, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   mean_PI_pre mean_PI_post
+##         &lt;dbl&gt;        &lt;dbl&gt;
+## 1        8.70         7.45</code></pre>
+</div>
+</div>
+</div>
+<div id="anovas-effect-of-time-x-condition" class="section level2">
+<h2>ANOVAs (effect of time x condition)</h2>
+<div id="changes-in-views-of-teens-antisocial-behavior"
+class="section level3">
+<h3>Changes in views of teens’ antisocial behavior</h3>
+<div id="wide-to-long-transformation" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_antisocial &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_Antisocial&quot;, &quot;VOT_P2EB_Antisocial&quot;)),
+    names_to = &quot;Time_Antisocial&quot;,
+    values_to = &quot;VOT_Antisocial&quot;)</code></pre>
+</div>
+<div id="defining-time-variable" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_antisocial$time &lt;- ifelse(counterstereotype_long_antisocial$Time_Antisocial == &quot;VoT_MS_Antisocial&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>antisocial.anova &lt;- anova_test(
+  data = counterstereotype_long_antisocial, dv = VOT_Antisocial, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(antisocial.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd      F        p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108  1.801 1.51e-01       0.028
+## 2                       time   1 108 21.041 1.22e-05     * 0.077
+## 3 ExperimentalTreatment:time   3 108  1.421 2.41e-01       0.017</code></pre>
+<p>Significant main effect of time (based on overall means above, a
+decrease in perceptions of teens’ antisocial behavior from pre- to
+post-test)</p>
+</div>
+<div id="visualization" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_antisocial$ETlabel &lt;- factor(counterstereotype_long_antisocial$ExperimentalTreatment)
+counterstereotype_long_antisocial$timelabel &lt;- factor(counterstereotype_long_antisocial$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_antisocial %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_Antisocial,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Antisocial Behavior&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Antisocial Behavior Over Time&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/antisocial-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-normalized-externalizing-behavior"
+class="section level3">
+<h3>Changes in views of teens’ normalized externalizing behavior</h3>
+<div id="wide-to-long-transformation-1" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_NEB &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_NEB&quot;, &quot;VOT_P2EB_NEB&quot;)),
+    names_to = &quot;Time_NEB&quot;,
+    values_to = &quot;VOT_NEB&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-1" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_NEB$time &lt;- ifelse(counterstereotype_long_NEB$Time_NEB == &quot;VoT_MS_NEB&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-1" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>NEB.anova &lt;- anova_test(
+  data = counterstereotype_long_NEB, dv = VOT_NEB, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(NEB.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd      F        p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108  0.300 8.25e-01       0.005
+## 2                       time   1 108 28.955 4.34e-07     * 0.093
+## 3 ExperimentalTreatment:time   3 108  1.974 1.22e-01       0.021</code></pre>
+<p>Significant main effect of time (based on overall means above, a
+decrease in perceptions of teens’ normalized externalizing behavior from
+pre- to post-test)</p>
+</div>
+<div id="visualization-1" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_NEB$ETlabel &lt;- factor(counterstereotype_long_NEB$ExperimentalTreatment)
+counterstereotype_long_NEB$timelabel &lt;- factor(counterstereotype_long_NEB$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_NEB %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_NEB,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Normalized Externalizing Behavior&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Normalized Externalizing Behavior Over Time&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/NEB-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-risk-taking-behavior"
+class="section level3">
+<h3>Changes in views of teens’ risk-taking behavior</h3>
+<div id="wide-to-long-transformation-2" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_RT &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_RT&quot;, &quot;VOT_P2EB_RT&quot;)),
+    names_to = &quot;Time_RT&quot;,
+    values_to = &quot;VOT_RT&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-2" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_RT$time &lt;- ifelse(counterstereotype_long_RT$Time_RT == &quot;VoT_MS_RT&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-2" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>RT.anova &lt;- anova_test(
+  data = counterstereotype_long_RT, dv = VOT_RT, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(RT.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 107 3.081 0.031     * 0.048
+## 2                       time   1 107 7.426 0.008     * 0.028
+## 3 ExperimentalTreatment:time   3 107 0.944 0.422       0.011</code></pre>
+<p>Significant main effect of time (based on overall means above, a
+decrease in perceptions of teens’ risk-taking behavior from pre- to
+post-test)</p>
+<p>Significant main effect of condition (note to self: investigate this
+later with post-hoc tests!)</p>
+</div>
+<div id="visualization-2" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_RT$ETlabel &lt;- factor(counterstereotype_long_RT$ExperimentalTreatment)
+counterstereotype_long_RT$timelabel &lt;- factor(counterstereotype_long_RT$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_RT %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_RT,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Risk-Taking Behavior&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Risk-Taking Behavior Over Time&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/RT-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-academic-engagement"
+class="section level3">
+<h3>Changes in views of teens’ academic engagement</h3>
+<div id="wide-to-long-transformation-3" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_AE &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_AE&quot;, &quot;VOT_P2AE&quot;)),
+    names_to = &quot;Time_AE&quot;,
+    values_to = &quot;VOT_AE&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-3" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_AE$time &lt;- ifelse(counterstereotype_long_AE$Time_AE == &quot;VoT_MS_AE&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-3" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>AE.anova &lt;- anova_test(
+  data = counterstereotype_long_AE, dv = VOT_AE, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(AE.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108 1.200 0.313       0.017
+## 2                       time   1 108 2.293 0.133       0.010
+## 3 ExperimentalTreatment:time   3 108 1.401 0.246       0.018</code></pre>
+<p>No significant effects for views of teens’ academic engagement</p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-emotional-responsibility"
+class="section level3">
+<h3>Changes in views of teens’ emotional responsibility</h3>
+<div id="wide-to-long-transformation-4" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_ER &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_ER&quot;, &quot;VOT_P2PA_ER&quot;)),
+    names_to = &quot;Time_ER&quot;,
+    values_to = &quot;VOT_ER&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-4" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_ER$time &lt;- ifelse(counterstereotype_long_ER$Time_ER == &quot;VoT_MS_ER&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-4" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>ER.anova &lt;- anova_test(
+  data = counterstereotype_long_ER, dv = VOT_ER, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(ER.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108 0.607 0.612       0.008
+## 2                       time   1 108 5.655 0.019     * 0.025
+## 3 ExperimentalTreatment:time   3 108 1.032 0.382       0.014</code></pre>
+<p>Significant main effect of time (based on overall means above, an
+increase in perceptions of teens’ emotional responsibility from pre- to
+post-test)</p>
+</div>
+<div id="visualization-3" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_ER$ETlabel &lt;- factor(counterstereotype_long_ER$ExperimentalTreatment)
+counterstereotype_long_ER$timelabel &lt;- factor(counterstereotype_long_ER$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_ER %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_ER,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Emotional Responsibility&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Emotional Responsibility&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/ER-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-positive-approach-to-life"
+class="section level3">
+<h3>Changes in views of teens’ positive approach to life</h3>
+<div id="wide-to-long-transformation-5" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_PAL &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_PAL&quot;, &quot;VOT_P2PA_PATL&quot;)),
+    names_to = &quot;Time_PAL&quot;,
+    values_to = &quot;VOT_PAL&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-5" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_PAL$time &lt;- ifelse(counterstereotype_long_PAL$Time_PAL == &quot;VoT_MS_PAL&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-5" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>PAL.anova &lt;- anova_test(
+  data = counterstereotype_long_PAL, dv = VOT_PAL, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(PAL.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108 0.861 0.464       0.011
+## 2                       time   1 108 2.560 0.113       0.012
+## 3 ExperimentalTreatment:time   3 108 1.245 0.297       0.017</code></pre>
+<p>No significant effects for views of teens’ positive approach to
+life</p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-positive-family-influence"
+class="section level3">
+<h3>Changes in views of teens’ positive family influence</h3>
+<div id="wide-to-long-transformation-6" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_PFI &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_PFI&quot;, &quot;VOT_P2_PFI&quot;)),
+    names_to = &quot;Time_PFI&quot;,
+    values_to = &quot;VOT_PFI&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-6" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_PFI$time &lt;- ifelse(counterstereotype_long_PFI$Time_PFI == &quot;VoT_MS_PFI&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-6" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>PFI.anova &lt;- anova_test(
+  data = counterstereotype_long_PFI, dv = VOT_PFI, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(PFI.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108 0.798 0.498       0.011
+## 2                       time   1 108 4.653 0.033     * 0.021
+## 3 ExperimentalTreatment:time   3 108 0.898 0.445       0.013</code></pre>
+<p>Significant main effect of time (based on overall means above, an
+increase in perceptions of teens’ positive family influence from pre- to
+post-test)</p>
+</div>
+<div id="visualization-4" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_PFI$ETlabel &lt;- factor(counterstereotype_long_PFI$ExperimentalTreatment)
+counterstereotype_long_PFI$timelabel &lt;- factor(counterstereotype_long_PFI$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_PFI %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_PFI,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Positive Family Influence&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Positive Family Influence&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/PFI-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-negative-autonomy"
+class="section level3">
+<h3>Changes in views of teens’ negative autonomy</h3>
+<div id="wide-to-long-transformation-7" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_NA &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_NA&quot;, &quot;VOT_P2_NA&quot;)),
+    names_to = &quot;Time_NA&quot;,
+    values_to = &quot;VOT_NA&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-7" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_NA$time &lt;- ifelse(counterstereotype_long_NA$Time_NA == &quot;VoT_MS_NA&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-7" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>NA.anova &lt;- anova_test(
+  data = counterstereotype_long_NA, dv = VOT_NA, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(NA.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd     F     p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108 1.460 0.229       0.023
+## 2                       time   1 108 8.610 0.004     * 0.032
+## 3 ExperimentalTreatment:time   3 108 0.547 0.651       0.006</code></pre>
+<p>Significant main effect of time (based on overall means above, a
+decrease in perceptions of teens’ negative autonomy from pre- to
+post-test)</p>
+</div>
+<div id="visualization-5" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_NA$ETlabel &lt;- factor(counterstereotype_long_NA$ExperimentalTreatment)
+counterstereotype_long_NA$timelabel &lt;- factor(counterstereotype_long_NA$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_NA %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_NA,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Negative Autonomy&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Negative Autonomy Over Time&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/NA-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="changes-in-views-of-teens-peer-influence"
+class="section level3">
+<h3>Changes in views of teens’ peer influence</h3>
+<div id="wide-to-long-transformation-8" class="section level4">
+<h4>wide-to-long transformation</h4>
+<pre class="r"><code>counterstereotype_long_PI &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS_PI&quot;, &quot;VOT_P2_PI&quot;)),
+    names_to = &quot;Time_PI&quot;,
+    values_to = &quot;VOT_PI&quot;)</code></pre>
+</div>
+<div id="defining-time-variable-8" class="section level4">
+<h4>defining time variable</h4>
+<pre class="r"><code>counterstereotype_long_PI$time &lt;- ifelse(counterstereotype_long_PI$Time_PI == &quot;VoT_MS_PI&quot;, 1, 2)</code></pre>
+</div>
+<div id="anova-8" class="section level4">
+<h4>ANOVA</h4>
+<pre class="r"><code>PI.anova &lt;- anova_test(
+  data = counterstereotype_long_PI, dv = VOT_PI, wid = RespID,
+  between = ExperimentalTreatment, within = time
+)
+get_anova_table(PI.anova)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##                       Effect DFn DFd      F        p p&lt;.05   ges
+## 1      ExperimentalTreatment   3 108  0.248 8.63e-01       0.004
+## 2                       time   1 108 25.427 1.86e-06     * 0.103
+## 3 ExperimentalTreatment:time   3 108  0.267 8.49e-01       0.004</code></pre>
+<p>Significant main effect of time (based on overall means above, a
+decrease in perceptions of teens’ peer influence from pre- to
+post-test)</p>
+</div>
+<div id="visualization-6" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code>counterstereotype_long_PI$ETlabel &lt;- factor(counterstereotype_long_PI$ExperimentalTreatment)
+counterstereotype_long_PI$timelabel &lt;- factor(counterstereotype_long_PI$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long_PI %&gt;%
+  ggplot(aes(
+    x = timelabel,
+    y = VOT_PI,
+    fill = ETlabel
+  )) +
+  geom_boxplot() +
+  labs(
+    x = &quot;Time&quot;,
+    y = &quot;Perceptions of Teens&#39; Peer Influence&quot;,
+    fill = &quot;Experimental Condition&quot;,
+    title = &quot;Changes in Perceptions of Teens&#39; Peer Influence&quot;
+  )</code></pre>
+<p><img src="p02_files/figure-html/PI-anova-plot-1.png" width="672" /></p>
+</div>
+</div>
+</div>
 
 
 

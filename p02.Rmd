@@ -7,7 +7,7 @@ title: "Portfolio 2: Changes In Perceptions of Teens Over Time"
 
 I'm working on a poster for the upcoming SRA conference. The project I'm presenting is an intervention study in which we presented participants with counterstereotyped information about teens with the goal of improving their perceptions of adolescence. There were 4 total conditions: 3 received different presentations of teen counterstereotypes and 1 control group completed an unrelated activity about COVID and medical ethics. We measured their views of teens on several dimensions (e.g., risk-taking behavior, academic engagement, emotional responsibility) with a pre-test and a post-test (about one month later). I will focus on two main findings in my presentation:
 
-- All participants ended the study with more positive views of teens, even those in the control group. We got the outcome we wanted, but it doesn't seem that the intervention was driving that effect.
+- Overall, participants ended the study with more positive views of teens, even those in the control group. We got the outcome we wanted, but it doesn't seem that the intervention was driving that effect.
 
 - Changes in views of teens predicted positive behavioral intentions among the participants themselves. For example, participants who had more positive perceptions of teens' relationships with their family members at the end of the study also reported that they were more likely to express gratitude to a family member themselves.
 
@@ -17,12 +17,20 @@ For this portfolio piece, I will focus on the first finding (overall changes in 
 
 This project produced a very large dataset, but for the purposes of this piece I subsetted it to include only the following variables:
 
-Participant info:
+##### Participant info:
 - RespID: participant ID number
 - Demographic variables: Gender, Ethnicity, Race, Age
 - ExperimentalTreatment (1-4): The condition to which a participant was assigned, with 1-3 representing different types of interventions and 4 representing the control group.
 
-Pre- and post-test measures of teen stereotypes:
+  - Condition 1: Research-focused presentation of teen counterstereotyping information
+  
+  - Condition 2: Casual presentation of teen counterstereotyping information
+  
+  - Condition 3: Research-focused presentation of college student (late adolescence/early emerging adulthood) counterstereotyping information
+  
+  - Condition 4: Control group (COVID medical ethics reading)
+
+##### Pre- and post-test measures of teen stereotypes:
 - "VoT_MS" corresponds with measures taken at pre-test
 - "VOT_P2" corresponds with measures taken at post-test
 - Antisocial: perceptions of teens' antisocial behavior (e.g., stealing)
@@ -79,14 +87,6 @@ counterstereotype_filtered <- counterstereotype_data %>%
 
 
 ### Descriptives for the participants' views of teens before and after the experimental treatment, broken out by condition and overall
-
-#### Condition 1: Research-focused presentation of teen counterstereotyping information
-
-#### Condition 2: Casual presentation of teen counterstereotyping information
-
-#### Condition 3: Research-focused presentation of college student (late adolescence/early emerging adulthood) counterstereotyping information
-
-#### Condition 4: Control group (COVID medical ethics reading)
 
 ##### Antisocial, by condition
 
@@ -265,14 +265,11 @@ Significant main effect of time (based on overall means above, a decrease in per
 
 #### Visualization
 
-##### creating categorical variables
-
 ```{r factor}
 counterstereotype_long_antisocial$ETlabel <- factor(counterstereotype_long_antisocial$ExperimentalTreatment)
 counterstereotype_long_antisocial$timelabel <- factor(counterstereotype_long_antisocial$time,
                                                       labels = c("Pre-Test", "Post-Test"))
 ```
-
 
 ```{r antisocial-anova-plot, warning=FALSE}
 counterstereotype_long_antisocial %>%
@@ -373,8 +370,9 @@ RT.anova <- anova_test(
 get_anova_table(RT.anova)
 ```
 
--Significant main effect of time (based on overall means above, a decrease in perceptions of teens' risk-taking behavior from pre- to post-test)
--Significant main effect of condition: investigate this later with post-hoc tests!
+Significant main effect of time (based on overall means above, a decrease in perceptions of teens' risk-taking behavior from pre- to post-test)
+
+Significant main effect of condition (note to self: investigate this later with post-hoc tests!)
 
 #### Visualization
 
@@ -459,6 +457,8 @@ get_anova_table(ER.anova)
 ```
 Significant main effect of time (based on overall means above, an increase in perceptions of teens' emotional responsibility from pre- to post-test)
 
+#### Visualization
+
 ```{r factor5}
 counterstereotype_long_ER$ETlabel <- factor(counterstereotype_long_ER$ExperimentalTreatment)
 counterstereotype_long_ER$timelabel <- factor(counterstereotype_long_ER$time,
@@ -500,7 +500,6 @@ counterstereotype_long_PAL$time <- ifelse(counterstereotype_long_PAL$Time_PAL ==
 ```
 
 #### ANOVA
-
 
 ```{r PAL-anova, warning=FALSE}
 PAL.anova <- anova_test(
@@ -672,4 +671,5 @@ counterstereotype_long_PI %>%
     title = "Changes in Perceptions of Teens' Peer Influence"
   )
 ```
+
 
