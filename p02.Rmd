@@ -48,9 +48,13 @@ Although the ANOVAs showed a consistent main effect of time on perceptions of te
 ##### Sources:
 I followed this tutorial to complete the ANOVAs: https://www.datanovia.com/en/lessons/mixed-anova-in-r/
 
+--- 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+### Loading packages
 
 ```{r load-packages, message=FALSE}
 library(haven)
@@ -59,13 +63,13 @@ library(car)
 library(rstatix)
 ```
 
-### Reading in the data
+### Reading in data
 
 ```{r read-data}
 counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav")
 ```
 
-### Subsetting the data to work only with the necessary variables
+### Subsetting the data to work only with the necessary variables + filtering out participants with missing information on ExperimentalTreatment (condition)
 
 ```{r filter-data}
 counterstereotype_filtered <- counterstereotype_data %>%
@@ -73,151 +77,158 @@ counterstereotype_filtered <- counterstereotype_data %>%
   filter(!is.na(ExperimentalTreatment))
 ```
 
-### Changing the experimental treatment grouping variable from character to integer
-```{r ET-type}
-counterstereotype_filtered$ExperimentalTreatment <- as.integer(counterstereotype_filtered$ExperimentalTreatment)
-```
 
-### Getting descriptives for the participants' views of teens before and after the experimental treatment, broken out by condition
+### Descriptives for the participants' views of teens before and after the experimental treatment, broken out by condition and overall
 
 #### Condition 1: Research-focused presentation of teen counterstereotyping information
 
 #### Condition 2: Casual presentation of teen counterstereotyping information
 
-#### Condition 3: Research-focused presentation of college student counterstereotyping information
+#### Condition 3: Research-focused presentation of college student (late adolescence/early emerging adulthood) counterstereotyping information
 
 #### Condition 4: Control group (COVID medical ethics reading)
 
+##### Antisocial, by condition
 
 ```{r antisocial-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_antisocial_pre = mean(VoT_MS_Antisocial, na.rm = TRUE), mean_antisocial_post = mean(VOT_P2EB_ANTISOCIAL, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Antisocial, overall
+
 ```{r antisocial-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_antisocial_pre = mean(VoT_MS_Antisocial, na.rm = TRUE), mean_antisocial_post = mean(VOT_P2EB_ANTISOCIAL, na.rm = TRUE))
 ```
 
+##### Normalized externalizing behavior, by condition
 
 ```{r normalized-externalizing-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_NEB_pre = mean(VoT_MS_NEB, na.rm = TRUE), mean_NEB_post = mean(VOT_P2EB_NEB, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Normalized externalizing behavior, overall
 
 ```{r NEB-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_NEB_pre = mean(VoT_MS_NEB, na.rm = TRUE), mean_NEB_post = mean(VOT_P2EB_NEB, na.rm = TRUE))
 ```
 
+##### Risk-taking, by condition
 
 ```{r risk-taking-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_risktaking_pre = mean(VoT_MS_RT, na.rm = TRUE), mean_risktaking_post = mean(VOT_P2EB_RT, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Risk-taking, overall
 
 ```{r RT-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_RT_pre = mean(VoT_MS_RT, na.rm = TRUE), mean_RT_post = mean(VOT_P2EB_RT, na.rm = TRUE))
 ```
 
+##### Academic engagement, by condition
 
 ```{r academic-engagement-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_academicengagement_pre = mean(VoT_MS_AE, na.rm = TRUE), mean_academicengagement_post = mean(VOT_P2AE, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Academic engagement, overall
+
 ```{r AE-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_AE_pre = mean(VoT_MS_AE, na.rm = TRUE), mean_RT_post = mean(VOT_P2AE, na.rm = TRUE))
 ```
 
+##### Emotional responsibility, by condition
+
 ```{r emotional-responsibility-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_emotionalresponsibility_pre = mean(VoT_MS_ER, na.rm = TRUE), mean_emotionalresponsibility_post = mean(VOT_P2PA_ER, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Emotional responsibility, overall
+
 ```{r ER-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_ER_pre = mean(VoT_MS_ER, na.rm = TRUE), mean_ER_post = mean(VOT_P2PA_ER, na.rm = TRUE))
 ```
 
+##### Positive approach to life, by condition
+
 ```{r positive-approach-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_positiveapproach_pre = mean(VoT_MS_PAL, na.rm = TRUE), mean_risktaking_post = mean(VOT_P2PA_PATL, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Positive approach to life, overall
+
 ```{r PAL-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_PAL_pre = mean(VoT_MS_PAL, na.rm = TRUE), mean_PAL_post = mean(VOT_P2PA_PATL, na.rm = TRUE))
 ```
 
+##### Positive family influence, by condition
+
 ```{r positive-family-influence-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_PFI_pre = mean(VoT_MS_PFI, na.rm = TRUE), mean_PFI_post = mean(VOT_P2_PFI, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Positive family influence, overall
+
 ```{r PFI-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_PFI_pre = mean(VoT_MS_PFI, na.rm = TRUE), mean_PFI_post = mean(VOT_P2_PFI, na.rm = TRUE))
 ```
 
+##### Negative autonomy, by condition
 
 ```{r negative-autonomy-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_negativeautonomy_pre = mean(VoT_MS_NA, na.rm = TRUE), mean_negativeautonomy_post = mean(VOT_P2_NA, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Negative autonomy, overall
+
 ```{r NA-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_NA_pre = mean(VoT_MS_NA, na.rm = TRUE), mean_NA_post = mean(VOT_P2_NA, na.rm = TRUE))
 ```
 
+##### Peer influence, by condition
+
 ```{r peer-influence-descriptives}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   group_by(ExperimentalTreatment) %>%
   summarize(mean_peerinfluence_pre = mean(VoT_MS_PI, na.rm = TRUE), mean_peerinfluence_post = mean(VOT_P2_PI, na.rm = TRUE)) %>%
   ungroup()
 ```
 
+##### Peer influence, overall
+
 ```{r PI-overall-means}
 counterstereotype_filtered %>%
-  filter(!is.na(ExperimentalTreatment)) %>%
   summarize(mean_PI_pre = mean(VoT_MS_PI, na.rm = TRUE), mean_PI_post = mean(VOT_P2_PI, na.rm = TRUE))
 ```
 
