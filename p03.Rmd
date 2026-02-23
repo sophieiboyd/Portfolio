@@ -58,7 +58,7 @@ counterstereotype_long <- counterstereotype_long %>%
                                                                                                                                                     "x")))))))))))))))))))
 ```
 
-```{r time-main-effect-plot}
+```{r time-main-effect-plot-1}
 counterstereotype_long %>%
   ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype, color = stereotype)) +
   stat_summary(fun=mean, geom="line") +
@@ -66,5 +66,46 @@ counterstereotype_long %>%
   theme_minimal() 
 ```
 
+```{r stereotype-labels}
+counterstereotype_long <- counterstereotype_long %>%
+  mutate(stereotypelabel = ifelse(stereotype == "antisocial", "Antisocial Behavior*",
+                                  ifelse(stereotype == "norm_ext", "Normalized Externalizing Behavior*",
+                                         ifelse(stereotype == "risk", "Risk-Taking*",
+                                                ifelse(stereotype == "academic", "Academic Engagement",
+                                                       ifelse(stereotype == "emo_resp", "Emotional Responsibility*",
+                                                              ifelse(stereotype == "pos_app", "Positive Approach to Life",
+                                                                     ifelse(stereotype == "pos_fam", "Positive Family Influence*",
+                                                                            ifelse(stereotype == "neg_auto", "Negative Autonomy*",
+                                                                                   ifelse(stereotype == "peers", "Peer Influence*", "x"))))))))))
+
+```
 
 
+```{r colors}
+counterstereotype_colors <- c("Antisocial Behavior*" = "pink2", "Normalized Externalizing Behavior*" = "deeppink", "Risk-Taking*" = "violetred", "Negative Autonomy*" = "hotpink", "Peer Influence*" = "deeppink4", "Academic Engagement" = "darkturquoise", "Emotional Responsibility*" = "deepskyblue", "Positive Approach to Life" = "dodgerblue3", "Positive Family Influence*" = "blue")
+```
+
+```{r stereotype-order}
+counterstereotype_long <- counterstereotype_long %>%
+  mutate(stereotype_ordered = fct_relevel(stereotypelabel, 'Peer Influence*', 'Risk-Taking*', 'Normalized Externalizing Behavior*', 'Negative Autonomy*', 'Antisocial Behavior*', 'Positive Family Influence*', 'Positive Approach to Life', 'Emotional Responsibility*', 'Academic Engagement'))
+```
+
+
+```{r time-main-effect-plot2, warning=FALSE}
+counterstereotype_long %>%
+  ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype_ordered, color = stereotype_ordered)) +
+  stat_summary(fun=mean, geom="line") +
+  stat_summary(fun=mean, geom="point") +
+  labs(x = "Time",
+       y = "Views of Teens",
+       title = "Changes in Views of Teens Over Time",
+       color = "Attribute\n* = sig. main effect of time") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_color_manual(values=counterstereotype_colors)
+```
+
+* Added labels
+* Customized colors to group by positive vs. negative while still differentiating between stereotypes/attributes
+* Customized order of stereotypes to group by positive/negative
+* Centered title

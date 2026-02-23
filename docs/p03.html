@@ -341,7 +341,39 @@ counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
   theme_minimal() </code></pre>
 <pre><code>## Warning: Removed 46 rows containing non-finite values (`stat_summary()`).
 ## Removed 46 rows containing non-finite values (`stat_summary()`).</code></pre>
-<p><img src="p03_files/figure-html/time-main-effect-plot-1.png" width="672" /></p>
+<p><img src="p03_files/figure-html/time-main-effect-plot-1-1.png" width="672" /></p>
+<pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
+  mutate(stereotypelabel = ifelse(stereotype == &quot;antisocial&quot;, &quot;Antisocial Behavior*&quot;,
+                                  ifelse(stereotype == &quot;norm_ext&quot;, &quot;Normalized Externalizing Behavior*&quot;,
+                                         ifelse(stereotype == &quot;risk&quot;, &quot;Risk-Taking*&quot;,
+                                                ifelse(stereotype == &quot;academic&quot;, &quot;Academic Engagement&quot;,
+                                                       ifelse(stereotype == &quot;emo_resp&quot;, &quot;Emotional Responsibility*&quot;,
+                                                              ifelse(stereotype == &quot;pos_app&quot;, &quot;Positive Approach to Life&quot;,
+                                                                     ifelse(stereotype == &quot;pos_fam&quot;, &quot;Positive Family Influence*&quot;,
+                                                                            ifelse(stereotype == &quot;neg_auto&quot;, &quot;Negative Autonomy*&quot;,
+                                                                                   ifelse(stereotype == &quot;peers&quot;, &quot;Peer Influence*&quot;, &quot;x&quot;))))))))))</code></pre>
+<pre class="r"><code>counterstereotype_colors &lt;- c(&quot;Antisocial Behavior*&quot; = &quot;pink2&quot;, &quot;Normalized Externalizing Behavior*&quot; = &quot;deeppink&quot;, &quot;Risk-Taking*&quot; = &quot;violetred&quot;, &quot;Negative Autonomy*&quot; = &quot;hotpink&quot;, &quot;Peer Influence*&quot; = &quot;deeppink4&quot;, &quot;Academic Engagement&quot; = &quot;darkturquoise&quot;, &quot;Emotional Responsibility*&quot; = &quot;deepskyblue&quot;, &quot;Positive Approach to Life&quot; = &quot;dodgerblue3&quot;, &quot;Positive Family Influence*&quot; = &quot;blue&quot;)</code></pre>
+<pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
+  mutate(stereotype_ordered = fct_relevel(stereotypelabel, &#39;Peer Influence*&#39;, &#39;Risk-Taking*&#39;, &#39;Normalized Externalizing Behavior*&#39;, &#39;Negative Autonomy*&#39;, &#39;Antisocial Behavior*&#39;, &#39;Positive Family Influence*&#39;, &#39;Positive Approach to Life&#39;, &#39;Emotional Responsibility*&#39;, &#39;Academic Engagement&#39;))</code></pre>
+<pre class="r"><code>counterstereotype_long %&gt;%
+  ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype_ordered, color = stereotype_ordered)) +
+  stat_summary(fun=mean, geom=&quot;line&quot;) +
+  stat_summary(fun=mean, geom=&quot;point&quot;) +
+  labs(x = &quot;Time&quot;,
+       y = &quot;Views of Teens&quot;,
+       title = &quot;Changes in Views of Teens Over Time&quot;,
+       color = &quot;Attribute\n* = sig. main effect of time&quot;) +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_color_manual(values=counterstereotype_colors)</code></pre>
+<p><img src="p03_files/figure-html/time-main-effect-plot2-1.png" width="672" /></p>
+<ul>
+<li>Added labels</li>
+<li>Customized colors to group by positive vs. negative while still
+differentiating between stereotypes/attributes</li>
+<li>Customized order of stereotypes to group by positive/negative</li>
+<li>Centered title</li>
+</ul>
 
 
 
