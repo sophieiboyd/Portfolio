@@ -1,5 +1,70 @@
 ---
-title: "Portfolio 3"
+title: "Portfolio 3: Changes In Perceptions of Teens Over Time, cont."
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+```{r load-packages, message=FALSE}
+library(haven)
+library(tidyverse)
+library(car)
+library(rstatix)
+```
+
+```{r read-data}
+counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav")
+```
+
+```{r filter-data}
+counterstereotype_filtered <- counterstereotype_data %>%
+  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %>%
+  filter(!is.na(ExperimentalTreatment))
+```
+
+```{r wide-to-long}
+counterstereotype_long <- counterstereotype_filtered %>%
+  pivot_longer(
+    cols = starts_with(c("VoT_MS", "VOT_P2")),
+    names_to = "time_stereotype",
+    values_to = "viewsofteens")
+```
+
+```{r time-var}
+counterstereotype_long <- counterstereotype_long %>%
+  mutate(time = ifelse(startsWith(time_stereotype, "VoT_MS"), 1, 2))
+
+counterstereotype_long$timelabel <- factor(counterstereotype_long$time,
+                                                      labels = c("Pre-Test", "Post-Test"))
+```
+
+```{r stereotype-var}
+counterstereotype_long <- counterstereotype_long %>%
+  mutate(stereotype = ifelse(time_stereotype == "VoT_MS_Antisocial", "antisocial",
+                             ifelse(time_stereotype == "VOT_P2EB_ANTISOCIAL", "antisocial",
+                                    ifelse(time_stereotype == "VoT_MS_NEB", "norm_ext",
+                                           ifelse(time_stereotype == "VOT_P2EB_NEB", "norm_ext",
+                                                  ifelse(time_stereotype == "VoT_MS_RT", "risk",
+                                                         ifelse(time_stereotype == "VOT_P2EB_RT", "risk",
+                                                                ifelse(time_stereotype == "VoT_MS_AE", "academic",
+                                                                       ifelse(time_stereotype == "VOT_P2AE", "academic",
+                                                                              ifelse(time_stereotype == "VoT_MS_ER", "emo_resp",
+                                                                                     ifelse(time_stereotype == "VOT_P2PA_ER", "emo_resp",
+                                                                                            ifelse(time_stereotype == "VoT_MS_PAL", "pos_app",
+                                                                                                   ifelse(time_stereotype == "VOT_P2PA_PATL", "pos_app",
+                                                                                                          ifelse(time_stereotype == "VoT_MS_PFI", "pos_fam",
+                                                                                                                 ifelse(time_stereotype == "VOT_P2_PFI", "pos_fam",
+                                                                                                                        ifelse(time_stereotype == "VoT_MS_NA", "neg_auto",
+                                                                                                                               ifelse(time_stereotype == "VOT_P2_NA", "neg_auto",
+                                                                                                                                      ifelse(time_stereotype == "VoT_MS_PI", "peers",
+                                                                                                                                             ifelse(time_stereotype == "VOT_P2_PI", "peers",
+                                                                                                                                                    "x")))))))))))))))))))
+```
+
+```{r time-main-effect-plot}
+counterstereotype_long %>%
+  ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype, color = stereotype)) +
+  stat_summary(fun=mean, geom="line") +
+  stat_summary(fun=mean, geom="point") +
+  theme_minimal() 
+```
+
+
+

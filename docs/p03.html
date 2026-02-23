@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 3</title>
+<title>Portfolio 3: Changes In Perceptions of Teens Over Time, cont.</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,58 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 3</h1>
+<h1 class="title toc-ignore">Portfolio 3: Changes In Perceptions of
+Teens Over Time, cont.</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<pre class="r"><code>library(haven)
+library(tidyverse)
+library(car)
+library(rstatix)</code></pre>
+<pre class="r"><code>counterstereotype_data &lt;- read_sav(&quot;/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav&quot;)</code></pre>
+<pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
+  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %&gt;%
+  filter(!is.na(ExperimentalTreatment))</code></pre>
+<pre class="r"><code>counterstereotype_long &lt;- counterstereotype_filtered %&gt;%
+  pivot_longer(
+    cols = starts_with(c(&quot;VoT_MS&quot;, &quot;VOT_P2&quot;)),
+    names_to = &quot;time_stereotype&quot;,
+    values_to = &quot;viewsofteens&quot;)</code></pre>
+<pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
+  mutate(time = ifelse(startsWith(time_stereotype, &quot;VoT_MS&quot;), 1, 2))
+
+counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
+                                                      labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+<pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
+  mutate(stereotype = ifelse(time_stereotype == &quot;VoT_MS_Antisocial&quot;, &quot;antisocial&quot;,
+                             ifelse(time_stereotype == &quot;VOT_P2EB_ANTISOCIAL&quot;, &quot;antisocial&quot;,
+                                    ifelse(time_stereotype == &quot;VoT_MS_NEB&quot;, &quot;norm_ext&quot;,
+                                           ifelse(time_stereotype == &quot;VOT_P2EB_NEB&quot;, &quot;norm_ext&quot;,
+                                                  ifelse(time_stereotype == &quot;VoT_MS_RT&quot;, &quot;risk&quot;,
+                                                         ifelse(time_stereotype == &quot;VOT_P2EB_RT&quot;, &quot;risk&quot;,
+                                                                ifelse(time_stereotype == &quot;VoT_MS_AE&quot;, &quot;academic&quot;,
+                                                                       ifelse(time_stereotype == &quot;VOT_P2AE&quot;, &quot;academic&quot;,
+                                                                              ifelse(time_stereotype == &quot;VoT_MS_ER&quot;, &quot;emo_resp&quot;,
+                                                                                     ifelse(time_stereotype == &quot;VOT_P2PA_ER&quot;, &quot;emo_resp&quot;,
+                                                                                            ifelse(time_stereotype == &quot;VoT_MS_PAL&quot;, &quot;pos_app&quot;,
+                                                                                                   ifelse(time_stereotype == &quot;VOT_P2PA_PATL&quot;, &quot;pos_app&quot;,
+                                                                                                          ifelse(time_stereotype == &quot;VoT_MS_PFI&quot;, &quot;pos_fam&quot;,
+                                                                                                                 ifelse(time_stereotype == &quot;VOT_P2_PFI&quot;, &quot;pos_fam&quot;,
+                                                                                                                        ifelse(time_stereotype == &quot;VoT_MS_NA&quot;, &quot;neg_auto&quot;,
+                                                                                                                               ifelse(time_stereotype == &quot;VOT_P2_NA&quot;, &quot;neg_auto&quot;,
+                                                                                                                                      ifelse(time_stereotype == &quot;VoT_MS_PI&quot;, &quot;peers&quot;,
+                                                                                                                                             ifelse(time_stereotype == &quot;VOT_P2_PI&quot;, &quot;peers&quot;,
+                                                                                                                                                    &quot;x&quot;)))))))))))))))))))</code></pre>
+<pre class="r"><code>counterstereotype_long %&gt;%
+  ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype, color = stereotype)) +
+  stat_summary(fun=mean, geom=&quot;line&quot;) +
+  stat_summary(fun=mean, geom=&quot;point&quot;) +
+  theme_minimal() </code></pre>
+<pre><code>## Warning: Removed 46 rows containing non-finite values (`stat_summary()`).
+## Removed 46 rows containing non-finite values (`stat_summary()`).</code></pre>
+<p><img src="p03_files/figure-html/time-main-effect-plot-1.png" width="672" /></p>
 
 
 
