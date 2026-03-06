@@ -51,7 +51,7 @@ A series of descriptive tables and mixed two-way ANOVAs with figures to represen
 
 #### Interpretation:
 
-Although the ANOVAs showed a consistent main effect of time on perceptions of teens, the plots do not necessarily show consistent, meaningful changes in views of teens after breaking down the results by condition. 
+Although the ANOVAs showed a consistent main effect of time on perceptions of teens, the plots show some variability in the magnitude of change across conditions. 
 
 ##### Sources:
 I followed this tutorial to complete the ANOVAs: https://www.datanovia.com/en/lessons/mixed-anova-in-r/

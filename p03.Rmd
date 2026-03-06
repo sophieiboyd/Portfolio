@@ -2,22 +2,56 @@
 title: "Portfolio 3: Changes In Perceptions of Teens Over Time, cont."
 ---
 
-```{r load-packages, message=FALSE}
+## Overview:
+
+#### Goal:
+
+Using the same data from my previous portfolio piece, I want to condense the information about changes in views of teens over time into one figure for my conference poster. Because there was not a significant effect of condition, I will collapse across conditions and display just the overall main effect of time.
+
+#### Data:
+
+Using the same dataset from portfolio piece 2, for this project I will focus on the pre- and post-test scores on stereotypes about teens' antisocial behavior, normalized externalizing behavior, risk-taking behavior, academic engagement, emotional responsibility, positive approach to life, positive family influence, negative autonomy, and peer influence. I did a (somewhat inefficient) wide-to-long transformation in this project to combine the pre- and post-test scores into single variables to be grouped by a separate stereotype variable. This transformation allowed me to combine changes in views of different stereotypes into a single plot.
+
+#### Product:
+
+My initial attempt at a main effects plot, followed by a cleaner, prettier final version for the poster.
+
+#### Interpretation:
+
+On average, participants' views of teens improved over the course of the study, with significant effects of time on all but two stereotypes.
+
+##### Sources:
+
+<https://stackoverflow.com/questions/62385588/main-effect-plot-with-ggplot2>
+
+<https://stackoverflow.com/questions/17180115/manually-setting-group-colors-for-ggplot2>
+
+------------------------------------------------------------------------
+
+### Loading packages
+
+```{r load-packages, message=FALSE, warning=FALSE}
 library(haven)
 library(tidyverse)
 library(car)
 library(rstatix)
 ```
 
+### Reading in data
+
 ```{r read-data}
 counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav")
 ```
+
+### Subsetting the data to work only with the necessary variables + filtering out participants with missing information on ExperimentalTreatment (condition)
 
 ```{r filter-data}
 counterstereotype_filtered <- counterstereotype_data %>%
   select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %>%
   filter(!is.na(ExperimentalTreatment))
 ```
+
+### Wide-to-long transformation to get one pre-test variable and one post-test variable
 
 ```{r wide-to-long}
 counterstereotype_long <- counterstereotype_filtered %>%
@@ -27,6 +61,8 @@ counterstereotype_long <- counterstereotype_filtered %>%
     values_to = "viewsofteens")
 ```
 
+### Creating time (pre vs. post) grouping variable
+
 ```{r time-var}
 counterstereotype_long <- counterstereotype_long %>%
   mutate(time = ifelse(startsWith(time_stereotype, "VoT_MS"), 1, 2))
@@ -34,6 +70,8 @@ counterstereotype_long <- counterstereotype_long %>%
 counterstereotype_long$timelabel <- factor(counterstereotype_long$time,
                                                       labels = c("Pre-Test", "Post-Test"))
 ```
+
+### Creating stereotype grouping variable
 
 ```{r stereotype-var}
 counterstereotype_long <- counterstereotype_long %>%
@@ -58,13 +96,17 @@ counterstereotype_long <- counterstereotype_long %>%
                                                                                                                                                     "x")))))))))))))))))))
 ```
 
-```{r time-main-effect-plot-1}
+### First attempt at plotting change over time
+
+```{r time-main-effect-plot-1, warning=FALSE}
 counterstereotype_long %>%
   ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype, color = stereotype)) +
   stat_summary(fun=mean, geom="line") +
   stat_summary(fun=mean, geom="point") +
   theme_minimal() 
 ```
+
+### Creating labels for stereotypes, including significance indicators (\*)
 
 ```{r stereotype-labels}
 counterstereotype_long <- counterstereotype_long %>%
@@ -80,16 +122,20 @@ counterstereotype_long <- counterstereotype_long %>%
 
 ```
 
+### Assigning colors to stereotype groups (pink for negative, blue for positive)
 
 ```{r colors}
 counterstereotype_colors <- c("Antisocial Behavior*" = "pink2", "Normalized Externalizing Behavior*" = "deeppink", "Risk-Taking*" = "violetred", "Negative Autonomy*" = "hotpink", "Peer Influence*" = "deeppink4", "Academic Engagement" = "darkturquoise", "Emotional Responsibility*" = "deepskyblue", "Positive Approach to Life" = "dodgerblue3", "Positive Family Influence*" = "blue")
 ```
+
+### Customizing display order of stereotype groups (grouped by positive vs. negative and ordered to match plot)
 
 ```{r stereotype-order}
 counterstereotype_long <- counterstereotype_long %>%
   mutate(stereotype_ordered = fct_relevel(stereotypelabel, 'Peer Influence*', 'Risk-Taking*', 'Normalized Externalizing Behavior*', 'Negative Autonomy*', 'Antisocial Behavior*', 'Positive Family Influence*', 'Positive Approach to Life', 'Emotional Responsibility*', 'Academic Engagement'))
 ```
 
+### Improving the plot
 
 ```{r time-main-effect-plot2, warning=FALSE}
 counterstereotype_long %>%
@@ -105,7 +151,9 @@ counterstereotype_long %>%
   scale_color_manual(values=counterstereotype_colors)
 ```
 
-* Added labels
-* Customized colors to group by positive vs. negative while still differentiating between stereotypes/attributes
-* Customized order of stereotypes to group by positive/negative
-* Centered title
+#### Changes from first attempt:
+
+-   Added labels
+-   Customized colors to group by positive vs. negative while still differentiating between stereotypes/attributes
+-   Customized order of stereotypes to group by positive/negative and to match order of plot
+-   Centered title

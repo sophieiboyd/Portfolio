@@ -296,24 +296,93 @@ Teens Over Time, cont.</h1>
 </div>
 
 
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>Using the same data from my previous portfolio piece, I want to
+condense the information about changes in views of teens over time into
+one figure for my conference poster. Because there was not a significant
+effect of condition, I will collapse across conditions and display just
+the overall main effect of time.</p>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>Using the same dataset from portfolio piece 2, for this project I
+will focus on the pre- and post-test scores on stereotypes about teens’
+antisocial behavior, normalized externalizing behavior, risk-taking
+behavior, academic engagement, emotional responsibility, positive
+approach to life, positive family influence, negative autonomy, and peer
+influence. I did a (somewhat inefficient) wide-to-long transformation in
+this project to combine the pre- and post-test scores into single
+variables to be grouped by a separate stereotype variable. This
+transformation allowed me to combine changes in views of different
+stereotypes into a single plot.</p>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>My initial attempt at a main effects plot, followed by a cleaner,
+prettier final version for the poster.</p>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>On average, participants’ views of teens improved over the course of
+the study, with significant effects of time on all but two
+stereotypes.</p>
+<div id="sources" class="section level5">
+<h5>Sources:</h5>
+<p><a
+href="https://stackoverflow.com/questions/62385588/main-effect-plot-with-ggplot2"
+class="uri">https://stackoverflow.com/questions/62385588/main-effect-plot-with-ggplot2</a>
+<a
+href="https://stackoverflow.com/questions/17180115/manually-setting-group-colors-for-ggplot2"
+class="uri">https://stackoverflow.com/questions/17180115/manually-setting-group-colors-for-ggplot2</a></p>
+<hr />
+</div>
+</div>
+<div id="loading-packages" class="section level3">
+<h3>Loading packages</h3>
 <pre class="r"><code>library(haven)
 library(tidyverse)
 library(car)
 library(rstatix)</code></pre>
+</div>
+<div id="reading-in-data" class="section level3">
+<h3>Reading in data</h3>
 <pre class="r"><code>counterstereotype_data &lt;- read_sav(&quot;/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav&quot;)</code></pre>
+</div>
+<div
+id="subsetting-the-data-to-work-only-with-the-necessary-variables-filtering-out-participants-with-missing-information-on-experimentaltreatment-condition"
+class="section level3">
+<h3>Subsetting the data to work only with the necessary variables +
+filtering out participants with missing information on
+ExperimentalTreatment (condition)</h3>
 <pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
   select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %&gt;%
   filter(!is.na(ExperimentalTreatment))</code></pre>
+</div>
+<div
+id="wide-to-long-transformation-to-get-one-pre-test-variable-and-one-post-test-variable"
+class="section level3">
+<h3>Wide-to-long transformation to get one pre-test variable and one
+post-test variable</h3>
 <pre class="r"><code>counterstereotype_long &lt;- counterstereotype_filtered %&gt;%
   pivot_longer(
     cols = starts_with(c(&quot;VoT_MS&quot;, &quot;VOT_P2&quot;)),
     names_to = &quot;time_stereotype&quot;,
     values_to = &quot;viewsofteens&quot;)</code></pre>
+</div>
+<div id="creating-time-pre-vs.-post-grouping-variable"
+class="section level3">
+<h3>Creating time (pre vs. post) grouping variable</h3>
 <pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
   mutate(time = ifelse(startsWith(time_stereotype, &quot;VoT_MS&quot;), 1, 2))
 
 counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
                                                       labels = c(&quot;Pre-Test&quot;, &quot;Post-Test&quot;))</code></pre>
+</div>
+<div id="creating-stereotype-grouping-variable" class="section level3">
+<h3>Creating stereotype grouping variable</h3>
 <pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
   mutate(stereotype = ifelse(time_stereotype == &quot;VoT_MS_Antisocial&quot;, &quot;antisocial&quot;,
                              ifelse(time_stereotype == &quot;VOT_P2EB_ANTISOCIAL&quot;, &quot;antisocial&quot;,
@@ -334,14 +403,22 @@ counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
                                                                                                                                       ifelse(time_stereotype == &quot;VoT_MS_PI&quot;, &quot;peers&quot;,
                                                                                                                                              ifelse(time_stereotype == &quot;VOT_P2_PI&quot;, &quot;peers&quot;,
                                                                                                                                                     &quot;x&quot;)))))))))))))))))))</code></pre>
+</div>
+<div id="first-attempt-at-plotting-change-over-time"
+class="section level3">
+<h3>First attempt at plotting change over time</h3>
 <pre class="r"><code>counterstereotype_long %&gt;%
   ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype, color = stereotype)) +
   stat_summary(fun=mean, geom=&quot;line&quot;) +
   stat_summary(fun=mean, geom=&quot;point&quot;) +
   theme_minimal() </code></pre>
-<pre><code>## Warning: Removed 46 rows containing non-finite values (`stat_summary()`).
-## Removed 46 rows containing non-finite values (`stat_summary()`).</code></pre>
 <p><img src="p03_files/figure-html/time-main-effect-plot-1-1.png" width="672" /></p>
+</div>
+<div
+id="creating-labels-for-stereotypes-including-significance-indicators"
+class="section level3">
+<h3>Creating labels for stereotypes, including significance indicators
+(*)</h3>
 <pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
   mutate(stereotypelabel = ifelse(stereotype == &quot;antisocial&quot;, &quot;Antisocial Behavior*&quot;,
                                   ifelse(stereotype == &quot;norm_ext&quot;, &quot;Normalized Externalizing Behavior*&quot;,
@@ -352,9 +429,24 @@ counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
                                                                      ifelse(stereotype == &quot;pos_fam&quot;, &quot;Positive Family Influence*&quot;,
                                                                             ifelse(stereotype == &quot;neg_auto&quot;, &quot;Negative Autonomy*&quot;,
                                                                                    ifelse(stereotype == &quot;peers&quot;, &quot;Peer Influence*&quot;, &quot;x&quot;))))))))))</code></pre>
+</div>
+<div
+id="assigning-colors-to-stereotype-groups-pink-for-negative-blue-for-positive"
+class="section level3">
+<h3>Assigning colors to stereotype groups (pink for negative, blue for
+positive)</h3>
 <pre class="r"><code>counterstereotype_colors &lt;- c(&quot;Antisocial Behavior*&quot; = &quot;pink2&quot;, &quot;Normalized Externalizing Behavior*&quot; = &quot;deeppink&quot;, &quot;Risk-Taking*&quot; = &quot;violetred&quot;, &quot;Negative Autonomy*&quot; = &quot;hotpink&quot;, &quot;Peer Influence*&quot; = &quot;deeppink4&quot;, &quot;Academic Engagement&quot; = &quot;darkturquoise&quot;, &quot;Emotional Responsibility*&quot; = &quot;deepskyblue&quot;, &quot;Positive Approach to Life&quot; = &quot;dodgerblue3&quot;, &quot;Positive Family Influence*&quot; = &quot;blue&quot;)</code></pre>
+</div>
+<div
+id="customizing-display-order-of-stereotype-groups-grouped-by-positive-vs.-negative-and-ordered-to-match-plot"
+class="section level3">
+<h3>Customizing display order of stereotype groups (grouped by positive
+vs. negative and ordered to match plot)</h3>
 <pre class="r"><code>counterstereotype_long &lt;- counterstereotype_long %&gt;%
   mutate(stereotype_ordered = fct_relevel(stereotypelabel, &#39;Peer Influence*&#39;, &#39;Risk-Taking*&#39;, &#39;Normalized Externalizing Behavior*&#39;, &#39;Negative Autonomy*&#39;, &#39;Antisocial Behavior*&#39;, &#39;Positive Family Influence*&#39;, &#39;Positive Approach to Life&#39;, &#39;Emotional Responsibility*&#39;, &#39;Academic Engagement&#39;))</code></pre>
+</div>
+<div id="improving-the-plot" class="section level3">
+<h3>Improving the plot</h3>
 <pre class="r"><code>counterstereotype_long %&gt;%
   ggplot(aes(x = timelabel, y = viewsofteens, group = stereotype_ordered, color = stereotype_ordered)) +
   stat_summary(fun=mean, geom=&quot;line&quot;) +
@@ -367,13 +459,19 @@ counterstereotype_long$timelabel &lt;- factor(counterstereotype_long$time,
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_color_manual(values=counterstereotype_colors)</code></pre>
 <p><img src="p03_files/figure-html/time-main-effect-plot2-1.png" width="672" /></p>
+<div id="changes-from-first-attempt" class="section level4">
+<h4>Changes from first attempt:</h4>
 <ul>
 <li>Added labels</li>
 <li>Customized colors to group by positive vs. negative while still
 differentiating between stereotypes/attributes</li>
-<li>Customized order of stereotypes to group by positive/negative</li>
+<li>Customized order of stereotypes to group by positive/negative and to
+match order of plot</li>
 <li>Centered title</li>
 </ul>
+</div>
+</div>
+</div>
 
 
 
