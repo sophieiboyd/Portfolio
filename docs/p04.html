@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 4</title>
+<title>Portfolio 4: Using Changes in Perceptions of Teens Over Time to Predict Behavioral Intentions</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,252 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 4</h1>
+<h1 class="title toc-ignore">Portfolio 4: Using Changes in Perceptions
+of Teens Over Time to Predict Behavioral Intentions</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>As a second part of the teen counterstereotyping project, I examined
+whether changes in the participants’ perceptions of teens predicted
+their own behavioral intentions. I found that changes in perceptions of
+teens corresponded to positive behavioral intentions. For example,
+decreased perceptions of teens’ antisocial behavior predicted lower
+intentions to engage in antisocial behavior, and increased perceptions
+of teens’ positive family relationships predicted greater intentions to
+express gratitude toward a family member. The goal of this piece is to
+find an effective way to visualize the associations between changes in
+views of teens and behavioral intentions.</p>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>For this piece, I will be using the same dataset from portfolio
+pieces 2 and 3, but with new central variables. I will be using change
+scores to represent changes in the participants’ ratings of teens on
+each attribute from pre- to post-test. I will also be using measures of
+their behavioral intentions recorded at post-test.</p>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>A series of scatterplots to display the associations between change
+scores and personal behavioral intentions, culminating in a single
+figure that combines all plots.</p>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>Improvements in views of teens predicted positive behavioral
+intentions. (Decreases on negative attributes predicted lower negative
+behavioral intentions, and increases on positive attributes predicted
+higher positive intentions).</p>
+<div id="sources" class="section level5">
+<h5>Sources:</h5>
+<p><a href="https://r-graph-gallery.com/package/patchwork.html"
+class="uri">https://r-graph-gallery.com/package/patchwork.html</a></p>
+<hr />
+</div>
+</div>
+<div id="loading-packages" class="section level3">
+<h3>Loading packages</h3>
+<pre class="r"><code>library(haven)
+library(tidyverse)
+library(janitor)
+library(patchwork)</code></pre>
+</div>
+<div id="reading-in-data" class="section level3">
+<h3>Reading in data</h3>
+<pre class="r"><code>counterstereotype_data &lt;- read_sav(&quot;/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav&quot;)</code></pre>
+</div>
+<div
+id="subsetting-the-data-to-work-only-with-the-necessary-variables-filtering-out-participants-with-missing-information-on-experimentaltreatment-condition-to-be-consistent"
+class="section level3">
+<h3>Subsetting the data to work only with the necessary variables +
+filtering out participants with missing information on
+ExperimentalTreatment (condition) to be consistent</h3>
+<pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
+  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI, `@2BInt_antisocial`, `@2BInt_NEB`, `@2BInt_AE`, `@2BInt_NA`, `@2BInt_PFI`, `@2BInt_NA`,`@2BInt_PR`) %&gt;%
+  filter(!is.na(ExperimentalTreatment))</code></pre>
+</div>
+<div id="scatterplot-examining-antisocial-behavior"
+class="section level3">
+<h3>Scatterplot examining antisocial behavior</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_antisocial, y = `@2BInt_antisocial`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-antisocial-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_antisocial, y = `@2BInt_antisocial`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;pink2&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Antisocial Behavior&quot;,
+       y = &#39;Intentions to Engage in Antisocial Behavior&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-antisocial-clean-1.png" width="672" /></p>
+</div>
+<div id="scatterplot-examining-normalized-externalizing-behavior"
+class="section level3">
+<h3>Scatterplot examining normalized externalizing behavior</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NEB, y = `@2BInt_NEB`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NEB-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance-1"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NEB, y = `@2BInt_NEB`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deeppink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Normalized Externalizing Behavior&quot;,
+       y = &#39;Intentions to Engage in Externalizing Behavior&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NEB-clean-1.png" width="672" /></p>
+</div>
+<div id="scatterplot-examining-positive-family-influence"
+class="section level3">
+<h3>Scatterplot examining positive family influence</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-PFI-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance-2"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;blue&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Positive Family Influence&quot;,
+       y = &#39;Intentions to Engage Positively with Family&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-PFI-clean-1.png" width="672" /></p>
+</div>
+<div id="scatterplot-examining-negative-autonomy"
+class="section level3">
+<h3>Scatterplot examining negative autonomy</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NA, y = `@2BInt_NA`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NA-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance-3"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NA, y = `@2BInt_NA`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;hotpink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Negative Autonomy&quot;,
+       y = &#39;Intentions to Engage in Negative Autonomy&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NA-clean-1.png" width="672" /></p>
+</div>
+<div id="scatterplot-examining-academic-engagement"
+class="section level3">
+<h3>Scatterplot examining academic engagement</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_AE, y = `@2BInt_AE`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-AE-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance-4"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_AE, y = `@2BInt_AE`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;darkturquoise&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Academic Engagement&quot;,
+       y = &#39;Intentions to Be Academically Engaged&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-AE-clean-1.png" width="672" /></p>
+</div>
+<div id="scatterplot-examining-emotional-responsibility"
+class="section level3">
+<h3>Scatterplot examining emotional responsibility</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
+  geom_jitter()</code></pre>
+<p><img src="p04_files/figure-html/scatter-ER-1.png" width="672" /></p>
+</div>
+<div id="adding-a-line-and-improving-the-appearance-5"
+class="section level3">
+<h3>Adding a line and improving the appearance</h3>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deepskyblue&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Emotional Responsibility&quot;,
+       y = &#39;Intentions to Be Emotionally Responsible&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-ER-clean-1.png" width="672" /></p>
+</div>
+<div id="attempting-to-put-it-all-together-using-the-patchwork-package"
+class="section level3">
+<h3>Attempting to put it all together (using the patchwork package)</h3>
+<pre class="r"><code>p1 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_antisocial, y = `@2BInt_antisocial`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;pink2&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Antisocial Behavior*&quot;,
+       y = &#39;Intentions to Engage in Antisocial Behavior&#39; ) +
+  theme_minimal()
+
+p2 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NEB, y = `@2BInt_NEB`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deeppink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Normalized Externalizing Behavior*&quot;,
+       y = &#39;Intentions to Engage in Externalizing Behavior&#39; ) +
+  theme_minimal()
+
+p3 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NA, y = `@2BInt_NA`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;hotpink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Negative Autonomy*&quot;,
+       y = &#39;Intentions to Engage in Negative Autonomy&#39; ) +
+  theme_minimal()
+
+p4 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;blue&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Positive Family Influence*&quot;,
+       y = &#39;Intentions to Engage Positively with Family&#39; ) +
+  theme_minimal()
+
+p5 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_AE, y = `@2BInt_AE`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;darkturquoise&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Academic Engagement&quot;,
+       y = &#39;Intentions to Be Academically Engaged&#39; ) +
+  theme_minimal()
+
+p6 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deepskyblue&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Emotional Responsibility*&quot;,
+       y = &#39;Intentions to Be Emotionally Responsible&#39; ) +
+  theme_minimal()</code></pre>
+<pre class="r"><code>(p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = &#39;Improvements in Views of Teens Predict More Positive Behavioral Intentions&#39;, theme = theme(plot.title = element_text(hjust = 0.5)))</code></pre>
+<p><img src="p04_files/figure-html/combine-plots-1.png" width="1440" /></p>
+<pre class="r"><code>combined_plot &lt;- (p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = &#39;Improvements in Views of Teens Predict More Positive Behavioral Intentions&#39;, theme = theme(plot.title = element_text(hjust = 0.5)))
+
+ggsave(&quot;SRA_BehInt-plot.png&quot;, plot = combined_plot, width = 15)</code></pre>
+</div>
+</div>
 
 
 
