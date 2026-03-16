@@ -229,6 +229,6 @@ p6 <- counterstereotype_filtered %>%
 ```{r save-final-plot, warning=FALSE, message=FALSE}
 combined_plot <- (p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = 'Improvements in Views of Teens Predict More Positive Behavioral Intentions', theme = theme(plot.title = element_text(hjust = 0.5)))
 
-ggsave("SRA_BehInt-plot.png", plot = combined_plot, width = 15)
+ggsave("SRA_BehInt-plot.png", plot = combined_plot, width = 15, height = 10)
 ```
 
