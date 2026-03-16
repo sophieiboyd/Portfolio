@@ -1,5 +1,65 @@
 ---
-title: "Portfolio 4"
+title: "Portfolio 4: Using Changes in Perceptions of Teens Over Time to Predict Behavioral Intentions"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+As a second part of the teen counterstereotyping project, I examined whether changes in the participants' perceptions of teens predicted their own behavioral intentions. I found that changes in perceptions of teens corresponded to positive behavioral intentions. For example, decreased perceptions of teens' antisocial behavior predicted lower intentions to engage in antisocial behavior, and increased perceptions of teens' positive family relationships predicted greater intentions to express gratitude toward a family member. The goal of this piece is to find an effective way to visualize the associations between changes in views of teens and behavioral intentions. 
+
+#### Data:
+
+For this piece I will be using the same dataset from portfolio pieces 2 and 3, but with new central variables. I will be using change scores to represent changes in the participants' ratings of teens on each attribute from pre- to post-test. I will also be using measures of their behavioral intentions recorded at post-test. 
+**Insert info about data cleaning when finished
+
+#### Product:
+
+My initial attempt at a main effects plot, followed by a cleaner, prettier final version for the poster.
+
+#### Interpretation:
+
+On average, participants' views of teens improved over the course of the study, with significant effects of time on all but two stereotypes.
+
+##### Sources:
+
+<https://stackoverflow.com/questions/62385588/main-effect-plot-with-ggplot2>
+
+---
+
+### Loading packages
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(haven)
+library(tidyverse)
+library(janitor)
+```
+
+### Reading in data
+
+```{r read-data}
+counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/SRA/CollegeData.sav")
+```
+
+### Removing @ symbols from variable names to make dataset easier to work with
+
+```{r rename}
+clean_names(counterstereotype_data) %>%
+  rename(
+     BInt_antisocial = `@2BInt_antisocial`,
+     BInt_NEB = `@2BInt_NEB`,
+     BInt_AE = `@2BInt_AE`,
+     BInt_PFI =`@2BInt_PFI`,
+     BInt_PR = `@2BInt_PR`,
+     BInt_NA = `@2BInt_NA`
+  )
+```
+
+
+### Subsetting the data to work only with the necessary variables + filtering out participants with missing information on ExperimentalTreatment (condition) to be consistent
+
+```{r filter-data}
+counterstereotype_filtered <- counterstereotype_data %>%
+  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI,  ) %>%
+  filter(!is.na(ExperimentalTreatment))
+```
