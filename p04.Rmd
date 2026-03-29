@@ -325,3 +325,15 @@ p6 <- counterstereotype_filtered %>%
 ```{r combine-plots2, warning=FALSE, message=FALSE, fig.width = 15, fig.height = 10}
 (p1 + p2 + p3) / (p4 + p5 + p6) 
 ```
+
+##### Trying a vertical layout to fit my poster better
+
+```{r combine-plots2, warning=FALSE, message=FALSE, fig.width = 15, fig.height = 10}
+(p1 + p4) / (p2 + p5) / (p3 + p6) 
+```
+
+```{r save-vertical-plot, warning=FALSE, message=FALSE}
+combined_plot <- (p1 + p4) / (p2 + p5) / (p3 + p6) 
+
+ggsave("SRA_BehInt-plot-vertical.png", plot = combined_plot, width = 15, height = 10)
+```
