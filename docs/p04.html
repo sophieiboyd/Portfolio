@@ -533,8 +533,91 @@ p6 &lt;- counterstereotype_filtered %&gt;%
 <p><img src="p04_files/figure-html/combine-plots-1.png" width="1440" /></p>
 <pre class="r"><code>combined_plot &lt;- (p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = &#39;Improvements in Views of Teens Predict More Positive Behavioral Intentions&#39;, theme = theme(plot.title = element_text(hjust = 0.5)))
 
-ggsave(&quot;SRA_BehInt-plot.png&quot;, plot = combined_plot, width = 15)</code></pre>
+ggsave(&quot;SRA_BehInt-plot.png&quot;, plot = combined_plot, width = 15, height = 10)</code></pre>
 </div>
+</div>
+<div
+id="update-after-getting-feedback-from-my-lab-i-have-decided-to-recode-the-change-scores-for-negative-attributes-only-such-that-positive-change-scores-are-all-indicative-of-improvments-in-views-of-teens."
+class="section level2">
+<h2>Update: After getting feedback from my lab, I have decided to recode
+the change scores for negative attributes only, such that positive
+change scores are all indicative of improvments in views of teens.</h2>
+<pre class="r"><code>counterstereotype_filtered$Change_antisocial_R &lt;- counterstereotype_filtered$Change_antisocial * -1
+counterstereotype_filtered$Change_NEB_R &lt;- counterstereotype_filtered$Change_NEB * -1
+counterstereotype_filtered$Change_NA_R &lt;- counterstereotype_filtered$Change_NA * -1</code></pre>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_antisocial_R, y = `@2BInt_antisocial`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;pink2&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Antisocial Behavior&quot;,
+       y = &#39;Intentions to Engage in Antisocial Behavior&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-antisocial-2-1.png" width="672" /></p>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NEB_R, y = `@2BInt_NEB`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deeppink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Normalized Externalizing Behavior&quot;,
+       y = &#39;Intentions to Engage in Externalizing Behavior&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NEB-2-1.png" width="672" /></p>
+<pre class="r"><code>counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NA_R, y = `@2BInt_NA`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;hotpink&quot;) + 
+  labs(x = &quot;Change in Perception of Teens&#39; Negative Autonomy&quot;,
+       y = &#39;Intentions to Engage in Negative Autonomy&#39; ) +
+  theme_minimal()</code></pre>
+<p><img src="p04_files/figure-html/scatter-NA-2-1.png" width="672" /></p>
+<pre class="r"><code>p1 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NEB_R, y = `@2BInt_NEB`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deeppink&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Normalized Externalizing Behavior*&quot;,
+       y = &#39;Intentions to Engage in Externalizing Behavior&#39; ) +
+  theme_minimal()
+
+p2 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_NA_R, y = `@2BInt_NA`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;hotpink&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Negative Autonomy*&quot;,
+       y = &#39;Intentions to Engage in Negative Autonomy&#39; ) +
+  theme_minimal()
+
+p3 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_antisocial_R, y = `@2BInt_antisocial`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;pink2&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Antisocial Behavior*&quot;,
+       y = &#39;Intentions to Engage in Antisocial Behavior&#39; ) +
+  theme_minimal()
+
+p4 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;blue&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Positive Family Influence*&quot;,
+       y = &#39;Intentions to Engage Positively with Family&#39; ) +
+  theme_minimal()
+
+p5 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deepskyblue&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Emotional Responsibility*&quot;,
+       y = &#39;Intentions to Be Emotionally Responsible&#39; ) +
+  theme_minimal()
+
+p6 &lt;- counterstereotype_filtered %&gt;%
+  ggplot(aes(x = Change_AE, y = `@2BInt_AE`)) +
+  geom_jitter() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;darkturquoise&quot;) + 
+  labs(x = &quot;Improvement in Perception of Teens&#39; Academic Engagement&quot;,
+       y = &#39;Intentions to Be Academically Engaged&#39; ) +
+  theme_minimal()</code></pre>
+<pre class="r"><code>(p1 + p2 + p3) / (p4 + p5 + p6) </code></pre>
+<p><img src="p04_files/figure-html/combine-plots2-1.png" width="1440" /></p>
 </div>
 
 
