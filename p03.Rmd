@@ -144,7 +144,7 @@ counterstereotype_long %>%
   stat_summary(fun=mean, geom="point") +
   labs(x = "Time",
        y = "Views of Teens",
-       title = "Changes in Views of Teens Over Time",
+       title = "Average Change in Perceptions of Teens Over Time",
        color = "Attribute\n* = sig. main effect of time") +
   theme_minimal() + 
   theme(plot.title = element_text(hjust = 0.5)) +
