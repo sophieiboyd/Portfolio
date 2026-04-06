@@ -1,5 +1,145 @@
 ---
-title: "Portfolio 5"
+title: "Portfolio 5: Visualizing Measles Data"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+#### Data:
+
+#### Product:
+
+#### Interpretation:
+
+#### Sources:
+
+---
+
+### Loading packages 
+
+```{r load-packages, warning = FALSE, message=FALSE}
+library(tidyverse) 
+library(tidyr)
+library(tidytuesdayR)
+library(maps)
+```
+
+### Reading in data
+
+```{r read-data}
+tuesdata <- tidytuesdayR::tt_load('2020-02-25')
+tuesdata <- tidytuesdayR::tt_load(2020, week = 9)
+
+
+measles <- tuesdata$measles
+```
+
+### Average vaccination rate by state
+
+```{r mmr-states}
+measles %>%
+  filter(mmr > 0) %>%
+  select(mmr, state) %>%
+  group_by(state) %>%
+  summarize(across(everything(), list(mean = mean))) %>%
+  arrange(desc(mmr_mean))
+
+```
+
+
+### Trying to map vaccination rates 
+
+```{r mmr-map}
+# Get US map data
+us_map <- map_data("state")
+
+# Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = "white", 
+              color = "gray50") +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles,
+            aes(x = lng, 
+                y = lat,
+                color = mmr),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.8)
+```
+
+```{r mmr-map-attempt2}
+# Filtering data to just include continental US (for now)
+
+measles_cont <- measles %>%
+  filter(lng < 0) %>%
+  filter(mmr > 0)
+
+# Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = "white", 
+              color = "gray50") +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles_cont,
+            aes(x = lng, 
+                y = lat,
+                color = mmr),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.5)
+```
+
+
+### Trying to map vaccination rate by type of school
+
+### Average vaccination rate by school type
+
+```{r mmr-type}
+mmr_type_summary <- measles_cont %>%
+  filter(mmr > 0) %>%
+  select(mmr, type) %>%
+  group_by(type) %>%
+  summarize(across(everything(), list(mean = mean))) %>%
+  arrange(desc(mmr_mean))
+
+```
+
+```{r mmr-by-type-plot}
+measles_type <- measles_cont %>%
+  filter(type %in% c("Public", "Private", "Charter"))
+
+mmr_type_summary <- measles_type %>%
+  filter(mmr > 0) %>%
+  select(mmr, type) %>%
+  group_by(type) %>%
+  summarize(across(everything(), list(mean = mean))) %>%
+  arrange(desc(mmr_mean))
+
+mmr_type_summary %>%
+  ggplot(aes(x = type, y = mmr_mean, color = type, fill = type)) +
+  geom_col()
+```
+
+### Looking at types of schools by state
+
+```{r type-by-state-map}
+# Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = "white", 
+              color = "gray50") +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles_type,
+            aes(x = lng, 
+                y = lat,
+                color = type),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.5)
+```
+

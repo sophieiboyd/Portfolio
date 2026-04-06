@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 5</title>
+<title>Portfolio 5: Visualizing Measles Data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,170 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 5</h1>
+<h1 class="title toc-ignore">Portfolio 5: Visualizing Measles Data</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+</div>
+<div id="sources" class="section level4">
+<h4>Sources:</h4>
+<hr />
+</div>
+<div id="loading-packages" class="section level3">
+<h3>Loading packages</h3>
+<pre class="r"><code>library(tidyverse) 
+library(tidyr)
+library(tidytuesdayR)
+library(maps)</code></pre>
+</div>
+<div id="reading-in-data" class="section level3">
+<h3>Reading in data</h3>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2020-02-25&#39;)</code></pre>
+<pre><code>## ---- Compiling #TidyTuesday Information for 2020-02-25 ----
+## --- There is 1 file available ---
+## 
+## 
+## ── Downloading files ───────────────────────────────────────────────────────────
+## 
+##   1 of 1: &quot;measles.csv&quot;</code></pre>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(2020, week = 9)</code></pre>
+<pre><code>## ---- Compiling #TidyTuesday Information for 2020-02-25 ----
+## --- There is 1 file available ---
+## 
+## 
+## ── Downloading files ───────────────────────────────────────────────────────────
+## 
+##   1 of 1: &quot;measles.csv&quot;</code></pre>
+<pre class="r"><code>measles &lt;- tuesdata$measles</code></pre>
+</div>
+<div id="average-vaccination-rate-by-state" class="section level3">
+<h3>Average vaccination rate by state</h3>
+<pre class="r"><code>measles %&gt;%
+  filter(mmr &gt; 0) %&gt;%
+  select(mmr, state) %&gt;%
+  group_by(state) %&gt;%
+  summarize(across(everything(), list(mean = mean))) %&gt;%
+  arrange(desc(mmr_mean))</code></pre>
+<pre><code>## # A tibble: 21 × 2
+##    state         mmr_mean
+##    &lt;chr&gt;            &lt;dbl&gt;
+##  1 Illinois          97.4
+##  2 Massachusetts     97.0
+##  3 Pennsylvania      96.9
+##  4 Connecticut       96.8
+##  5 California        96.4
+##  6 New York          96.1
+##  7 Utah              95.2
+##  8 South Dakota      95.1
+##  9 Vermont           94.6
+## 10 Montana           94.4
+## # ℹ 11 more rows</code></pre>
+</div>
+<div id="trying-to-map-vaccination-rates" class="section level3">
+<h3>Trying to map vaccination rates</h3>
+<pre class="r"><code># Get US map data
+us_map &lt;- map_data(&quot;state&quot;)
+
+# Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles,
+            aes(x = lng, 
+                y = lat,
+                color = mmr),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.8)</code></pre>
+<pre><code>## Warning: Removed 1549 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
+<p><img src="p05_files/figure-html/mmr-map-1.png" width="672" /></p>
+<pre class="r"><code># Filtering data to just include continental US (for now)
+
+measles_cont &lt;- measles %&gt;%
+  filter(lng &lt; 0) %&gt;%
+  filter(mmr &gt; 0)
+
+# Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles_cont,
+            aes(x = lng, 
+                y = lat,
+                color = mmr),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.5)</code></pre>
+<p><img src="p05_files/figure-html/mmr-map-attempt2-1.png" width="672" /></p>
+</div>
+<div id="trying-to-map-vaccination-rate-by-type-of-school"
+class="section level3">
+<h3>Trying to map vaccination rate by type of school</h3>
+</div>
+<div id="average-vaccination-rate-by-school-type"
+class="section level3">
+<h3>Average vaccination rate by school type</h3>
+<pre class="r"><code>mmr_type_summary &lt;- measles_cont %&gt;%
+  filter(mmr &gt; 0) %&gt;%
+  select(mmr, type) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean))) %&gt;%
+  arrange(desc(mmr_mean))</code></pre>
+<pre class="r"><code>measles_type &lt;- measles_cont %&gt;%
+  filter(type %in% c(&quot;Public&quot;, &quot;Private&quot;, &quot;Charter&quot;))
+
+mmr_type_summary &lt;- measles_type %&gt;%
+  filter(mmr &gt; 0) %&gt;%
+  select(mmr, type) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean))) %&gt;%
+  arrange(desc(mmr_mean))
+
+mmr_type_summary %&gt;%
+  ggplot(aes(x = type, y = mmr_mean, color = type, fill = type)) +
+  geom_col()</code></pre>
+<p><img src="p05_files/figure-html/mmr-by-type-plot-1.png" width="672" /></p>
+</div>
+<div id="looking-at-types-of-schools-by-state" class="section level3">
+<h3>Looking at types of schools by state</h3>
+<pre class="r"><code># Create the point map
+ggplot() +
+  # Add US map background
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  # Add points for each location, colored by number of teachers
+  geom_point(data = measles_type,
+            aes(x = lng, 
+                y = lat,
+                color = type),
+            size = 1,  # Smaller fixed size for all points
+            alpha = 0.5)</code></pre>
+<p><img src="p05_files/figure-html/type-by-state-map-1.png" width="672" /></p>
+</div>
+</div>
 
 
 
