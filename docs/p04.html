@@ -533,7 +533,7 @@ p6 &lt;- counterstereotype_filtered %&gt;%
 <p><img src="p04_files/figure-html/combine-plots-1.png" width="1440" /></p>
 <pre class="r"><code>combined_plot &lt;- (p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = &#39;Improvements in Views of Teens Predict More Positive Behavioral Intentions&#39;, theme = theme(plot.title = element_text(hjust = 0.5)))
 
-ggsave(&quot;SRA_BehInt-plot.png&quot;, plot = combined_plot, width = 15, height = 10)</code></pre>
+# ggsave(&quot;SRA_BehInt-plot.png&quot;, plot = combined_plot, width = 15, height = 10)</code></pre>
 </div>
 </div>
 <div
@@ -573,7 +573,7 @@ counterstereotype_filtered$Change_NA_R &lt;- counterstereotype_filtered$Change_N
   ggplot(aes(x = Change_NEB_R, y = `@2BInt_NEB`)) +
   geom_jitter() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deeppink&quot;) + 
-  labs(x = &quot;Improvement in Perception of Teens&#39; Normalized Externalizing Behavior*&quot;,
+  labs(x = &quot;Improvement in Perception of Teens&#39; Normalized Externalizing Behavior&quot;,
        y = &#39;Intentions to Engage in Externalizing Behavior&#39; ) +
   theme_minimal()
 
@@ -581,7 +581,7 @@ p2 &lt;- counterstereotype_filtered %&gt;%
   ggplot(aes(x = Change_NA_R, y = `@2BInt_NA`)) +
   geom_jitter() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;hotpink&quot;) + 
-  labs(x = &quot;Improvement in Perception of Teens&#39; Negative Autonomy*&quot;,
+  labs(x = &quot;Improvement in Perception of Teens&#39; Negative Autonomy&quot;,
        y = &#39;Intentions to Engage in Negative Autonomy&#39; ) +
   theme_minimal()
 
@@ -589,7 +589,7 @@ p3 &lt;- counterstereotype_filtered %&gt;%
   ggplot(aes(x = Change_antisocial_R, y = `@2BInt_antisocial`)) +
   geom_jitter() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;pink2&quot;) + 
-  labs(x = &quot;Improvement in Perception of Teens&#39; Antisocial Behavior*&quot;,
+  labs(x = &quot;Improvement in Perception of Teens&#39; Antisocial Behavior&quot;,
        y = &#39;Intentions to Engage in Antisocial Behavior&#39; ) +
   theme_minimal()
 
@@ -597,7 +597,7 @@ p4 &lt;- counterstereotype_filtered %&gt;%
   ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
   geom_jitter() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;blue&quot;) + 
-  labs(x = &quot;Improvement in Perception of Teens&#39; Positive Family Influence*&quot;,
+  labs(x = &quot;Improvement in Perception of Teens&#39; Positive Family Influence&quot;,
        y = &#39;Intentions to Engage Positively with Family&#39; ) +
   theme_minimal()
 
@@ -605,8 +605,8 @@ p5 &lt;- counterstereotype_filtered %&gt;%
   ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
   geom_jitter() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;deepskyblue&quot;) + 
-  labs(x = &quot;Improvement in Perception of Teens&#39; Emotional Responsibility*&quot;,
-       y = &#39;Intentions to Be Emotionally Responsible&#39; ) +
+  labs(x = &quot;Improvement in Perception of Teens&#39; Emotional Responsibility&quot;,
+       y = &#39;Intentions to Engage Positively with Peers&#39; ) +
   theme_minimal()
 
 p6 &lt;- counterstereotype_filtered %&gt;%
@@ -618,6 +618,39 @@ p6 &lt;- counterstereotype_filtered %&gt;%
   theme_minimal()</code></pre>
 <pre class="r"><code>(p1 + p2 + p3) / (p4 + p5 + p6) </code></pre>
 <p><img src="p04_files/figure-html/combine-plots2-1.png" width="1440" /></p>
+<div id="trying-a-vertical-layout-to-fit-my-poster-better"
+class="section level5">
+<h5>Trying a vertical layout to fit my poster better</h5>
+<pre class="r"><code>(p1 + p4) / (p2 + p5) / (p3 + p6) </code></pre>
+<p><img src="p04_files/figure-html/combine-plots3-1.png" width="1440" /></p>
+<pre class="r"><code>combined_plot &lt;- (p1 + p4) / (p2 + p5) / (p3 + p6) + plot_annotation(title = &quot;Improvements in Views of Teens Predict Positive Behavioral Intentions&quot;, theme = theme(plot.title = element_text(hjust = 0.5))
+)
+
+combined_plot</code></pre>
+<p><img src="p04_files/figure-html/save-vertical-plot-1.png" width="672" /></p>
+<pre class="r"><code># ggsave(&quot;SRA_BehInt-plot-vertical.png&quot;, plot = combined_plot, width = 15, height = 25)</code></pre>
+</div>
+<div id="breaking-up-the-plots-to-fit-the-poster"
+class="section level4">
+<h4>Breaking up the plots to fit the poster</h4>
+<pre class="r"><code>combined_plot1 &lt;- (p1 + p4) 
+
+combined_plot1</code></pre>
+<p><img src="p04_files/figure-html/save-split-plots-1.png" width="672" /></p>
+<pre class="r"><code># ggsave(&quot;SRA_BehInt-plot1.png&quot;, plot = combined_plot1, width = 15, height = 7)
+
+combined_plot2 &lt;- (p2 + p5) 
+
+# ggsave(&quot;SRA_BehInt-plot2.png&quot;, plot = combined_plot2, width = 15, height = 7)
+
+combined_plot3 &lt;- (p3 + p6)
+
+# ggsave(&quot;SRA_BehInt-plot3.png&quot;, plot = combined_plot3, width = 15, height = 7)
+
+combined_plot4 &lt;- (p2 + p5) / (p3 + p6)
+
+# ggsave(&quot;SRA_BehInt-plot4.png&quot;, plot = combined_plot4, width = 15, height = 15)</code></pre>
+</div>
 </div>
 
 

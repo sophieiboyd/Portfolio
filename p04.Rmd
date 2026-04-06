@@ -229,7 +229,7 @@ p6 <- counterstereotype_filtered %>%
 ```{r save-final-plot, warning=FALSE, message=FALSE}
 combined_plot <- (p1 + p2 + p3) / (p4 + p5 + p6) + plot_annotation(title = 'Improvements in Views of Teens Predict More Positive Behavioral Intentions', theme = theme(plot.title = element_text(hjust = 0.5)))
 
-ggsave("SRA_BehInt-plot.png", plot = combined_plot, width = 15, height = 10)
+# ggsave("SRA_BehInt-plot.png", plot = combined_plot, width = 15, height = 10)
 ```
 
 ## Update: After getting feedback from my lab, I have decided to recode the change scores for negative attributes only, such that positive change scores are all indicative of improvments in views of teens.
@@ -276,7 +276,7 @@ p1 <- counterstereotype_filtered %>%
   ggplot(aes(x = Change_NEB_R, y = `@2BInt_NEB`)) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE, color = "deeppink") + 
-  labs(x = "Improvement in Perception of Teens' Normalized Externalizing Behavior*",
+  labs(x = "Improvement in Perception of Teens' Normalized Externalizing Behavior",
        y = 'Intentions to Engage in Externalizing Behavior' ) +
   theme_minimal()
 
@@ -284,7 +284,7 @@ p2 <- counterstereotype_filtered %>%
   ggplot(aes(x = Change_NA_R, y = `@2BInt_NA`)) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE, color = "hotpink") + 
-  labs(x = "Improvement in Perception of Teens' Negative Autonomy*",
+  labs(x = "Improvement in Perception of Teens' Negative Autonomy",
        y = 'Intentions to Engage in Negative Autonomy' ) +
   theme_minimal()
 
@@ -292,7 +292,7 @@ p3 <- counterstereotype_filtered %>%
   ggplot(aes(x = Change_antisocial_R, y = `@2BInt_antisocial`)) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE, color = "pink2") + 
-  labs(x = "Improvement in Perception of Teens' Antisocial Behavior*",
+  labs(x = "Improvement in Perception of Teens' Antisocial Behavior",
        y = 'Intentions to Engage in Antisocial Behavior' ) +
   theme_minimal()
 
@@ -300,7 +300,7 @@ p4 <- counterstereotype_filtered %>%
   ggplot(aes(x = Change_PFI, y = `@2BInt_PFI`)) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") + 
-  labs(x = "Improvement in Perception of Teens' Positive Family Influence*",
+  labs(x = "Improvement in Perception of Teens' Positive Family Influence",
        y = 'Intentions to Engage Positively with Family' ) +
   theme_minimal()
 
@@ -308,8 +308,8 @@ p5 <- counterstereotype_filtered %>%
   ggplot(aes(x = Change_ER, y = `@2BInt_PR`)) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE, color = "deepskyblue") + 
-  labs(x = "Improvement in Perception of Teens' Emotional Responsibility*",
-       y = 'Intentions to Be Emotionally Responsible' ) +
+  labs(x = "Improvement in Perception of Teens' Emotional Responsibility",
+       y = 'Intentions to Engage Positively with Peers' ) +
   theme_minimal()
 
 p6 <- counterstereotype_filtered %>%
@@ -328,12 +328,40 @@ p6 <- counterstereotype_filtered %>%
 
 ##### Trying a vertical layout to fit my poster better
 
-```{r combine-plots2, warning=FALSE, message=FALSE, fig.width = 15, fig.height = 20}
+```{r combine-plots3, warning=FALSE, message=FALSE, fig.width = 15, fig.height = 20}
 (p1 + p4) / (p2 + p5) / (p3 + p6) 
 ```
 
 ```{r save-vertical-plot, warning=FALSE, message=FALSE}
-combined_plot <- (p1 + p4) / (p2 + p5) / (p3 + p6) 
+combined_plot <- (p1 + p4) / (p2 + p5) / (p3 + p6) + plot_annotation(title = "Improvements in Views of Teens Predict Positive Behavioral Intentions", theme = theme(plot.title = element_text(hjust = 0.5))
+)
 
-ggsave("SRA_BehInt-plot-vertical.png", plot = combined_plot, width = 15, height = 20)
+combined_plot
+
+# ggsave("SRA_BehInt-plot-vertical.png", plot = combined_plot, width = 15, height = 25)
 ```
+
+#### Breaking up the plots to fit the poster
+
+```{r save-split-plots, warning=FALSE, message=FALSE}
+combined_plot1 <- (p1 + p4) 
+
+combined_plot1
+
+# ggsave("SRA_BehInt-plot1.png", plot = combined_plot1, width = 15, height = 7)
+
+combined_plot2 <- (p2 + p5) 
+
+# ggsave("SRA_BehInt-plot2.png", plot = combined_plot2, width = 15, height = 7)
+
+combined_plot3 <- (p3 + p6)
+
+# ggsave("SRA_BehInt-plot3.png", plot = combined_plot3, width = 15, height = 7)
+
+combined_plot4 <- (p2 + p5) / (p3 + p6)
+
+# ggsave("SRA_BehInt-plot4.png", plot = combined_plot4, width = 15, height = 15)
+
+
+```
+
