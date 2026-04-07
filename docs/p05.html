@@ -11,7 +11,7 @@
 
 
 
-<title>Portfolio 5: Visualizing Measles Data</title>
+<title>Portfolio 5: Visualizing Measles Vaccine Data</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -290,7 +290,8 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 5: Visualizing Measles Data</h1>
+<h1 class="title toc-ignore">Portfolio 5: Visualizing Measles Vaccine
+Data</h1>
 
 </div>
 
@@ -299,18 +300,37 @@ $(document).ready(function () {
 <h2>Overview:</h2>
 <div id="goal" class="section level4">
 <h4>Goal:</h4>
+<p>For this piece, I am interested in learning about measles vaccination
+rates in schools across the US and getting practice with creating maps
+in R.</p>
 </div>
 <div id="data" class="section level4">
 <h4>Data:</h4>
+<p>I used a Tidy Tuesday dataset that contains information about measles
+vaccination rates from schools across 32 states. Main variables include
+the type of school (e.g., public, private, charter), the measles
+vaccination rate, rates of medical/religious/personal exemptions, and
+the locations of the schools (indicated by state, city, longitude, and
+latitude)</p>
 </div>
 <div id="product" class="section level4">
 <h4>Product:</h4>
+<p>I created a series of maps and plots to better understand how
+vaccination rates and exemptions differ across states and different
+types of schools.</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
+<p>Vaccination rates were relatively high across most states and were
+highest in public schools relative to private and charter schools. More
+detailed interpretations are included throughout the document.</p>
 </div>
 <div id="sources" class="section level4">
 <h4>Sources:</h4>
+<p>data: <a
+href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2020/2020-02-25"
+class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2020/2020-02-25</a></p>
+<p>I adapted code from my first-year project to create the US maps.</p>
 <hr />
 </div>
 <div id="loading-packages" class="section level3">
@@ -362,65 +382,115 @@ library(maps)</code></pre>
 ##  9 Vermont           94.6
 ## 10 Montana           94.4
 ## # ℹ 11 more rows</code></pre>
+<p>Of the states represented, Illinois had the highest average
+vaccination rate and Arkansas had the lowest average vaccination
+rate.</p>
 </div>
-<div id="trying-to-map-vaccination-rates" class="section level3">
-<h3>Trying to map vaccination rates</h3>
-<pre class="r"><code># Get US map data
-us_map &lt;- map_data(&quot;state&quot;)
+<div id="first-attempt-at-mapping-vaccination-rates-by-state"
+class="section level3">
+<h3>First attempt at mapping vaccination rates by state</h3>
+<pre class="r"><code>us_map &lt;- map_data(&quot;state&quot;)
 
-# Create the point map
 ggplot() +
-  # Add US map background
   geom_polygon(data = us_map, 
               aes(x = long, y = lat, group = group),
               fill = &quot;white&quot;, 
               color = &quot;gray50&quot;) +
-  # Add points for each location, colored by number of teachers
   geom_point(data = measles,
             aes(x = lng, 
                 y = lat,
                 color = mmr),
-            size = 1,  # Smaller fixed size for all points
+            size = 1,  
             alpha = 0.8)</code></pre>
-<pre><code>## Warning: Removed 1549 rows containing missing values or values outside the scale range
-## (`geom_point()`).</code></pre>
 <p><img src="p05_files/figure-html/mmr-map-1.png" width="672" /></p>
-<pre class="r"><code># Filtering data to just include continental US (for now)
-
-measles_cont &lt;- measles %&gt;%
+<p>My first map ended up smushed to the left, and with a lot of extra
+points representing schools with missing data. I am going to filter the
+dataset to just include schools that have available vaccination data and
+will show up on my US map.</p>
+</div>
+<div id="second-attempt" class="section level3">
+<h3>Second attempt</h3>
+<pre class="r"><code>measles_filtered &lt;- measles %&gt;%
   filter(lng &lt; 0) %&gt;%
   filter(mmr &gt; 0)
 
-# Create the point map
 ggplot() +
-  # Add US map background
   geom_polygon(data = us_map, 
               aes(x = long, y = lat, group = group),
               fill = &quot;white&quot;, 
               color = &quot;gray50&quot;) +
-  # Add points for each location, colored by number of teachers
-  geom_point(data = measles_cont,
+  geom_point(data = measles_filtered,
             aes(x = lng, 
                 y = lat,
                 color = mmr),
-            size = 1,  # Smaller fixed size for all points
-            alpha = 0.5)</code></pre>
+            size = 1,  
+            alpha = 0.5) +
+  labs(x = NULL,
+       y = NULL,
+       color = &#39;MMR vaccine rate&#39;
+       )</code></pre>
 <p><img src="p05_files/figure-html/mmr-map-attempt2-1.png" width="672" /></p>
+<p>Much better, but still slightly off. I’m going to try once more, this
+time adding a line of code to set the map projection.</p>
 </div>
-<div id="trying-to-map-vaccination-rate-by-type-of-school"
-class="section level3">
-<h3>Trying to map vaccination rate by type of school</h3>
+<div id="third-attempt" class="section level3">
+<h3>Third attempt</h3>
+<pre class="r"><code>measles_filtered &lt;- measles %&gt;%
+  filter(lng &lt; 0) %&gt;%
+  filter(mmr &gt; 0)
+
+ggplot() +
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  geom_point(data = measles_filtered,
+            aes(x = lng, 
+                y = lat,
+                color = mmr),
+            size = 1,  
+            alpha = 0.5) +
+      coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +
+labs(x = NULL,
+       y = NULL,
+       color = &#39;MMR vaccine rate&#39;
+       )</code></pre>
+<p><img src="p05_files/figure-html/mmr-map-attempt3-1.png" width="672" /></p>
+<p>Better!</p>
+<p>I’m seeing that overall, vaccination rates were relatively high, but
+there are some dark blue dots/regions that represent schools with low
+vaccination rates across the map.</p>
+<p>I am also interested in seeing how vaccination rates differ across
+different types of schools.</p>
 </div>
 <div id="average-vaccination-rate-by-school-type"
 class="section level3">
 <h3>Average vaccination rate by school type</h3>
-<pre class="r"><code>mmr_type_summary &lt;- measles_cont %&gt;%
+<pre class="r"><code>measles_filtered %&gt;%
   filter(mmr &gt; 0) %&gt;%
   select(mmr, type) %&gt;%
   group_by(type) %&gt;%
   summarize(across(everything(), list(mean = mean))) %&gt;%
   arrange(desc(mmr_mean))</code></pre>
-<pre class="r"><code>measles_type &lt;- measles_cont %&gt;%
+<pre><code>## # A tibble: 7 × 2
+##   type         mmr_mean
+##   &lt;chr&gt;           &lt;dbl&gt;
+## 1 BOCES            98.8
+## 2 Public           96.2
+## 3 &lt;NA&gt;             94.5
+## 4 Nonpublic        94.4
+## 5 Kindergarten     94.2
+## 6 Private          93.3
+## 7 Charter          88.0</code></pre>
+<pre class="r"><code>#Saving as an object
+mmr_type_summary &lt;- measles_filtered %&gt;%
+  filter(mmr &gt; 0) %&gt;%
+  select(mmr, type) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean))) %&gt;%
+  arrange(desc(mmr_mean))</code></pre>
+<p>I want to focus on just public, private, and charter schools.</p>
+<pre class="r"><code>measles_type &lt;- measles_filtered %&gt;%
   filter(type %in% c(&quot;Public&quot;, &quot;Private&quot;, &quot;Charter&quot;))
 
 mmr_type_summary &lt;- measles_type %&gt;%
@@ -432,26 +502,158 @@ mmr_type_summary &lt;- measles_type %&gt;%
 
 mmr_type_summary %&gt;%
   ggplot(aes(x = type, y = mmr_mean, color = type, fill = type)) +
-  geom_col()</code></pre>
+  geom_col() +
+  labs(x = &#39;Type of School&#39;,
+       y = &#39;Average Vaccination Rate&#39;) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="p05_files/figure-html/mmr-by-type-plot-1.png" width="672" /></p>
+<p>Average vaccination rates were lowest on average in charter schools
+and highest on average in public schools. In line with these results, I
+found a paper (<a href="https://pubmed.ncbi.nlm.nih.gov/24795202/"
+class="uri">https://pubmed.ncbi.nlm.nih.gov/24795202/</a>) that reported
+higher vaccine exemption rates in private schools relative to public
+schools. To see if this explanation applies to my findings, I am going
+to examine the data I have on medical, religious, and personal exemption
+rates.</p>
 </div>
-<div id="looking-at-types-of-schools-by-state" class="section level3">
-<h3>Looking at types of schools by state</h3>
-<pre class="r"><code># Create the point map
+<div id="prevalence-of-vaccine-exemptions-by-type-of-school"
+class="section level3">
+<h3>Prevalence of vaccine exemptions by type of school</h3>
+<pre class="r"><code>measles_type %&gt;%
+  select(type, xrel, xmed, xper) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean), na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   type    xrel_mean xmed_mean xper_mean
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Charter       NaN      1.67     11.3 
+## 2 Private         1      5.09     12.4 
+## 3 Public          1      2.34      5.55</code></pre>
+<pre class="r"><code>#Saving as object:
+
+measles_x &lt;- measles_type %&gt;%
+  select(type, xrel, xmed, xper) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean), na.rm = TRUE))</code></pre>
+<p>The biggest differences in exemption rates by type of school were
+observed in personal exemptions, which were much higher for charter and
+private schools than public schools:</p>
+<pre class="r"><code>measles_x %&gt;%
+  ggplot(aes(x = type, y = xper_mean, color = type, fill = type)) +
+  geom_col() +
+  labs(x = &#39;Type of School&#39;,
+       y = &#39;Personal Vaccine Exemption Rate&#39;) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="p05_files/figure-html/xper-by-type-1.png" width="672" /></p>
+<p>Now, I want to see if differences in the prevalence of
+private/charter schools and in personal vaccine exemptions vary by state
+in a manner similar to the overall vaccine rates.</p>
+</div>
+<div id="mapping-privatecharter-schools-by-state"
+class="section level3">
+<h3>Mapping private/charter schools by state</h3>
+<pre class="r"><code>#Filtering to get just private/charter schools
+measles_type2 &lt;- measles_type %&gt;%
+    filter(type %in% c(&quot;Private&quot;, &quot;Charter&quot;))
+
 ggplot() +
-  # Add US map background
   geom_polygon(data = us_map, 
               aes(x = long, y = lat, group = group),
               fill = &quot;white&quot;, 
               color = &quot;gray50&quot;) +
-  # Add points for each location, colored by number of teachers
-  geom_point(data = measles_type,
+  geom_point(data = measles_type2,
             aes(x = lng, 
                 y = lat,
                 color = type),
-            size = 1,  # Smaller fixed size for all points
-            alpha = 0.5)</code></pre>
-<p><img src="p05_files/figure-html/type-by-state-map-1.png" width="672" /></p>
+            size = 1,  
+            alpha = 0.5) +
+      coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +
+labs(x = NULL,
+       y = NULL,
+       color = &#39;Type of school&#39;
+       )</code></pre>
+<p><img src="p05_files/figure-html/charter-private-map-1.png" width="672" /></p>
+<p>Unfortunately, the available data on charter and private schools was
+sparse.</p>
+</div>
+<div id="mapping-personal-exemption-rates-by-state"
+class="section level3">
+<h3>Mapping personal exemption rates by state</h3>
+<pre class="r"><code>measles_filtered_xper &lt;- measles_filtered %&gt;%
+  filter(!is.na(xper))
+  
+
+ggplot() +
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  geom_point(data = measles_filtered_xper,
+            aes(x = lng, 
+                y = lat,
+                color = xper),
+            size = 1,  
+            alpha = 0.5) +
+      coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +
+labs(x = NULL,
+       y = NULL,
+       color = &#39;Personal Vaccine Exemption Rate&#39;
+       )</code></pre>
+<p><img src="p05_files/figure-html/xper-map-1.png" width="672" /></p>
+<p>This is where I realized an error. The personal exemption rate is
+meant to be reported as a percentage, but it has values that go over
+100%. I am going to filter to include only possible values:</p>
+<pre class="r"><code>measles_filtered_xper &lt;- measles_filtered %&gt;%
+  filter(!is.na(xper)) %&gt;%
+  filter(xper &lt; 100)
+  
+
+ggplot() +
+  geom_polygon(data = us_map, 
+              aes(x = long, y = lat, group = group),
+              fill = &quot;white&quot;, 
+              color = &quot;gray50&quot;) +
+  geom_point(data = measles_filtered_xper,
+            aes(x = lng, 
+                y = lat,
+                color = xper),
+            size = 1,  
+            alpha = 0.5) +
+      coord_map(&quot;albers&quot;, lat0 = 39, lat1 = 45) +
+labs(x = NULL,
+       y = NULL,
+       color = &#39;Personal Vaccine Exemption Rate&#39;
+       )</code></pre>
+<p><img src="p05_files/figure-html/xper-map-fixed-1.png" width="672" /></p>
+<p>Looking at personal exemption rates by state is interesting, but
+unfortunately does not offer a great companion to the first map
+(vaccination rates by state) because there is substantial missing data
+on the exemption variables.</p>
+<p>After catching the error in the personal exemption rate variable, I
+now need to re-run my analyses of exemption rates by type of school from
+above to see if they were affected:</p>
+</div>
+<div
+id="prevalence-of-personal-vaccine-exemptions-by-type-of-school-corrected"
+class="section level3">
+<h3>Prevalence of personal vaccine exemptions by type of school
+(corrected)</h3>
+<pre class="r"><code>measles_filtered_xper %&gt;%
+  filter(type %in% c(&quot;Public&quot;, &quot;Private&quot;, &quot;Charter&quot;)) %&gt;%
+  select(type, xper) %&gt;%
+  group_by(type) %&gt;%
+  summarize(across(everything(), list(mean = mean), na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   type    xper_mean
+##   &lt;chr&gt;       &lt;dbl&gt;
+## 1 Charter     11.3 
+## 2 Private     12.4 
+## 3 Public       5.55</code></pre>
+<pre class="r"><code>max(measles_filtered_xper$xper)</code></pre>
+<pre><code>## [1] 83.33</code></pre>
+<p>Differences in personal exemption rates by school type remained the
+same. The incorrect value must have come from a different type of
+school, as I included all types of schools in the previous map.</p>
 </div>
 </div>
 
