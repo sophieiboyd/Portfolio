@@ -308,18 +308,45 @@ plan to use this simulated dataset in future portfolio pieces.</p>
 <div id="data" class="section level4">
 <h4>Data:</h4>
 <p>My original dataset contained youth-reported measures of parenting
-practices (warmth and support for autonomy), civic engagement, and
-demographic information collected over three waves of a longitudinal
-study. Participants made up 11 different cultural/geographic groups,
-which were represented by effect-coded predictors in my final regression
-models. There was quite a bit of missing data across waves, so to
-simplify my simulation, I will use the most restricted subsample I had
-(668 participants).</p>
+practices, civic engagement, and demographic information collected over
+three waves of a longitudinal study (labeled here as Times 1-3).
+Participants made up 11 different cultural/geographic groups, which were
+represented by effect-coded predictors in my final regression models.
+There was quite a bit of missing data across waves, so to simplify my
+simulation, I will use the most restricted subsample I had (668
+participants).</p>
+<p>Specific core variables include:</p>
+<ul>
+<li>Joint decision making at Time 1 (JDM; a measure of moderate support
+for autonomy)</li>
+<li>Independent decision making at Time 1 (IDM; a measure of extreme
+support for autonomy)</li>
+<li>Maternal warmth at Time 1 (MatWarmth)</li>
+<li>Paternal warmth at Time 1 (PatWarmth)</li>
+<li>Civic engagement at Time 2 (CE_2)</li>
+<li>Civic engagement at Time 3 (CE_3)</li>
+</ul>
+<p>Recruitment groups include:</p>
+<ul>
+<li>Naples, Italy</li>
+<li>Rome, Italy</li>
+<li>Kenya</li>
+<li>Philippines</li>
+<li>Thailand</li>
+<li>Sweden</li>
+<li>US, African American</li>
+<li>US, European American</li>
+<li>US, Hispanic</li>
+<li>Colombia</li>
+<li>Jordan</li>
+</ul>
 </div>
 <div id="product" class="section level4">
 <h4>Product:</h4>
 <p>A simulated dataset containing all variables necessary for the
-analyses I completed for my thesis.</p>
+analyses I completed for my thesis. (I obtained all parameter values by
+running descriptive and correlational analyses with the original dataset
+in SPSS.)</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
@@ -337,17 +364,91 @@ class="section level3">
 <h3>Creating the dataframe and simulating demographic information</h3>
 <div id="age-at-time-1" class="section level4">
 <h4>Age at Time 1</h4>
-<pre class="r"><code>df_civicengagement &lt;- data.frame(
+<pre class="r"><code>set.seed(123)
+df_civicengagement &lt;- data.frame(
   id = 1:668,
   age = rnorm(668, mean = 15.61, sd = .898)
 )</code></pre>
 </div>
-<div id="geographiccultural-recruitment-group" class="section level4">
-<h4>Geographic/cultural recruitment group</h4>
-<pre class="r"><code>df_civicengagement$IDN &lt;- rep(c(&quot;Italy-Naples&quot;, &quot;Italy-Rome&quot;, &quot;Kenya&quot;, &quot;Philippines&quot;, &quot;Thailand&quot;, &quot;Sweden&quot;, &quot;US-AA&quot;, &quot;US-EA&quot;, &quot;US-H&quot;, &quot;Colombia&quot;, &quot;Jordan&quot;),
+<div
+id="geographiccultural-recruitment-group-grouping-variable-effect-coded-variables"
+class="section level4">
+<h4>Geographic/cultural recruitment group (grouping variable +
+effect-coded variables)</h4>
+<pre class="r"><code>set.seed(123)
+df_civicengagement$IDN &lt;- rep(c(&quot;Italy-Naples&quot;, &quot;Italy-Rome&quot;, &quot;Kenya&quot;, &quot;Philippines&quot;, &quot;Thailand&quot;, &quot;Sweden&quot;, &quot;US-AA&quot;, &quot;US-EA&quot;, &quot;US-H&quot;, &quot;Colombia&quot;, &quot;Jordan&quot;),
   times = c(76, 84, 41, 67, 50, 33, 49, 66, 39, 74, 89),
   length.out = 668
 )</code></pre>
+<pre class="r"><code>df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Naples = case_when(
+    IDN == &quot;Italy-Naples&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Rome = case_when(
+    IDN == &quot;Italy-Rome&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Kenya = case_when(
+    IDN == &quot;Kenya&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Philippines = case_when(
+    IDN == &quot;Philippines&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Thailand = case_when(
+    IDN == &quot;Thailand&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Sweden = case_when(
+    IDN == &quot;Sweden&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(US_AA = case_when(
+    IDN == &quot;US-AA&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(US_H = case_when(
+    IDN == &quot;US-H&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Colombia = case_when(
+    IDN == &quot;Colombia&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(Jordan = case_when(
+    IDN == &quot;Jordan&quot; ~ 1,
+    IDN == &quot;US-EA&quot; ~ -1,
+    TRUE ~ 0
+  ))</code></pre>
 </div>
 <div id="gender" class="section level4">
 <h4>Gender</h4>
@@ -361,6 +462,44 @@ class="section level4">
 <h4>Maximum level of parental education (in years)</h4>
 <pre class="r"><code>df_civicengagement$max_parental_ed &lt;- rnorm(668, mean = 13.91, sd = 4.21)</code></pre>
 </div>
+</div>
+<div id="simulating-the-central-variables" class="section level3">
+<h3>Simulating the central variables</h3>
+<pre class="r"><code>set.seed(123)
+
+n_participants &lt;- 668
+
+var_names &lt;- c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;)
+
+mean_vars &lt;- c(.96, .26, 3.46, 3.26, 2.04, 1.81)
+sd_vars &lt;- c(.40, .21, .56, .74, .86, .80)
+
+cor_matrix_parenting_CE &lt;- matrix(
+  c(
+1.0000, -.802, .129, .172, .086, .103, 
+-.802, 1.0000, -.148, -.197, -.129, -.102,
+.129, -.148, 1.0000, .551, .056, -.002,
+.172, -.197, .551, 1.0000, .046, .044,
+.086, -.129, .056, .046, 1.0000, .521,
+.103, -.102, -.002, .044, .521, 1.000
+  ),
+  nrow = 6, ncol = 6, byrow = TRUE,
+  dimnames = list(
+c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;),
+c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;)
+  )
+)
+
+cov_matrix_parenting_CE &lt;- cor_matrix_parenting_CE * (sd_vars %*% t(sd_vars))
+
+parenting_CE_data &lt;- mvrnorm(n = 668, mu = mean_vars, Sigma = cov_matrix_parenting_CE)
+
+df_civicengagement &lt;- cbind(df_civicengagement, parenting_CE_data)</code></pre>
+<p>Great! Now I have a dataframe that includes simulated values for all
+of my main variables of interest. However, my simulation did not account
+for differences among the recruitment groups. I need to adjust my
+simulation to account for observed geographic/cultural differences in
+the parenting and civic engagement variables.</p>
 </div>
 </div>
 
