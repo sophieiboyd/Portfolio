@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 6</title>
+<title>Portfolio 6: Simulating Parenting and Civic Engagement Data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,79 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 6</h1>
+<h1 class="title toc-ignore">Portfolio 6: Simulating Parenting and Civic
+Engagement Data</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>I want to use my portfolio to share some of the analytic work I did
+for my Master’s thesis. However, I need to keep my data private. My goal
+for this piece is to simulate a dataset that resembles my thesis data. I
+plan to use this simulated dataset in future portfolio pieces.</p>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>My original dataset contained youth-reported measures of parenting
+practices (warmth and support for autonomy), civic engagement, and
+demographic information collected over three waves of a longitudinal
+study. Participants made up 11 different cultural/geographic groups,
+which were represented by effect-coded predictors in my final regression
+models. There was quite a bit of missing data across waves, so to
+simplify my simulation, I will use the most restricted subsample I had
+(668 participants).</p>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>A simulated dataset containing all variables necessary for the
+analyses I completed for my thesis.</p>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>**Fill in after completing</p>
+<hr />
+</div>
+<div id="load-packages-and-data" class="section level3">
+<h3>Load packages and data</h3>
+<pre class="r"><code>library(tidyverse) 
+library(ggplot2)
+library(MASS)</code></pre>
+</div>
+<div id="creating-the-dataframe-and-simulating-demographic-information"
+class="section level3">
+<h3>Creating the dataframe and simulating demographic information</h3>
+<div id="age-at-time-1" class="section level4">
+<h4>Age at Time 1</h4>
+<pre class="r"><code>df_civicengagement &lt;- data.frame(
+  id = 1:668,
+  age = rnorm(668, mean = 15.61, sd = .898)
+)</code></pre>
+</div>
+<div id="geographiccultural-recruitment-group" class="section level4">
+<h4>Geographic/cultural recruitment group</h4>
+<pre class="r"><code>df_civicengagement$IDN &lt;- rep(c(&quot;Italy-Naples&quot;, &quot;Italy-Rome&quot;, &quot;Kenya&quot;, &quot;Philippines&quot;, &quot;Thailand&quot;, &quot;Sweden&quot;, &quot;US-AA&quot;, &quot;US-EA&quot;, &quot;US-H&quot;, &quot;Colombia&quot;, &quot;Jordan&quot;),
+  times = c(76, 84, 41, 67, 50, 33, 49, 66, 39, 74, 89),
+  length.out = 668
+)</code></pre>
+</div>
+<div id="gender" class="section level4">
+<h4>Gender</h4>
+<pre class="r"><code>df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;),
+  times = c(354, 314),
+  length.out = 668
+)</code></pre>
+</div>
+<div id="maximum-level-of-parental-education-in-years"
+class="section level4">
+<h4>Maximum level of parental education (in years)</h4>
+<pre class="r"><code>df_civicengagement$max_parental_ed &lt;- rnorm(668, mean = 13.91, sd = 4.21)</code></pre>
+</div>
+</div>
+</div>
 
 
 

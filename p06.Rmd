@@ -1,5 +1,69 @@
 ---
-title: "Portfolio 6"
+title: "Portfolio 6: Simulating Parenting and Civic Engagement Data"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+I want to use my portfolio to share some of the analytic work I did for my Master's thesis. However, I need to keep my data private. My goal for this piece is to simulate a dataset that resembles my thesis data. I plan to use this simulated dataset in future portfolio pieces.
+
+#### Data:
+
+My original dataset contained youth-reported measures of parenting practices (warmth and support for autonomy), civic engagement, and demographic information collected over three waves of a longitudinal study. Participants made up 11 different cultural/geographic groups, which were represented by effect-coded predictors in my final regression models. There was quite a bit of missing data across waves, so to simplify my simulation, I will use the most restricted subsample I had (668 participants).
+
+#### Product:
+
+A simulated dataset containing all variables necessary for the analyses I completed for my thesis.
+
+#### Interpretation:
+
+**Fill in after completing
+
+----
+
+### Load packages and data
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(tidyverse) 
+library(ggplot2)
+library(MASS)
+```
+
+### Creating the dataframe and simulating demographic information 
+
+#### Age at Time 1 
+
+```{r age}
+df_civicengagement <- data.frame(
+  id = 1:668,
+  age = rnorm(668, mean = 15.61, sd = .898)
+)
+```
+
+#### Geographic/cultural recruitment group 
+
+```{r IDN}
+df_civicengagement$IDN <- rep(c("Italy-Naples", "Italy-Rome", "Kenya", "Philippines", "Thailand", "Sweden", "US-AA", "US-EA", "US-H", "Colombia", "Jordan"),
+  times = c(76, 84, 41, 67, 50, 33, 49, 66, 39, 74, 89),
+  length.out = 668
+)
+```
+
+#### Gender 
+
+```{r gender}
+df_civicengagement$male <- rep(c("not male", "male"),
+  times = c(354, 314),
+  length.out = 668
+)
+```
+
+#### Maximum level of parental education (in years)
+
+```{r max-parental-ed}
+df_civicengagement$max_parental_ed <- rnorm(668, mean = 13.91, sd = 4.21)
+```
+
+
+
