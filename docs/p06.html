@@ -310,7 +310,7 @@ plan to use this simulated dataset in future portfolio pieces.</p>
 <p>My original dataset contained youth-reported measures of parenting
 practices, civic engagement, and demographic information collected over
 three waves of a longitudinal study (labeled here as Times 1-3).
-Participants made up 11 different cultural/geographic groups, which were
+Participants made up 11 different geographic/cultural groups, which were
 represented by effect-coded predictors in my final regression models.
 There was quite a bit of missing data across waves, so to simplify my
 simulation, I will use the most restricted subsample I had (668
@@ -344,15 +344,15 @@ support for autonomy)</li>
 <div id="product" class="section level4">
 <h4>Product:</h4>
 <p>A simulated dataset containing all variables necessary for the
-analyses I completed for my thesis. (I obtained all parameter values by
+analyses I ran for my thesis. (I obtained all parameter values by
 running descriptive and correlational analyses with the original dataset
 in SPSS.)</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
 <p>The simulation worked well for recreating my data! The biggest
-challenge was figuring out how to model (1) group differences in the
-average levels of the core variables and (2) correlations among the core
+challenge was figuring out how to model (1) correlations among the core
+variables and (2) group differences in the average levels of the core
 variables at the same time. I ended up simulating the variables based on
 their correlations with each other first, and then adding “rnorm” terms
 by group to reflect group differences. This allowed me to model the main
@@ -367,8 +367,8 @@ data with two-way interactions in a future portfolio piece!</p>
 class="uri">https://rpubs.com/ozlem/exporting_data</a></p>
 <hr />
 </div>
-<div id="load-packages-and-data" class="section level3">
-<h3>Load packages and data</h3>
+<div id="loading-packages-and-data" class="section level3">
+<h3>Loading packages and data</h3>
 <pre class="r"><code>library(tidyverse) 
 library(ggplot2)
 library(MASS)</code></pre>
@@ -384,11 +384,14 @@ df_civicengagement &lt;- data.frame(
   age = rnorm(668, mean = 15.61, sd = .898)
 )</code></pre>
 </div>
-<div
-id="geographiccultural-recruitment-group-grouping-variable-effect-coded-variables"
+<div id="maximum-level-of-parental-education-in-years"
 class="section level4">
-<h4>Geographic/cultural recruitment group (grouping variable +
-effect-coded variables)</h4>
+<h4>Maximum level of parental education (in years)</h4>
+<pre class="r"><code>set.seed(123)
+df_civicengagement$max_parental_ed &lt;- rnorm(668, mean = 13.91, sd = 4.21)</code></pre>
+</div>
+<div id="recruitment-sitesgroups" class="section level4">
+<h4>Recruitment sites/groups</h4>
 <pre class="r"><code>set.seed(123)
 df_civicengagement$IDN &lt;- rep(c(&quot;Italy-Naples&quot;, &quot;Italy-Rome&quot;, &quot;Kenya&quot;, &quot;Philippines&quot;, &quot;Thailand&quot;, &quot;Sweden&quot;, &quot;US-AA&quot;, &quot;US-EA&quot;, &quot;US-H&quot;, &quot;Colombia&quot;, &quot;Jordan&quot;),
   times = c(76, 84, 41, 67, 50, 33, 49, 66, 39, 74, 89),
@@ -474,14 +477,10 @@ df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;),
   length.out = 668
 )</code></pre>
 </div>
-<div id="maximum-level-of-parental-education-in-years"
-class="section level4">
-<h4>Maximum level of parental education (in years)</h4>
-<pre class="r"><code>df_civicengagement$max_parental_ed &lt;- rnorm(668, mean = 13.91, sd = 4.21)</code></pre>
 </div>
-</div>
-<div id="simulating-the-central-variables" class="section level3">
-<h3>Simulating the central variables</h3>
+<div id="simulating-the-core-variables-parenting-and-civic-engagement"
+class="section level3">
+<h3>Simulating the core variables (parenting and civic engagement)</h3>
 <pre class="r"><code>set.seed(123)
 
 n_participants &lt;- 668
@@ -525,21 +524,20 @@ of my main variables of interest. Let’s visualize it:</p>
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="p06_files/figure-html/age-viz-1.png" width="672" /></p>
 <pre class="r"><code>df_civicengagement %&gt;%
-  ggplot(aes(x = male, fill = male)) +
-  geom_bar() +
-  labs(x = &#39;Gender&#39;,
-       y = &#39;Count&#39;) +
-  theme(legend.position = &quot;none&quot;) +
-  coord_cartesian(ylim = c(200, 400)) +
-  scale_fill_viridis_d()</code></pre>
-<p><img src="p06_files/figure-html/gender-viz-1.png" width="672" /></p>
-<pre class="r"><code>df_civicengagement %&gt;%
   ggplot(aes(x = max_parental_ed)) +
   geom_histogram(binwidth=.7, fill = &quot;navy&quot;) +
   labs(x = &#39;Maximum Parental Education&#39;,
        y = &#39;Count&#39;) +
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="p06_files/figure-html/max-parental-ed-viz-1.png" width="672" /></p>
+<pre class="r"><code>df_civicengagement %&gt;%
+  ggplot(aes(x = male, fill = male)) +
+  geom_bar() +
+  labs(x = &#39;Gender&#39;,
+       y = &#39;Count&#39;) +
+  theme(legend.position = &quot;none&quot;) +
+  scale_fill_viridis_d()</code></pre>
+<p><img src="p06_files/figure-html/gender-viz-1.png" width="672" /></p>
 <pre class="r"><code>df_civicengagement %&gt;%
   ggplot(aes(x = IDN, fill = IDN)) +
   geom_bar() +
@@ -549,11 +547,12 @@ of my main variables of interest. Let’s visualize it:</p>
   coord_flip() +
   scale_fill_viridis_d()</code></pre>
 <p><img src="p06_files/figure-html/group-viz-1.png" width="672" /></p>
-<p>Based on my bar graphs, I see that the simulations for my categorical
-variables did not run as intended. I wanted to set specific numbers for
-each group/level, but I see that the groups/levels were simulated to be
-about equal. Here are my second attempts at simulating gender and
-recruitment group membership according to my data:</p>
+<p>Based on my bar graphs, it seems that the simulations for my
+categorical variables did not run as intended. I wanted to set specific
+numbers for each group/level, but I see that the groups/levels were
+simulated to be about equal in size. Here are my second attempts at
+simulating gender and recruitment group membership according to my
+data:</p>
 <pre class="r"><code>set.seed(123)
 df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;),
   times = c(354, 314))
@@ -616,8 +615,12 @@ engagement:</p>
   labs(x = &#39;Paternal Warmth&#39;,
        y = &#39;Civic Engagement at Time 2&#39;)</code></pre>
 <p><img src="p06_files/figure-html/PW-CE-1.png" width="672" /></p>
-<p>Seeing how the simulated correlations compare to the values I
-entered:</p>
+</div>
+<div
+id="seeing-how-the-simulated-correlations-compare-to-the-values-i-entered"
+class="section level3">
+<h3>Seeing how the simulated correlations compare to the values I
+entered:</h3>
 <pre class="r"><code>print(cor_matrix_parenting_CE)</code></pre>
 <pre><code>##              JDM    IDM MatWarmth PatWarmth   CE_2   CE_3
 ## JDM        1.000 -0.802     0.129     0.172  0.086  0.103
@@ -641,8 +644,8 @@ entered:</p>
 ## PatWarmth  0.077169200
 ## CE_2       0.494268113
 ## CE_3       1.000000000</code></pre>
-<p>Everything looks good! I will save my simulated data for use in a
-future portfolio piece:</p>
+<p>Everything looks as expected here! I will save my simulated data for
+use in a future portfolio piece:</p>
 <pre class="r"><code>write.csv(df_civicengagement, &quot;/Users/sophieboyd/Documents/GitHub/Portfolio/docs/civicengagement_sim.csv&quot;)</code></pre>
 <p>One thing missing from my simulation is that I did not account for
 any differences between the recruitment groups. This is not a problem
@@ -657,16 +660,19 @@ my second simulation, I will just include two groups. Because I was
 interested in examining civic engagement in countries with different
 levels of income inequality, I will use the country with the highest
 inequality (Colombia) and the country with the lowest inequality
-(Sweden) according to estimates from the World Inequality Database.</p>
+(Sweden) according to estimates from the World Inequality Database. The
+total sample will contain 125 participants.</p>
 <pre class="r"><code>set.seed(123)
 df_civicengagement &lt;- data.frame(
   id = 1:125,
   age = rnorm(125, mean = 15.17, sd = .975)
 )</code></pre>
 <pre class="r"><code>set.seed(123)
+df_civicengagement$max_parental_ed &lt;- rnorm(125, mean = 12.67, sd = 5.02)</code></pre>
+<pre class="r"><code>set.seed(123)
 df_civicengagement$IDN &lt;- rep(c(&quot;Sweden&quot;, &quot;Colombia&quot;), times = c(51, 74))</code></pre>
-<pre class="r"><code>df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;), times = c(72, 53))</code></pre>
-<pre class="r"><code>df_civicengagement$max_parental_ed &lt;- rnorm(125, mean = 12.67, sd = 5.02)</code></pre>
+<pre class="r"><code>set.seed(123)
+df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;), times = c(72, 53))</code></pre>
 <p>First, I am recreating the core variables using the correlations
 again, with the values adjusted for my limited sample (means, standard
 deviations, and correlations across the two groups combined):</p>
@@ -700,11 +706,10 @@ cov_matrix_parenting_CE &lt;- cor_matrix_parenting_CE * (sd_vars %*% t(sd_vars))
 parenting_CE_data &lt;- mvrnorm(n = 125, mu = mean_vars, Sigma = cov_matrix_parenting_CE)
 
 df_civicengagement &lt;- cbind(df_civicengagement, parenting_CE_data)</code></pre>
-<p>Now, I need to create variation among the groups. I am mainly
-interested in how levels of civic engagement differ across countries
-with different levels of socioeconomic inequality, so I will focus on
-varying the two measures of civic engagement (reports at Time 2 and Time
-3).</p>
+<p>Now, I need to create variation between the groups. Because I am
+mainly interested in how levels of civic engagement differ across
+countries with different levels of inequality, I will focus on varying
+the two measures of civic engagement (reports at Time 2 and Time 3).</p>
 <p>I am setting the means in rnorm to be the amount above/below the
 overall sample mean that I want to shift the mean for each group. Civic
 engagement was lower in Sweden and higher in Colombia.</p>
@@ -712,14 +717,14 @@ engagement was lower in Sweden and higher in Colombia.</p>
 
 df_civicengagement &lt;- df_civicengagement %&gt;%
   mutate(CE_2 = case_when(
-    IDN == &quot;Sweden&quot; ~ CE_2 + rnorm(125, mean = -.22, sd = .01),
-    IDN == &quot;Colombia&quot; ~ CE_2 + rnorm(125, mean = .16, sd = .01), 
+    IDN == &quot;Sweden&quot; ~ CE_2 + rnorm(125, mean = -.22, sd = 0),
+    IDN == &quot;Colombia&quot; ~ CE_2 + rnorm(125, mean = .16, sd = 0), 
   ))
 
 df_civicengagement &lt;- df_civicengagement %&gt;%
   mutate(CE_3 = case_when(
-    IDN == &quot;Sweden&quot; ~ CE_3 + rnorm(125, mean = -.19, sd = .01),
-    IDN == &quot;Colombia&quot; ~ CE_3 + rnorm(125, mean = .14, sd = .01), 
+    IDN == &quot;Sweden&quot; ~ CE_3 + rnorm(125, mean = -.19, sd = 0),
+    IDN == &quot;Colombia&quot; ~ CE_3 + rnorm(125, mean = .14, sd = 0), 
   ))</code></pre>
 <p>Now I will check the means to see if the simulation matches up with
 my data. I am expecting to see group differences in mean levels of civic
@@ -735,16 +740,26 @@ variables.</p>
 library(conflicted)
 conflicts_prefer(dplyr::select())</code></pre>
 <pre><code>## [conflicted] Will prefer dplyr::select over any other package.</code></pre>
-<pre class="r"><code>core_var_means &lt;- df_civicengagement %&gt;%
+<pre class="r"><code>df_civicengagement %&gt;%
   select(IDN, JDM, IDM, MatWarmth, PatWarmth, CE_2, CE_3) %&gt;%
   group_by(IDN) %&gt;%
-  summarize(across(everything(), list(mean = mean)))
+  summarize(across(everything(), list(mean = mean)))</code></pre>
+<pre><code>## # A tibble: 2 × 7
+##   IDN      JDM_mean IDM_mean MatWarmth_mean PatWarmth_mean CE_2_mean CE_3_mean
+##   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Colombia    0.958    0.283           3.45           3.22      1.87      1.69
+## 2 Sweden      0.858    0.344           3.37           3.33      1.48      1.38</code></pre>
+<pre class="r"><code># All better!
 
-# All better!</code></pre>
+#saving for future use:
+core_var_means &lt;- df_civicengagement %&gt;%
+  select(IDN, JDM, IDM, MatWarmth, PatWarmth, CE_2, CE_3) %&gt;%
+  group_by(IDN) %&gt;%
+  summarize(across(everything(), list(mean = mean)))</code></pre>
 </div>
-<div id="visualizing-the-core-variables-by-group"
+<div id="visualizing-the-core-variable-means-by-group"
 class="section level3">
-<h3>Visualizing the core variables by group:</h3>
+<h3>Visualizing the core variable means by group:</h3>
 <pre class="r"><code>core_var_means %&gt;%
   ggplot(aes(x = IDN, y = JDM_mean, fill = IDN)) +
   geom_col() +
@@ -793,6 +808,34 @@ class="section level3">
   theme(legend.position=&quot;none&quot;) +
   scale_fill_viridis_d() </code></pre>
 <p><img src="p06_files/figure-html/CE3-viz-1.png" width="672" /></p>
+<p>I also want to make sure the correlations are still aligned with my
+expectations:</p>
+<pre class="r"><code>print(cor_matrix_parenting_CE)</code></pre>
+<pre><code>##              JDM    IDM MatWarmth PatWarmth   CE_2   CE_3
+## JDM        1.000 -0.806     0.126     0.178 -0.021  0.116
+## IDM       -0.806  1.000    -0.096    -0.163  0.000 -0.059
+## MatWarmth  0.126 -0.096     1.000     0.593 -0.184 -0.172
+## PatWarmth  0.178 -0.163     0.593     1.000 -0.299 -0.155
+## CE_2      -0.021  0.000    -0.184    -0.299  1.000  0.557
+## CE_3       0.116 -0.059    -0.172    -0.155  0.557  1.000</code></pre>
+<pre class="r"><code>cor(df_civicengagement[c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;)])</code></pre>
+<pre><code>##                    JDM         IDM   MatWarmth   PatWarmth         CE_2
+## JDM        1.000000000 -0.79106458  0.18056207  0.27410807 -0.003936589
+## IDM       -0.791064581  1.00000000 -0.14570877 -0.24861127 -0.053647757
+## MatWarmth  0.180562068 -0.14570877  1.00000000  0.47404928 -0.062009306
+## PatWarmth  0.274108068 -0.24861127  0.47404928  1.00000000 -0.237455180
+## CE_2      -0.003936589 -0.05364776 -0.06200931 -0.23745518  1.000000000
+## CE_3       0.153201348 -0.10298311 -0.02203241 -0.04775526  0.607136499
+##                  CE_3
+## JDM        0.15320135
+## IDM       -0.10298311
+## MatWarmth -0.02203241
+## PatWarmth -0.04775526
+## CE_2       0.60713650
+## CE_3       1.00000000</code></pre>
+<p>Based on the means and correlations, I think I successfully varied
+the levels of civic engagement by recruitment group while maintaining
+the desired structure of the data.</p>
 </div>
 </div>
 
