@@ -29,9 +29,9 @@ Recruitment groups include:
 - Philippines
 - Thailand
 - Sweden
-- US, African American
-- US, European American
-- US, Hispanic
+- US: African American
+- US: European American
+- US: Hispanic
 - Colombia
 - Jordan
 
@@ -200,6 +200,94 @@ df_civicengagement <- cbind(df_civicengagement, parenting_CE_data)
 ```
 
 
-Great! Now I have a dataframe that includes simulated values for all of my main variables of interest. However, my simulation did not account for differences among the recruitment groups. I need to adjust my simulation to account for observed geographic/cultural differences in the parenting and civic engagement variables.  
+Great! Now I have a dataframe that includes simulated values for all of my main variables of interest. However, my simulations did not account for differences among the recruitment groups. I need to adjust my simulations to account for observed geographic/cultural differences in the parenting and civic engagement variables. 
+
+This would get kind of complicated with all 11 groups, so to simplify my next simulation, I will just include two groups. I was interested in examining civic engagement in countries with different levels of socioeconomic inequality, so I will use the country with the highest inequality (Colombia) and the country with the lowest inequality (Sweden) according to estimates from the World Inequality Database.
+
+```{r age2}
+set.seed(123)
+df_civicengagement <- data.frame(
+  id = 1:125,
+  age = rnorm(125, mean = 15.17, sd = .975)
+)
+```
+
+```{r IDN2}
+set.seed(123)
+df_civicengagement$IDN <- rep(c("Sweden", "Colombia"),
+  times = c(51, 74),
+  length.out = 125
+)
+```
+
+```{r gender2}
+df_civicengagement$male <- rep(c("not male", "male"),
+  times = c(72, 53),
+  length.out = 125
+)
+```
+
+```{r max-parental-ed2}
+df_civicengagement$max_parental_ed <- rnorm(125, mean = 12.67, sd = 5.02)
+```
+
+```{r parenting-CE-sim2}
+set.seed(123)
+
+n_participants <- 125
+
+var_names <- c("JDM", "IDM", "MatWarmth", "PatWarmth", "CE_2", "CE_3")
+
+mean_vars <- c(.88, .33, 3.46, 3.24, 1.74, 1.57)
+sd_vars <- c(.36, .21, .63, .81, .63, .62)
+
+cor_matrix_parenting_CE <- matrix(
+  c(
+1.0000, -.806, .126, .178, -.021, .116, 
+-.806, 1.0000, -.096, -.163, .000, -.059,
+.126, -.096, 1.0000, .593, -.184, -.172,
+.178, -.163, .593, 1.0000, -.299, -.155,
+-.021, .000, -.184, -.299, 1.0000, .557,
+.116, -.059, -.172, -.155, .557, 1.000
+  ),
+  nrow = 6, ncol = 6, byrow = TRUE,
+  dimnames = list(
+c("JDM", "IDM", "MatWarmth", "PatWarmth", "CE_2", "CE_3"),
+c("JDM", "IDM", "MatWarmth", "PatWarmth", "CE_2", "CE_3")
+  )
+)
+
+cov_matrix_parenting_CE <- cor_matrix_parenting_CE * (sd_vars %*% t(sd_vars))
+
+parenting_CE_data <- mvrnorm(n = 125, mu = mean_vars, Sigma = cov_matrix_parenting_CE)
+
+df_civicengagement <- cbind(df_civicengagement, parenting_CE_data)
+```
+
+Now, I need to create variation among the groups. I am mainly interested in how levels of civic engagement differ across countries with different levels of socioeconomic inequality, so I will focus on the two measures of civic engagement (reports at Time 2 and Time 3).
+
+```{r group-diff-sim}
+set.seed(123)
+
+df_civicengagement <- df_civicengagement %>%
+  mutate(CE_2 = case_when(
+    IDN == "Sweden" ~ CE_2 + rnorm(125, mean = -.22, sd = .01),
+    IDN == "Colombia" ~ CE_2 + rnorm(125, mean = .16, sd = .01), 
+  ))
+
+df_civicengagement <- df_civicengagement %>%
+  mutate(CE_3 = case_when(
+    IDN == "Sweden" ~ CE_3 + rnorm(125, mean = -.19, sd = .01),
+    IDN == "Colombia" ~ CE_3 + rnorm(125, mean = .14, sd = .01), 
+  ))
+
+```
 
 
+```{r group-means, warning=FALSE}
+df_civicengagement %>%
+  group_by(IDN) %>%
+  summarize(across(everything(), list(mean = mean)))
+```
+
+### Visualizing my new data

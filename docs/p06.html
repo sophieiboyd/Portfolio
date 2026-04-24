@@ -334,9 +334,9 @@ support for autonomy)</li>
 <li>Philippines</li>
 <li>Thailand</li>
 <li>Sweden</li>
-<li>US, African American</li>
-<li>US, European American</li>
-<li>US, Hispanic</li>
+<li>US: African American</li>
+<li>US: European American</li>
+<li>US: Hispanic</li>
 <li>Colombia</li>
 <li>Jordan</li>
 </ul>
@@ -496,10 +496,91 @@ parenting_CE_data &lt;- mvrnorm(n = 668, mu = mean_vars, Sigma = cov_matrix_pare
 
 df_civicengagement &lt;- cbind(df_civicengagement, parenting_CE_data)</code></pre>
 <p>Great! Now I have a dataframe that includes simulated values for all
-of my main variables of interest. However, my simulation did not account
-for differences among the recruitment groups. I need to adjust my
-simulation to account for observed geographic/cultural differences in
-the parenting and civic engagement variables.</p>
+of my main variables of interest. However, my simulations did not
+account for differences among the recruitment groups. I need to adjust
+my simulations to account for observed geographic/cultural differences
+in the parenting and civic engagement variables.</p>
+<p>This would get kind of complicated with all 11 groups, so to simplify
+my next simulation, I will just include two groups. I was interested in
+examining civic engagement in countries with different levels of
+socioeconomic inequality, so I will use the country with the highest
+inequality (Colombia) and the country with the lowest inequality
+(Sweden) according to estimates from the World Inequality Database.</p>
+<pre class="r"><code>set.seed(123)
+df_civicengagement &lt;- data.frame(
+  id = 1:125,
+  age = rnorm(125, mean = 15.17, sd = .975)
+)</code></pre>
+<pre class="r"><code>set.seed(123)
+df_civicengagement$IDN &lt;- rep(c(&quot;Sweden&quot;, &quot;Colombia&quot;),
+  times = c(51, 74),
+  length.out = 125
+)</code></pre>
+<pre class="r"><code>df_civicengagement$male &lt;- rep(c(&quot;not male&quot;, &quot;male&quot;),
+  times = c(72, 53),
+  length.out = 125
+)</code></pre>
+<pre class="r"><code>df_civicengagement$max_parental_ed &lt;- rnorm(125, mean = 12.67, sd = 5.02)</code></pre>
+<pre class="r"><code>set.seed(123)
+
+n_participants &lt;- 125
+
+var_names &lt;- c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;)
+
+mean_vars &lt;- c(.88, .33, 3.46, 3.24, 1.74, 1.57)
+sd_vars &lt;- c(.36, .21, .63, .81, .63, .62)
+
+cor_matrix_parenting_CE &lt;- matrix(
+  c(
+1.0000, -.806, .126, .178, -.021, .116, 
+-.806, 1.0000, -.096, -.163, .000, -.059,
+.126, -.096, 1.0000, .593, -.184, -.172,
+.178, -.163, .593, 1.0000, -.299, -.155,
+-.021, .000, -.184, -.299, 1.0000, .557,
+.116, -.059, -.172, -.155, .557, 1.000
+  ),
+  nrow = 6, ncol = 6, byrow = TRUE,
+  dimnames = list(
+c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;),
+c(&quot;JDM&quot;, &quot;IDM&quot;, &quot;MatWarmth&quot;, &quot;PatWarmth&quot;, &quot;CE_2&quot;, &quot;CE_3&quot;)
+  )
+)
+
+cov_matrix_parenting_CE &lt;- cor_matrix_parenting_CE * (sd_vars %*% t(sd_vars))
+
+parenting_CE_data &lt;- mvrnorm(n = 125, mu = mean_vars, Sigma = cov_matrix_parenting_CE)
+
+df_civicengagement &lt;- cbind(df_civicengagement, parenting_CE_data)</code></pre>
+<p>Now, I need to create variation among the groups. I am mainly
+interested in how levels of civic engagement differ across countries
+with different levels of socioeconomic inequality, so I will focus on
+the two measures of civic engagement (reports at Time 2 and Time 3).</p>
+<pre class="r"><code>set.seed(123)
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(CE_2 = case_when(
+    IDN == &quot;Sweden&quot; ~ CE_2 + rnorm(125, mean = -.22, sd = .01),
+    IDN == &quot;Colombia&quot; ~ CE_2 + rnorm(125, mean = .16, sd = .01), 
+  ))
+
+df_civicengagement &lt;- df_civicengagement %&gt;%
+  mutate(CE_3 = case_when(
+    IDN == &quot;Sweden&quot; ~ CE_3 + rnorm(125, mean = -.19, sd = .01),
+    IDN == &quot;Colombia&quot; ~ CE_3 + rnorm(125, mean = .14, sd = .01), 
+  ))</code></pre>
+<pre class="r"><code>df_civicengagement %&gt;%
+  group_by(IDN) %&gt;%
+  summarize(across(everything(), list(mean = mean)))</code></pre>
+<pre><code>## # A tibble: 2 × 11
+##   IDN      id_mean age_mean male_mean max_parental_ed_mean JDM_mean IDM_mean
+##   &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;                &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Colombia      63     15.2        NA                 12.7    0.975    0.272
+## 2 Sweden        63     15.2        NA                 12.8    0.861    0.344
+## # ℹ 4 more variables: MatWarmth_mean &lt;dbl&gt;, PatWarmth_mean &lt;dbl&gt;,
+## #   CE_2_mean &lt;dbl&gt;, CE_3_mean &lt;dbl&gt;</code></pre>
+</div>
+<div id="visualizing-my-new-data" class="section level3">
+<h3>Visualizing my new data</h3>
 </div>
 </div>
 
