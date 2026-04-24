@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 7</title>
+<title>Portfolio 7: Regression Models and Tables with Simulated Data</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -290,18 +290,135 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 7</h1>
+<h1 class="title toc-ignore">Portfolio 7: Regression Models and Tables
+with Simulated Data</h1>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<div id="overview" class="section level2">
+<h2>Overview:</h2>
+<div id="goal" class="section level4">
+<h4>Goal:</h4>
+<p>In my last portfolio piece, I simulated a dataset based on the data
+that I used to complete my thesis. Now, I want to replicate some of my
+analyses with the simulated data to show my work. My analyses consisted
+of a long series of regression models predicting future civic engagement
+from perceived parenting during adolescence. I reported the results with
+a series of tables that I (painstakingly) created by hand. To save
+myself time with this kind of reporting in the future, I also want to
+learn how to create APA style regression tables in R with this piece. In
+addition to actually running the regressions with my simulated data, I
+want to find the best method for producing clean tables that I can use
+in my future work.</p>
+</div>
+<div id="data" class="section level4">
+<h4>Data:</h4>
+<p>I simulated my data in my previous portfolio piece. The core
+variables are listed below. Additionally, demographic variables include
+age, gender, and maximum level of parental education (used as a proxy
+for SES).</p>
+<p>Specific core variables include:</p>
+<ul>
+<li>Joint decision making at Time 1 (JDM; a measure of moderate support
+for autonomy)</li>
+<li>Independent decision making at Time 1 (IDM; a measure of extreme
+support for autonomy)</li>
+<li>Maternal warmth at Time 1 (MatWarmth)</li>
+<li>Paternal warmth at Time 1 (PatWarmth)</li>
+<li>Civic engagement at Time 2 (CE_2)</li>
+<li>Civic engagement at Time 3 (CE_3)</li>
+</ul>
+<p>Recruitment groups include:</p>
+<ul>
+<li>Naples, Italy</li>
+<li>Rome, Italy</li>
+<li>Kenya</li>
+<li>Philippines</li>
+<li>Thailand</li>
+<li>Sweden</li>
+<li>US: African American</li>
+<li>US: European American</li>
+<li>US: Hispanic</li>
+<li>Colombia</li>
+<li>Jordan</li>
+</ul>
+</div>
+<div id="product" class="section level4">
+<h4>Product:</h4>
+<p>A series of regression models presented with APA style tables created
+in R.</p>
+</div>
+<div id="interpretation" class="section level4">
+<h4>Interpretation:</h4>
+<p>**Fill in later</p>
+</div>
+<div id="sources" class="section level4">
+<h4>Sources</h4>
+<hr />
+</div>
+<div id="loading-packages-and-data" class="section level3">
+<h3>Loading packages and data</h3>
+<pre class="r"><code>library(tidyverse)
+library(QuantPsyc)</code></pre>
+<pre class="r"><code>civicengagement_data &lt;- read.csv(&quot;/Users/sophieboyd/Documents/GitHub/Portfolio/docs/civicengagement_sim.csv&quot;)</code></pre>
+</div>
+<div id="data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+<p>Before I can run my regression models, I need to mean-center my
+predictors and dummy-code gender:</p>
+<pre class="r"><code>civicengagement_data &lt;- civicengagement_data %&gt;%
+  mutate(age_cent = age - 15.62) %&gt;%
+  mutate(MPE_cent = max_parental_ed - 13.95) %&gt;%
+  mutate(JDM_cent = JDM - .95) %&gt;%
+  mutate(IDM_cent = IDM - .26) %&gt;%
+  mutate(MatWarmth_cent = MatWarmth - 3.46) %&gt;%
+  mutate(PatWarmth_cent = PatWarmth - 3.24) %&gt;%
+  mutate(CE_2_cent = CE_2 - 2.03) %&gt;%
+  mutate(dummy_male = case_when(
+    male == &quot;not male&quot; ~ 0,
+    male == &quot;male&quot; ~ 1
+  ))</code></pre>
+</div>
+<div id="running-the-models" class="section level3">
+<h3>Running the models</h3>
+<div
+id="model-1-predicting-civic-engagement-at-time-2-from-joint-decision-making-maternal-warmth-and-their-interaction"
+class="section level4">
+<h4>Model 1: predicting civic engagement at Time 2 from joint decision
+making, maternal warmth, and their interaction</h4>
+<pre class="r"><code>model1 &lt;- lm(CE_2 ~ JDM_cent + MatWarmth_cent + MatWarmth_cent:JDM_cent , data = civicengagement_data)
+
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CE_2 ~ JDM_cent + MatWarmth_cent + MatWarmth_cent:JDM_cent, 
+##     data = civicengagement_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.47357 -0.51885  0.01046  0.51223  2.41417 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)              2.02677    0.03256  62.244   &lt;2e-16 ***
+## JDM_cent                 0.18998    0.08564   2.218   0.0269 *  
+## MatWarmth_cent           0.09548    0.05743   1.663   0.0969 .  
+## JDM_cent:MatWarmth_cent  0.05666    0.15041   0.377   0.7065    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8329 on 664 degrees of freedom
+## Multiple R-squared:  0.01338,    Adjusted R-squared:  0.008921 
+## F-statistic: 3.001 on 3 and 664 DF,  p-value: 0.02997</code></pre>
+<pre class="r"><code>lm.beta(model1)</code></pre>
+<pre><code>## Warning in b * sx: longer object length is not a multiple of shorter object
+## length</code></pre>
+<pre><code>##                JDM_cent          MatWarmth_cent JDM_cent:MatWarmth_cent 
+##              0.08642109              0.06480018              0.02577499</code></pre>
+</div>
+</div>
+</div>
 
 
 

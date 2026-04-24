@@ -1,5 +1,91 @@
 ---
-title: "Portfolio 7"
+title: "Portfolio 7: Regression Models and Tables with Simulated Data"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+In my last portfolio piece, I simulated a dataset based on the data that I used to complete my thesis. Now, I want to replicate some of my analyses with the simulated data to show my work. My analyses consisted of a long series of regression models predicting future civic engagement from perceived parenting during adolescence. I reported the results with a series of tables that I (painstakingly) created by hand. To save myself time with this kind of reporting in the future, I also want to learn how to create APA style regression tables in R with this piece. In addition to actually running the regressions with my simulated data, I want to find the best method for producing clean tables that I can use in my future work. 
+
+#### Data:
+
+I simulated my data in my previous portfolio piece. The core variables are listed below. Additionally, demographic variables include age, gender, and maximum level of parental education (used as a proxy for SES).
+
+Specific core variables include:
+
+- Joint decision making at Time 1 (JDM; a measure of moderate support for autonomy)
+- Independent decision making at Time 1 (IDM; a measure of extreme support for autonomy)
+- Maternal warmth at Time 1 (MatWarmth)
+- Paternal warmth at Time 1 (PatWarmth)
+- Civic engagement at Time 2 (CE_2)
+- Civic engagement at Time 3 (CE_3)
+
+Recruitment groups include:
+
+- Naples, Italy
+- Rome, Italy
+- Kenya
+- Philippines
+- Thailand
+- Sweden
+- US: African American
+- US: European American
+- US: Hispanic
+- Colombia
+- Jordan
+
+#### Product:
+
+A series of regression models presented with APA style tables created in R.
+
+#### Interpretation:
+
+**Fill in later
+
+#### Sources
+
+
+----
+
+### Loading packages and data
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(QuantPsyc)
+```
+
+```{r read-data}
+civicengagement_data <- read.csv("/Users/sophieboyd/Documents/GitHub/Portfolio/docs/civicengagement_sim.csv")
+```
+
+### Data cleaning
+
+Before I can run my regression models, I need to mean-center my predictors and dummy-code gender:
+
+```{r mean-cent}
+civicengagement_data <- civicengagement_data %>%
+  mutate(age_cent = age - 15.62) %>%
+  mutate(MPE_cent = max_parental_ed - 13.95) %>%
+  mutate(JDM_cent = JDM - .95) %>%
+  mutate(IDM_cent = IDM - .26) %>%
+  mutate(MatWarmth_cent = MatWarmth - 3.46) %>%
+  mutate(PatWarmth_cent = PatWarmth - 3.24) %>%
+  mutate(CE_2_cent = CE_2 - 2.03) %>%
+  mutate(dummy_male = case_when(
+    male == "not male" ~ 0,
+    male == "male" ~ 1
+  ))
+```
+
+### Running the models
+
+#### Model 1: predicting civic engagement at Time 2 from joint decision making, maternal warmth, and their interaction
+
+```{r model1}
+model1 <- lm(CE_2 ~ JDM_cent + MatWarmth_cent + MatWarmth_cent:JDM_cent , data = civicengagement_data)
+
+summary(model1)
+lm.beta(model1)
+```
+
