@@ -6,7 +6,7 @@ title: "Portfolio 7: Regression Models and Tables with Simulated Data"
 
 #### Goal:
 
-In my last portfolio piece, I simulated a dataset based on the data that I used to complete my thesis. Now, I want to replicate some of my analyses with the simulated data to show my work. My analyses consisted of a long series of regression models predicting future civic engagement from perceived parenting during adolescence. I reported the results with a series of tables that I (painstakingly) created by hand. To save myself time with this kind of reporting in the future, I also want to learn how to create APA style regression tables in R with this piece. In addition to actually running the regressions with my simulated data, I want to find the best method for producing clean tables that I can use in my future work. 
+In my last portfolio piece, I simulated a dataset based on the data that I used to complete my thesis. Now, I want to replicate some of my analyses with the simulated data to show my work. My analyses consisted of a long series of regression models predicting future civic engagement from perceived parenting during adolescence. I reported the results with a series of tables that I (painstakingly) created by hand. To save myself time with this kind of reporting in the future, I want to learn how to create APA style regression tables in R. In addition to actually running the regressions with my simulated data, my goal for this piece is to find the best method for producing clean tables that I can use in my future work. 
 
 #### Data:
 
@@ -65,8 +65,6 @@ Before I can run my regression models, I need to mean-center my predictors and d
 
 ```{r mean-cent}
 civicengagement_data <- civicengagement_data %>%
-  mutate(age_cent = age - 15.62) %>%
-  mutate(MPE_cent = max_parental_ed - 13.95) %>%
   mutate(JDM_cent = JDM - .95) %>%
   mutate(IDM_cent = IDM - .26) %>%
   mutate(MatWarmth_cent = MatWarmth - 3.46) %>%
@@ -88,4 +86,68 @@ model1 <- lm(CE_2 ~ JDM_cent + MatWarmth_cent + MatWarmth_cent:JDM_cent , data =
 summary(model1)
 lm.beta(model1)
 ```
+
+#### Model 2: predicting civic engagement at Time 2 from joint decision making, paternal warmth, and their interaction
+
+```{r model2}
+model2 <- lm(CE_2 ~ JDM_cent + PatWarmth_cent + PatWarmth_cent:JDM_cent , data = civicengagement_data)
+
+summary(model2)
+lm.beta(model2)
+```
+
+#### Model 3: predicting civic engagement at Time 3 from joint decision making, maternal warmth, and their interaction (controlling for civic engagement at Time 2)
+
+```{r model3}
+model3 <- lm(CE_3 ~ JDM_cent + MatWarmth_cent + MatWarmth_cent:JDM_cent + CE_2_cent, data = civicengagement_data)
+
+summary(model3)
+lm.beta(model3)
+```
+
+#### Model 4: predicting civic engagement at Time 3 from joint decision making, paternal warmth, and their interaction (controlling for civic engagement at Time 2)
+
+```{r model4}
+model4 <- lm(CE_3 ~ JDM_cent + PatWarmth_cent + PatWarmth_cent:JDM_cent + CE_2_cent, data = civicengagement_data)
+
+summary(model4)
+lm.beta(model4)
+```
+
+#### Model 5: predicting civic engagement at Time 2 from independent decision making, maternal warmth, and their interaction 
+
+```{r model5}
+model5 <- lm(CE_2 ~ IDM_cent + MatWarmth_cent + MatWarmth_cent:IDM_cent, data = civicengagement_data)
+
+summary(model5)
+lm.beta(model5)
+```
+
+#### Model 6: predicting civic engagement at Time 2 from independent decision making, paternal warmth, and their interaction 
+
+```{r model6}
+model6 <- lm(CE_2 ~ IDM_cent + PatWarmth_cent + PatWarmth_cent:IDM_cent, data = civicengagement_data)
+
+summary(model6)
+lm.beta(model6)
+```
+
+#### Model 7: predicting civic engagement at Time 3 from independent decision making, maternal warmth, and their interaction (controlling for civic engagement at Time 2)
+
+```{r model7}
+model7 <- lm(CE_3 ~ IDM_cent + MatWarmth_cent + MatWarmth_cent:IDM_cent + CE_2_cent, data = civicengagement_data)
+
+summary(model7)
+lm.beta(model7)
+```
+
+#### Model 8: predicting civic engagement at Time 3 from independent decision making, paternal warmth, and their interaction (controlling for civic engagement at Time 2)
+
+```{r model8}
+model8 <- lm(CE_3 ~ IDM_cent + PatWarmth_cent + PatWarmth_cent:IDM_cent + CE_2_cent, data = civicengagement_data)
+
+summary(model8)
+lm.beta(model8)
+```
+
 
