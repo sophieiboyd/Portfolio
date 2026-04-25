@@ -150,4 +150,10 @@ summary(model8)
 lm.beta(model8)
 ```
 
+Now that I've run my regressions, I am going to experiment with displaying my results in tables. I came across the following recommended packages:
+
+- apaTables
+- remPsyc
+- papaja
+
 
