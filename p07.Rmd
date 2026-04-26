@@ -1,5 +1,7 @@
 ---
 title: "Portfolio 7: Regression Models and Tables with Simulated Data"
+
+
 ---
 
 ## Overview:
@@ -44,8 +46,9 @@ A series of regression models presented with APA style tables created in R.
 **Fill in later
 
 #### Sources
-
-
+https://cran.r-project.org/web/packages/apaTables/apaTables.pdf
+https://cran.r-project.org/web/packages/rempsyc/vignettes/table.html
+https://github.com/crsh/papaja
 ----
 
 ### Loading packages and data
@@ -155,5 +158,55 @@ Now that I've run my regressions, I am going to experiment with displaying my re
 - apaTables
 - remPsyc
 - papaja
+
+### Loading the new packages
+
+```{r table-packages, warning=FALSE}
+library(apaTables)
+library(rempsyc)
+library(broom)
+library(papaja)
+```
+
+### Testing each package with Model 1:
+
+#### apaTables
+
+```{r model1-apatables}
+apa.reg.table(model1, filename = "model1table.doc")
+```
+
+I like the way that the table turned out, but saving the tables to separate word documents would be a bit inconvenient for creating multiple tables and experimenting with different layouts/aesthetic components.
+
+#### rempsyc
+
+```{r model1-rempsyc}
+(model1table <- tidy(model1))
+
+nice_table(model1table, broom = "lm")
+```
+
+I like the look of this one! I just need to find a way to change the labels.
+
+#### papaja
+
+```{r model1-papaja}
+apa_model1 <- apa_print(model1)
+
+apa_model1
+```
+
+This package requires opening a new R Markdown file with an APA template.
+
+I am happiest with the results and functionality of the rempsyc package. Now, I need to learn how to edit the labels and create tables for each of the eight models I ran.
+
+
+### Model 1
+
+```{r model1-table}
+(model1table <- tidy(model1))
+
+nice_table(model1table, broom = "lm")
+```
 
 
