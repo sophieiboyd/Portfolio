@@ -1,7 +1,5 @@
 ---
 title: "Portfolio 7: Regression Models and Tables with Simulated Data"
-
-
 ---
 
 ## Overview:

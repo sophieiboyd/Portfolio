@@ -1,5 +1,140 @@
 ---
-title: "Portfolio 8"
+title: "Simulating and Modeling Two-Way Interactions"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+In my last two portfolio pieces, I focused on modeling main effects. I want to build upon this work and learn how to (1) simulate and (2) visualize data with two-way interactions. 
+
+#### Data:
+
+I plan to simulate a dataset with variables that could be analyzed with a 2x2 design. The dataset is inspired by my first year project, in which I presented middle school teachers with hypothetical lesson topics (all related to contemporary social issues) and asked for their thoughts/opinions about them.
+
+The two conditions:
+- Identity: whether the lesson topic focused on race or gender
+- Framing: whether the lesson topic focused on social inequality or the social construction of identity
+
+I employed a mixed design, such that identity varied between subjects and framing differed within subjects. 
+
+Each teacher viewed four lesson topics in the actual study, but to simplify my simulation, I will give each teacher two lesson topics with the same identity condition and one of each framing condition per participant.
+
+The main outcomes of interest (all measured on a scale from 1 to 7):
+- Anticipated responses (positive/negative) from students, parents, and administrators
+- Perceived appropriateness of the topics
+- Perceived importance of the topics
+- Perceived relevance of the topics (to the teacher's course)
+- How confident the teachers felt in their ability to implement the lessons effectively
+- How likely the teachers would be to introduce the topics to their students
+
+#### Product:
+
+A simulated dataset with my variables of interest and a series of interaction plots to visualize the results.
+
+#### Interpretation:
+
+** fill in after completing
+
+#### Sources
+
+https://www.crumplab.com/programmingforpsych/simulating-and-analyzing-data-in-r.html#simulating-data-for-multi-factor-designs 
+
+----
+
+### Loading packages and data
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(tidyverse) 
+library(ggplot2)
+library(MASS)
+```
+
+### Creating the dataframe and assigning ID numbers (sample size = 520)
+
+```{r df}
+set.seed(123)
+df_lessons <- data.frame(
+  id = 1:520)
+```
+
+### Creating the Identity condition (between-subjects)
+
+```{r identity}
+set.seed(123)
+df_lessons$identity <- rep(c("race", "gender"),
+  length.out = 520
+)
+```
+
+### Creating the Framing condition (within-subjects)
+
+This variable will be a bit more challenging to simulate. I don't know the most efficient way to achieve the data structure that I want, but in the actual project, I used a wide-to-long transformation. I am going to try to recreate the process here:
+
+```{r framing}
+set.seed(123)
+df_lessons$topic1 <- rep(c("inequality"),
+                           length.out = 520
+)
+
+df_lessons$topic2 <- rep(c("social construction"),
+                           length.out = 520
+)
+
+df_lessons_long <- df_lessons %>%
+  pivot_longer(
+    cols = starts_with(c("topic")),
+    names_to = "topic_number",
+    values_to = "framing")
+
+library(conflicted)
+conflict_prefer("select", "dplyr")
+df_lessons_long <- df_lessons_long %>%
+  select(id, identity, framing)
+```
+
+That seemed to work! 
+
+### Creating the outcome variables
+
+Across all outcome variables, I saw the same general trend: teachers responded most negatively to lessons about the social construction of gender. Across the other three combinations of conditions, responses were neutral-to-positive at very similar levels to one another.
+
+```{r dv-sim}
+set.seed(123)
+implementation <- rnorm(1040, c(4.2, 4.0, 4.3, 2.5), sd = 1.5)
+
+df_lessons <- cbind(df_lessons_long, implementation)
+```
+
+### Checking the group means
+
+Let's see if the mean implementation values across the four combinations of conditions match up with my expectations:
+
+```{r group-means}
+df_lessons %>%
+  group_by(identity, framing) %>%
+  select(implementation) %>%
+  summarize(across(everything(), list(mean = mean)))
+
+df_lessons_means <- df_lessons %>%
+  group_by(identity, framing) %>%
+  select(implementation) %>%
+  summarize(across(everything(), list(mean = mean)))
+```
+
+Looks good! To go beyond descriptive analyses, I will run an ANOVA to see if the group means were significantly different.
+
+```{r anova}
+library(car)
+reg <- lm(implementation ~ identity + framing + identity:framing, data = df_lessons)
+Anova(reg, type = 3)
+```
+
+### Interpreting the interaction
+
+```{r emtrends}
+library(emmeans)
+
+```
+
+
