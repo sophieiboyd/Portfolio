@@ -300,55 +300,65 @@ Interactions</h1>
 <h2>Overview:</h2>
 <div id="goal" class="section level4">
 <h4>Goal:</h4>
-<p>In my last two portfolio pieces, I focused on modeling main effects.
-I want to build upon this work and learn how to (1) simulate and (2)
-visualize data with two-way interactions.</p>
+<p>I want to build upon the work I did in my last two portfolio pieces
+and learn how to (1) simulate and (2) visualize data with significant
+two-way interactions.</p>
 </div>
 <div id="data" class="section level4">
 <h4>Data:</h4>
-<p>I plan to simulate a dataset with variables that could be analyzed
-with a 2x2 design. The dataset is inspired by my first year project, in
-which I presented middle school teachers with hypothetical lesson topics
-(all related to contemporary social issues) and asked for their
+<p>I plan to simulate a dataset with variables that can be analyzed with
+a 2x2 design. The dataset is inspired by my first year project, in which
+I presented middle school teachers with hypothetical lesson topics (all
+related to contemporary social issues) and asked for their
 thoughts/opinions about them.</p>
-<p>The two conditions: - Identity: whether the lesson topic focused on
-race or gender - Framing: whether the lesson topic focused on social
-inequality or the social construction of identity</p>
+<p>The two conditions:</p>
+<ul>
+<li>Identity: whether the lesson topic focused on race or gender</li>
+<li>Framing: whether the lesson topic focused on social inequality or
+the social construction of identity</li>
+</ul>
 <p>I employed a mixed design, such that identity varied between subjects
 and framing differed within subjects.</p>
 <p>Each teacher viewed four lesson topics in the actual study, but to
 simplify my simulation, I will give each teacher two lesson topics with
-the same identity condition and one of each framing condition per
-participant.</p>
-<p>The main outcomes of interest (all measured on a scale from 1 to 7):
-- Anticipated responses (positive/negative) from students, parents, and
-administrators - Perceived appropriateness of the topics - Perceived
-importance of the topics - Perceived relevance of the topics (to the
-teacher’s course) - How confident the teachers felt in their ability to
-implement the lessons effectively - How likely the teachers would be to
-introduce the topics to their students</p>
+the same identity condition and one of each framing condition.</p>
+<p>The main outcome of interest was the teachers’ reported likelihood of
+implementing the lesson topics in their own classrooms on a scale from 1
+(very unlikely) to 7 (very likely).</p>
 </div>
 <div id="product" class="section level4">
 <h4>Product:</h4>
 <p>A simulated dataset with my variables of interest and a series of
-interaction plots to visualize the results.</p>
+follow-up analyses and plots to visualize the results.</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
-<p>** fill in after completing</p>
+<p>I was able to successfully simulate a dataset with a signficant
+two-way interaction that was consistent with the results I got in my
+original project. Learning to use the truncnorm package was helpful for
+keeping my simulated values within a reasonable/possible range. Both
+emmeans and ggplot provided nice interaction plots, but I preferred the
+bar plot in this context because I was analyzing the interaction between
+two categorical variables instead of a categorical variable and a
+continuous variable. I will keep both options in mind for future
+use!</p>
 </div>
 <div id="sources" class="section level4">
 <h4>Sources</h4>
 <p><a
 href="https://www.crumplab.com/programmingforpsych/simulating-and-analyzing-data-in-r.html#simulating-data-for-multi-factor-designs"
 class="uri">https://www.crumplab.com/programmingforpsych/simulating-and-analyzing-data-in-r.html#simulating-data-for-multi-factor-designs</a></p>
+<p><a
+href="https://stackoverflow.com/questions/19343133/setting-upper-and-lower-limits-in-rnorm"
+class="uri">https://stackoverflow.com/questions/19343133/setting-upper-and-lower-limits-in-rnorm</a></p>
 <hr />
 </div>
 <div id="loading-packages-and-data" class="section level3">
 <h3>Loading packages and data</h3>
 <pre class="r"><code>library(tidyverse) 
 library(ggplot2)
-library(MASS)</code></pre>
+library(MASS)
+library(truncnorm)</code></pre>
 </div>
 <div
 id="creating-the-dataframe-and-assigning-id-numbers-sample-size-520"
@@ -398,14 +408,18 @@ conflict_prefer(&quot;select&quot;, &quot;dplyr&quot;)</code></pre>
 </div>
 <div id="creating-the-outcome-variables" class="section level3">
 <h3>Creating the outcome variables</h3>
-<p>Across all outcome variables, I saw the same general trend: teachers
-responded most negatively to lessons about the social construction of
-gender. Across the other three combinations of conditions, responses
-were neutral-to-positive at very similar levels to one another.</p>
+<p>In my original study, I observed that teachers responded most
+negatively to lessons about the social construction of gender. Across
+the other three combinations of conditions, responses were
+neutral-to-positive at very similar levels to one another. I am going to
+attempt to recreate this pattern in my simulation:</p>
 <pre class="r"><code>set.seed(123)
-implementation &lt;- rnorm(1040, c(4.2, 4.0, 4.3, 2.5), sd = 1.5)
+implementation &lt;- rtruncnorm(n = 1040, a = 0, mean = c(4.2, 4.0, 4.3, 2.5), sd = 1.5)
 
 df_lessons &lt;- cbind(df_lessons_long, implementation)</code></pre>
+<p>I realized on my first try that I was getting some negative values
+(which would have been impossible on my actual measures), so I used the
+truncnorm package to set the minimum of my simulated values at 0.</p>
 </div>
 <div id="checking-the-group-means" class="section level3">
 <h3>Checking the group means</h3>
@@ -422,10 +436,10 @@ combinations of conditions match up with my expectations:</p>
 ## # Groups:   identity [2]
 ##   identity framing             implementation_mean
 ##   &lt;chr&gt;    &lt;chr&gt;                             &lt;dbl&gt;
-## 1 gender   inequality                         4.46
-## 2 gender   social construction                2.41
-## 3 race     inequality                         4.27
-## 4 race     social construction                4.02</code></pre>
+## 1 gender   inequality                         4.29
+## 2 gender   social construction                2.64
+## 3 race     inequality                         4.22
+## 4 race     social construction                4.20</code></pre>
 <pre class="r"><code>df_lessons_means &lt;- df_lessons %&gt;%
   group_by(identity, framing) %&gt;%
   select(implementation) %&gt;%
@@ -433,31 +447,89 @@ combinations of conditions match up with my expectations:</p>
 <pre><code>## Adding missing grouping variables: `identity`, `framing`
 ## `summarise()` has grouped output by &#39;identity&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<p>Looks good! To go beyond descriptive analyses, I will run an ANOVA to
-see if the group means were significantly different.</p>
+<p>Looks good! Like my actual findings, all of the means are pretty
+close, with the exception of the gender/social construction combination
+of conditions. To go beyond descriptive analyses, I will run an ANOVA to
+see if the group means are significantly different. In the original
+study, I used the lme4 package to run a model with a random intercept to
+account for the within-subjects nature of the framing variable. I will
+do the same here:</p>
 <pre class="r"><code>library(car)</code></pre>
 <pre><code>## Loading required package: carData</code></pre>
-<pre class="r"><code>reg &lt;- lm(implementation ~ identity + framing + identity:framing, data = df_lessons)
+<pre class="r"><code>library(lme4)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre class="r"><code>reg &lt;- lmer(implementation ~ framing * identity + (1|id), data = df_lessons)
 Anova(reg, type = 3)</code></pre>
-<pre><code>## Anova Table (Type III tests)
+<pre><code>## Analysis of Deviance Table (Type III Wald chisquare tests)
 ## 
 ## Response: implementation
-##                  Sum Sq   Df   F value Pr(&gt;F)    
-## (Intercept)      5168.5    1 2296.1900 &lt;2e-16 ***
-## identity            4.8    1    2.1498 0.1429    
-## framing           545.8    1  242.4775 &lt;2e-16 ***
-## identity:framing  210.5    1   93.5218 &lt;2e-16 ***
-## Residuals        2332.0 1036                     
+##                      Chisq Df Pr(&gt;Chisq)    
+## (Intercept)      2274.8054  1     &lt;2e-16 ***
+## framing           171.5746  1     &lt;2e-16 ***
+## identity            0.3396  1     0.5601    
+## framing:identity   84.1317  1     &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>A significant interaction between identity and framing, as well as a
+significant main effect of framing. I suspect that the interaction is
+driving the significant main effect, but let’s take a look…</p>
 </div>
 <div id="interpreting-the-interaction" class="section level3">
 <h3>Interpreting the interaction</h3>
+<p>Using the emmeans package to run contrasts and plot the identity x
+framing interaction:</p>
 <pre class="r"><code>library(emmeans)</code></pre>
-<pre><code>## Warning: package &#39;emmeans&#39; was built under R version 4.3.3</code></pre>
 <pre><code>## Welcome to emmeans.
 ## Caution: You lose important information if you filter this package&#39;s results.
 ## See &#39;? untidy&#39;</code></pre>
+<pre class="r"><code>EMM &lt;- emmeans(reg, ~ identity * framing)
+pairs(EMM, simple = &quot;identity&quot;)</code></pre>
+<pre><code>## framing = inequality:
+##  contrast      estimate    SE   df t.ratio p.value
+##  gender - race   0.0742 0.127 1036   0.583  0.5602
+## 
+## framing = social construction:
+##  contrast      estimate    SE   df t.ratio p.value
+##  gender - race  -1.5670 0.127 1036 -12.307  &lt;.0001
+## 
+## Degrees-of-freedom method: kenward-roger</code></pre>
+<pre class="r"><code>pairs(EMM, simple = &quot;framing&quot;)</code></pre>
+<pre><code>## identity = gender:
+##  contrast                         estimate    SE  df t.ratio p.value
+##  inequality - social construction   1.6573 0.127 518  13.099  &lt;.0001
+## 
+## identity = race:
+##  contrast                         estimate    SE  df t.ratio p.value
+##  inequality - social construction   0.0161 0.127 518   0.127  0.8990
+## 
+## Degrees-of-freedom method: kenward-roger</code></pre>
+<pre class="r"><code>emmip(reg, identity ~ framing, cov.reduce = range) +
+  theme_minimal() +
+  labs(x = &#39;Framing Condition&#39;,
+       y = &#39;Likelihood of Implementation&#39;,
+       color = &#39;Identity Condition&#39;) +
+  coord_cartesian(ylim = c(1,7)) +
+  scale_color_viridis_d()</code></pre>
+<p><img src="p08_files/figure-html/emmip-1.png" width="672" /></p>
+<p>Since framing is not a continuous variable, I want to try plotting
+the interaction with bars instead of lines:</p>
+<pre class="r"><code>df_lessons_means %&gt;%
+  ggplot(aes(x = framing, y = implementation_mean, fill = identity)) +
+  geom_col(position = &quot;dodge&quot;) +
+  labs(x = &#39;Framing Condition&#39;,
+       y = &#39;Likelihood of Implementation&#39;,
+       fill = &#39;Identity Condition&#39;) +
+  scale_fill_viridis_d() +
+  theme_minimal()</code></pre>
+<p><img src="p08_files/figure-html/bars-1.png" width="672" /></p>
+<p>I prefer this visualization for this particular dataset/context. The
+contrast between the likelihood of implementation for the gender/social
+construction lesson and the other three lessons is very clear.</p>
 </div>
 </div>
 
