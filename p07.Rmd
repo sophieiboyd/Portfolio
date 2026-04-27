@@ -43,12 +43,15 @@ A series of regression models presented with APA style tables created in R.
 
 #### Interpretation:
 
-**Fill in later
+In my opinion, the rempsyc package made the nicest looking tables and was the most user-friendly. This will be a very useful tool in my future work!
 
 #### Sources
 https://cran.r-project.org/web/packages/apaTables/apaTables.pdf
+
 https://cran.r-project.org/web/packages/rempsyc/vignettes/table.html
+
 https://github.com/crsh/papaja
+
 ----
 
 ### Loading packages and data
@@ -153,6 +156,8 @@ summary(model8)
 lm.beta(model8)
 ```
 
+### Testing out tables
+
 Now that I've run my regressions, I am going to experiment with displaying my results in tables. I came across the following recommended packages:
 
 - apaTables
@@ -198,15 +203,163 @@ apa_model1
 
 This package requires opening a new R Markdown file with an APA template.
 
-I am happiest with the results and functionality of the rempsyc package. Now, I need to learn how to edit the labels and create tables for each of the eight models I ran.
+I am happiest with the results and functionality of the rempsyc package. Now, I need to edit the labels and create tables for each of the eight models I ran.
+
+### Renaming the variables
+
+I need to give the same name to two different versions of a variable, so I am renaming in two different dataframes. (Specifically, civic engagement at Time 2 is the outcome in the first four models and the centered version of the same variable is a predictor in the next four models.)
+
+```{r rename}
+civicengagement_data1 <- civicengagement_data %>%
+  rename("Joint Decision Making" = JDM_cent,
+         "Independent Decision Making" = IDM_cent, 
+         "Maternal Warmth" = MatWarmth_cent,
+         "Paternal Warmth" = PatWarmth_cent,
+         "Civic Engagement at Time 2" = CE_2,
+         "Civic Engagement at Time 3" = CE_3)
+
+civicengagement_data2 <- civicengagement_data %>%
+  rename("Joint Decision Making" = JDM_cent,
+         "Independent Decision Making" = IDM_cent, 
+         "Maternal Warmth" = MatWarmth_cent,
+         "Paternal Warmth" = PatWarmth_cent,
+         "Civic Engagement at Time 2" = CE_2_cent,
+         "Civic Engagement at Time 3" = CE_3)
+```
 
 
 ### Model 1
 
 ```{r model1-table}
+model1 <- lm(`Civic Engagement at Time 2` ~ `Maternal Warmth` + `Joint Decision Making` + `Maternal Warmth`:`Joint Decision Making`, data = civicengagement_data1)
+
 (model1table <- tidy(model1))
 
 nice_table(model1table, broom = "lm")
 ```
 
+I don't love that the back ticks show up on the table. I am going to rename the variables to abbreviations and add a caption to define them instead.
 
+```{r rename2}
+civicengagement_data1 <- civicengagement_data %>%
+  rename("J_D_M" = JDM,
+         "I_D_M" = IDM,
+         "JDM" = JDM_cent,
+         "IDM" = IDM_cent, 
+         "MW" = MatWarmth_cent,
+         "PW" = PatWarmth_cent,
+         "CE2" = CE_2,
+         "CE3" = CE_3)
+
+civicengagement_data2 <- civicengagement_data %>%
+  rename("J_D_M" = JDM,
+         "I_D_M" = IDM,
+         "JDM" = JDM_cent,
+         "IDM" = IDM_cent, 
+         "MW" = MatWarmth_cent,
+         "PW" = PatWarmth_cent,
+         "CE2" = CE_2_cent,
+         "CE3" = CE_3)
+```
+
+Adding a title and notes as well:
+
+```{r model1-table-newlabel}
+model1 <- lm(CE2 ~ MW + JDM + MW:JDM, data = civicengagement_data1)
+
+(model1table <- tidy(model1))
+
+nice_table(model1table, broom = "lm",
+           title = c("Table 1", "Predicting Civic Engagement (Time 2) from Maternal Warmth and Joint Deicision Making."),
+           note = c("MW = Maternal Warmth, JDM = Joint Decision Making",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+I'm happy with this layout. Time to recreate it for the rest of the models:
+
+### Model 2
+
+```{r model2-table}
+model2 <- lm(CE2 ~ PW + JDM + PW:JDM, data = civicengagement_data1)
+
+(model2table <- tidy(model2))
+
+nice_table(model2table, broom = "lm",
+           title = c("Table 2", "Predicting Civic Engagement (Time 2) from Paternal Warmth and Joint Deicision Making."),
+           note = c("PW = Paternal Warmth, JDM = Joint Decision Making",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model3-table}
+model3 <- lm(CE3 ~ MW + JDM + MW:JDM + CE2, data = civicengagement_data2)
+
+(model3table <- tidy(model3))
+
+nice_table(model3table, broom = "lm",
+           title = c("Table 3", "Predicting Civic Engagement (Time 3) from Maternal Warmth and Joint Deicision Making."),
+           note = c("MW = Maternal Warmth, JDM = Joint Decision Making, CE2 = Civic Engagement at Time 2 (control)",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model4-table}
+model4 <- lm(CE3 ~ PW + JDM + PW:JDM + CE2, data = civicengagement_data2)
+
+(model4table <- tidy(model4))
+
+nice_table(model4table, broom = "lm",
+           title = c("Table 4", "Predicting Civic Engagement (Time 3) from Paternal Warmth and Joint Deicision Making."),
+           note = c("PW = Paternal Warmth, JDM = Joint Decision Making, CE2 = Civic Engagement at Time 2 (control)",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model5-table}
+model5 <- lm(CE2 ~ MW + IDM + MW:IDM, data = civicengagement_data1)
+
+(model5table <- tidy(model5))
+
+nice_table(model5table, broom = "lm",
+           title = c("Table 5", "Predicting Civic Engagement (Time 2) from Maternal Warmth and Independent Deicision Making."),
+           note = c("MW = Maternal Warmth, IDM = Independent Decision Making",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model6-table}
+model6 <- lm(CE2 ~ PW + IDM + PW:IDM, data = civicengagement_data1)
+
+(model6table <- tidy(model6))
+
+nice_table(model6table, broom = "lm",
+           title = c("Table 6", "Predicting Civic Engagement (Time 2) from Paternal Warmth and Independent Deicision Making."),
+           note = c("PW = Paternal Warmth, IDM = Independent Decision Making",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model7-table}
+model7 <- lm(CE3 ~ MW + IDM + MW:IDM + CE2, data = civicengagement_data2)
+
+(model7table <- tidy(model7))
+
+nice_table(model7table, broom = "lm",
+           title = c("Table 7", "Predicting Civic Engagement (Time 3) from Maternal Warmth and Independent Deicision Making."),
+           note = c("MW = Maternal Warmth, IDM = Independent Decision Making, CE2 = Civic Engagement at Time 2 (control)",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
+
+```{r model8-table}
+model8 <- lm(CE3 ~ PW + IDM + PW:IDM + CE2, data = civicengagement_data2)
+
+(model8table <- tidy(model8))
+
+nice_table(model8table, broom = "lm",
+           title = c("Table 8", "Predicting Civic Engagement (Time 3) from Paternal Warmth and Independent Decision Making."),
+           note = c("PW = Paternal Warmth, IDM = Independent Decision Making, CE2 = Civic Engagement at Time 2 (control)",
+                    "* p < .05, ** p < .01, *** p < .001")
+           )
+```
