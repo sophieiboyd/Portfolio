@@ -324,9 +324,9 @@ Nonfiction/Memoir).</li>
 </div>
 <div id="product" class="section level4">
 <h4>Product</h4>
-<p>A simple function/algorithm that returns a recommendation for me
-based on my preferences for the type of work, the genre, the length, and
-my friends’ ratings.</p>
+<p>A simple set of codes that returns a recommendation for me based on
+my preferences for the type of work, the genre, the length, and my
+friends’ ratings.</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation</h4>
@@ -338,18 +338,8 @@ my friends’ ratings.</p>
 </div>
 <div id="loading-packages-and-data" class="section level3">
 <h3>Loading packages and data</h3>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.5.2     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.1.0     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(readxl)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(readxl)</code></pre>
 <pre class="r"><code>recs &lt;- read_excel(&quot;LauraGabbyRecs.xlsx&quot;)
 glimpse(recs)</code></pre>
 <pre><code>## Rows: 59
@@ -387,6 +377,7 @@ recs %&gt;%
        y = &#39;Count&#39;,
        title = &#39;Books by Genre&#39;)</code></pre>
 <p><img src="p09_files/figure-html/books-by-genre-1.png" width="672" /></p>
+<p>Lots of thriller options for both movies and books!</p>
 <pre class="r"><code>recs %&gt;%
   filter(Type == &quot;Movie&quot;) %&gt;%
   ggplot(aes(x = Length, fill = &quot;navy&quot;)) +
@@ -409,8 +400,85 @@ recs %&gt;%
 <p><img src="p09_files/figure-html/book-rating-distribution-1.png" width="672" /></p>
 </div>
 </div>
-<div id="building-the-recommendation-tool" class="section level3">
-<h3>Building the recommendation tool</h3>
+<div id="buildingtesting-the-recommendation-tool"
+class="section level3">
+<h3>Building/testing the recommendation tool</h3>
+<pre class="r"><code>recs_1 &lt;- recs %&gt;%
+  filter(Type == &quot;Movie&quot;) %&gt;%
+  filter(Genre == &quot;Thriller/Horror&quot;) %&gt;%
+  filter(Rating &gt;= 4) %&gt;%
+  filter(Length &lt;= 120) 
+
+sample(recs_1$Title, 1)</code></pre>
+<pre><code>## [1] &quot;Jennifer&#39;s Body&quot;</code></pre>
+<pre class="r"><code>recs_2 &lt;- recs %&gt;%
+  filter(Type == &quot;Book&quot;) %&gt;%
+  filter(Genre == &quot;Sci-Fi&quot;) %&gt;%
+  filter(Rating &gt;= 4) %&gt;%
+  filter(Length &lt;= 400) 
+
+sample(recs_2$Title, 1)</code></pre>
+<pre><code>## [1] &quot;The Handmaid&#39;s Tale&quot;</code></pre>
+<p>This is my first attempt at getting a random movie recommendation and
+book recommendation that fit my selected criteria. It is a bit
+inconvenient to have to save a new dataframe that meets each set of
+criteria, but I think it works well enough for what I need to do. I will
+create a more general template that I can refer back to later:</p>
+</div>
+<div id="step-by-step-recommendation-tool" class="section level3">
+<h3>Step-by-step recommendation tool:</h3>
+<pre class="r"><code>new_df &lt;- recs %&gt;%
+  # Movie or book?
+  filter(Type == &quot;____&quot;) %&gt;%
+  # What genre are you in the mood for?
+  filter(Genre == &quot;____&quot;) %&gt;%
+  # What is the minimum rating you trust?
+  filter(Rating &gt;= __) %&gt;%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length &lt;= ____) 
+
+sample(new_df$Title, 1)</code></pre>
+<p>Emerson let me test out my code with her preferences too:</p>
+<pre class="r"><code>EE_df &lt;- recs %&gt;%
+  filter(Type == &quot;Movie&quot;) %&gt;%
+  filter(Genre == &quot;Comedy&quot;) %&gt;%
+  filter(Rating &gt;= 3) %&gt;%
+  filter(Length &lt;= 120)
+
+sample(EE_df$Title, 1)</code></pre>
+<pre><code>## [1] &quot;Y2K&quot;</code></pre>
+<p>Her recommended movie was Y2K!</p>
+</div>
+<div id="saving-my-progress" class="section level3">
+<h3>Saving my progress</h3>
+<p>As I watch/read the recommended movies/books, I want to be able to
+keep track of what I have watched/read already so I can continuing
+narrowing my recommendations down to works that are new to me. I also
+want to save my own ratings of the movies and books to compare to my
+friends’ ratings. I will create new variables in my dataframe to save my
+progress and filter my future recommendations:</p>
+<pre class="r"><code>recs &lt;- recs %&gt;%
+  mutate(watched = 0) %&gt;%
+  mutate(my_rating = 0)</code></pre>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together:</h3>
+<p>To test everything step-by-step, I am going to request a movie
+recommendation, watch the movie this evening, and return to update my
+dataset with my own rating.</p>
+<pre class="r"><code>test_df &lt;- recs %&gt;%
+  # Movie or book?
+  filter(Type == &quot;Movie&quot;) %&gt;%
+  # What genre are you in the mood for?
+  filter(Genre == &quot;Comedy&quot;) %&gt;%
+  # What is the minimum rating you trust?
+  filter(Rating &gt;= 3.5) %&gt;%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length &lt;= 120) 
+
+sample(test_df$Title, 1)</code></pre>
+<pre><code>## [1] &quot;Y2K&quot;</code></pre>
+<p>Going to watch “This Is Spinal Tap” and report back!</p>
 </div>
 </div>
 

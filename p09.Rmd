@@ -22,7 +22,7 @@ I recorded this information for 30 movies and 30 books.
 
 #### Product
 
-A simple function/algorithm that returns a recommendation for me based on my preferences for the type of work, the genre, the length, and my friends' ratings.
+A simple set of codes that returns a recommendation for me based on my preferences for the type of work, the genre, the length, and my friends' ratings.
 
 #### Interpretation
 
@@ -34,7 +34,7 @@ A simple function/algorithm that returns a recommendation for me based on my pre
 
 ### Loading packages and data
 
-```{r load-packages, warning=FALSE}
+```{r load-packages, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 ```
@@ -76,6 +76,8 @@ recs %>%
        title = 'Books by Genre')
 ```
 
+Lots of thriller options for both movies and books! 
+
 ```{r movie-length-distribution}
 recs %>%
   filter(Type == "Movie") %>%
@@ -100,6 +102,93 @@ recs %>%
        title = 'Distribution of Book Lengths (in pages)')
 ```
 
-### Building the recommendation tool
+### Building/testing the recommendation tool
 
+```{r movie-selector}
+recs_1 <- recs %>%
+  filter(Type == "Movie") %>%
+  filter(Genre == "Thriller/Horror") %>%
+  filter(Rating >= 4) %>%
+  filter(Length <= 120) 
+
+sample(recs_1$Title, 1)
+  
+```
+
+```{r book-selector}
+recs_2 <- recs %>%
+  filter(Type == "Book") %>%
+  filter(Genre == "Sci-Fi") %>%
+  filter(Rating >= 4) %>%
+  filter(Length <= 400) 
+
+sample(recs_2$Title, 1)
+  
+```
+
+This is my first attempt at getting a random movie recommendation and book recommendation that fit my selected criteria. It is a bit inconvenient to have to save a new dataframe that meets each set of criteria, but I think it works well enough for what I need to do. I will create a more general template that I can refer back to later: 
+
+### Step-by-step recommendation tool:
+
+```{r tool-template, eval = FALSE}
+new_df <- recs %>%
+  # Movie or book?
+  filter(Type == "____") %>%
+  # What genre are you in the mood for?
+  filter(Genre == "____") %>%
+  # What is the minimum rating you trust?
+  filter(Rating >= __) %>%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length <= ____) 
+
+sample(new_df$Title, 1)
+```
+
+Emerson let me test out my code with her preferences too: 
+
+```{r Emerson-pref}
+EE_df <- recs %>%
+  filter(Type == "Movie") %>%
+  filter(Genre == "Comedy") %>%
+  filter(Rating >= 3) %>%
+  filter(Length <= 120)
+
+sample(EE_df$Title, 1)
+```
+
+Her recommended movie was Y2K!
+
+### Saving my progress
+
+As I watch/read the recommended movies/books, I want to be able to keep track of what I have watched/read already so I can continuing narrowing my recommendations down to works that are new to me. I also want to save my own ratings of the movies and books to compare to my friends' ratings. I will create new variables in my dataframe to save my progress and filter my future recommendations:
+
+```{r my-progress}
+recs <- recs %>%
+  mutate(watched = 0) %>%
+  mutate(my_rating = 0)
+```
+
+### Putting it all together:
+
+To test everything step-by-step, I am going to request a movie recommendation, watch the movie this evening, and return to update my dataset with my own rating. 
+
+```{r my-test}
+test_df <- recs %>%
+  # Movie or book?
+  filter(Type == "Movie") %>%
+  # What genre are you in the mood for?
+  filter(Genre == "Comedy") %>%
+  # What is the minimum rating you trust?
+  filter(Rating >= 3.5) %>%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length <= 120) 
+
+sample(test_df$Title, 1)
+```
+
+Going to watch "This Is Spinal Tap" and report back!
+
+```{r update}
+  
+```
 
