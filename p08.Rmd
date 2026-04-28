@@ -1,5 +1,5 @@
 ---
-title: "Simulating and Modeling Two-Way Interactions"
+title: "Portfolio 8: Simulating and Modeling Two-Way Interactions"
 ---
 
 ## Overview:

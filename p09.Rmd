@@ -1,5 +1,46 @@
 ---
-title: "Portfolio 9"
+title: "Portfolio 9: My Summer Read/Watch List"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+## Overview:
+
+#### Goal:
+
+My best friends Laura and Gabby have great taste! With summer break around the corner, I want to select some good books to read and movies to watch during my time off from school. My goal for this piece is to develop a tool for choosing my next book/movie using my own preferences and data from Laura's Letterboxd account and Gabby's GoodReads account to generate recommendations.
+
+#### Data:
+
+I entered Laura and Gabby's reviews into a spreadsheet that includes the following variables:
+
+- Title (the title of the movie/book)
+- Rating (my friend's rating of each work from 1 to 5 stars)
+- Type (movie or book)
+- Genre (these are broad, somewhat imprecise categories. Options for movies are Comedy, Drama, Family, Thriller/Horror, and Romance. Options for books are Literary Fiction, Historical, Sci-Fi, Thriller, and Nonfiction/Memoir). 
+- Length (in minutes for movies and in pages for books)
+
+I recorded this information for 30 movies and 30 books.
+
+#### Product
+
+A simple function/algorithm that returns a recommendation for me based on my preferences for the type of work, the genre, the length, and my friends' ratings.
+
+#### Interpretation
+
+** fill in later
+
+#### Sources
+
+----
+
+### Loading packages and data
+
+```{r load-packages, warning=FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+```{r load-data}
+recs <- read_excel("LauraGabbyRecs.xlsx")
+```
+
+
