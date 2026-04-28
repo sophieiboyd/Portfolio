@@ -41,6 +41,65 @@ library(readxl)
 
 ```{r load-data}
 recs <- read_excel("LauraGabbyRecs.xlsx")
+glimpse(recs)
 ```
+
+#### Visualizing the data
+
+Before creating my recommendation tool, I want to get a general sense of what movies/books are available in the dataset.
+
+```{r movies-by-genre}
+#ordering genres by frequency for both movies and books (after having run the bar graphs once)
+
+recs$Genre_ordered <- fct_relevel(recs$Genre, 'Thriller/Horror', 'Drama', 'Family', 'Comedy', 'Romance', 'Thriller', 'Sci-Fi', 'Historical', 'Nonfiction/Memoir', 'Literary Fiction')
+
+recs %>%
+  filter(Type == "Movie") %>%
+  ggplot(aes(x = Genre_ordered, fill = Genre_ordered)) +
+  geom_bar() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(x = 'Genre',
+       y = 'Count',
+       title = 'Movies by Genre')
+```
+
+```{r books-by-genre}
+recs %>%
+  filter(Type == "Book") %>%
+  ggplot(aes(x = Genre_ordered, fill = Genre_ordered)) +
+  geom_bar() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(x = 'Genre',
+       y = 'Count',
+       title = 'Books by Genre')
+```
+
+```{r movie-length-distribution}
+recs %>%
+  filter(Type == "Movie") %>%
+  ggplot(aes(x = Length, fill = "navy")) +
+  geom_density() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(x = 'Length',
+       y = 'Count',
+       title = 'Distribution of Movie Runtimes (in minutes)')
+```
+
+```{r book-rating-distribution}
+recs %>%
+  filter(Type == "Book") %>%
+  ggplot(aes(x = Length, fill = "navy")) +
+  geom_density() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(x = 'Length',
+       y = 'Count',
+       title = 'Distribution of Book Lengths (in pages)')
+```
+
+### Building the recommendation tool
 
 
