@@ -28,8 +28,6 @@ A simple set of codes that returns a recommendation for me based on my preferenc
 
 I ended up with a basic but useful tool for getting movie/book recommendations from my friends' data. I look forward to using it over the summer and chatting with Laura and Gabby about our thoughts/reviews. To keep improving the tool in the future, it could be cool to incorporate a web scraping element to pull new reviews from Letterboxd and GoodReads. 
 
-#### Sources
-
 ----
 
 ### Loading packages and data
