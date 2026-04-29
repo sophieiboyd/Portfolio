@@ -199,13 +199,13 @@ new_df <- recs %>%
   # Getting rid of titles I have already watched/read
   filter(watched_or_read == 0) %>%
   # Movie or book?
-  filter(Type == "Movie") %>%
+  filter(Type == "____") %>%
   # What genre are you in the mood for?
-  filter(Genre == "Comedy") %>%
+  filter(Genre == "____") %>%
   # What is the minimum rating you trust?
-  filter(Rating >= 3) %>%
+  filter(Rating >= __) %>%
   # How much time do you have? (enter max length preference in minutes/pages)
-  filter(Length <= 500) 
+  filter(Length <= ___) 
 
 sample(new_df$Title, 1)
 ```

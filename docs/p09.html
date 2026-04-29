@@ -494,13 +494,13 @@ filter out movies I have seen/books I have read:</p>
   # Getting rid of titles I have already watched/read
   filter(watched_or_read == 0) %&gt;%
   # Movie or book?
-  filter(Type == &quot;Movie&quot;) %&gt;%
+  filter(Type == &quot;____&quot;) %&gt;%
   # What genre are you in the mood for?
-  filter(Genre == &quot;Comedy&quot;) %&gt;%
+  filter(Genre == &quot;____&quot;) %&gt;%
   # What is the minimum rating you trust?
-  filter(Rating &gt;= 3) %&gt;%
+  filter(Rating &gt;= __) %&gt;%
   # How much time do you have? (enter max length preference in minutes/pages)
-  filter(Length &lt;= 500) 
+  filter(Length &lt;= ___) 
 
 sample(new_df$Title, 1)</code></pre>
 </div>
