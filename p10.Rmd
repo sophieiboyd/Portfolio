@@ -24,6 +24,8 @@ No dataset for this one- I will just be entering a list of my projects/tasks.
 
 https://sites.temple.edu/psmgis/2017/07/30/flow-charts-in-r-using-diagrammer/
 
+https://rich-iannone.github.io/DiagrammeR/#:~:text=Any%20time%20we%20add%20a,edges%20and%20bind%20attribute%20data.
+
 ---- 
 
 I am going to start by searching online for recommended packages/tools for creating graphic organizers and/or flow charts to test out. 
@@ -39,9 +41,12 @@ library(DiagrammeR)
 ```
 
 ```{r attempt1}
-DiagrammeR("graph LR;
-           A --> B;
-           B --> C;
-           B --> D")
+DiagrammeR("graph TB;
+           Analysis --> Writing;
+           Analysis --> Cleaning;
+           Analysis --> Hypothesis_Testing;
+           Writing --> Method;
+           Writing --> Results;
+           Writing --> Discussion")
 ```
 

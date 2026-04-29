@@ -331,6 +331,8 @@ projects/tasks.</p>
 <p><a
 href="https://sites.temple.edu/psmgis/2017/07/30/flow-charts-in-r-using-diagrammer/"
 class="uri">https://sites.temple.edu/psmgis/2017/07/30/flow-charts-in-r-using-diagrammer/</a></p>
+<p><a href="https://rich-iannone.github.io/DiagrammeR/#"
+class="uri">https://rich-iannone.github.io/DiagrammeR/#</a>:~:text=Any%20time%20we%20add%20a,edges%20and%20bind%20attribute%20data.</p>
 <hr />
 <p>I am going to start by searching online for recommended
 packages/tools for creating graphic organizers and/or flow charts to
@@ -341,12 +343,15 @@ test out.</p>
 <li></li>
 </ul>
 <pre class="r"><code>library(DiagrammeR)</code></pre>
-<pre class="r"><code>DiagrammeR(&quot;graph LR;
-           A --&gt; B;
-           B --&gt; C;
-           B --&gt; D&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-40d46ed814dfd70f6345" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-40d46ed814dfd70f6345">{"x":{"diagram":"graph LR;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DiagrammeR(&quot;graph TB;
+           Analysis --&gt; Writing;
+           Analysis --&gt; Cleaning;
+           Analysis --&gt; Hypothesis_Testing;
+           Writing --&gt; Method;
+           Writing --&gt; Results;
+           Writing --&gt; Discussion&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-9b84e3f93dd7ab2317ff" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-9b84e3f93dd7ab2317ff">{"x":{"diagram":"graph TB;\n           Analysis --> Writing;\n           Analysis --> Cleaning;\n           Analysis --> Hypothesis_Testing;\n           Writing --> Method;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
