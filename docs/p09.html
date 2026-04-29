@@ -330,7 +330,12 @@ friends’ ratings.</p>
 </div>
 <div id="interpretation" class="section level4">
 <h4>Interpretation</h4>
-<p>** fill in later</p>
+<p>I ended up with a basic but useful tool for getting movie/book
+recommendations from my friends’ data. I look forward to using it over
+the summer and chatting with Laura and Gabby about our thoughts/reviews.
+To keep improving the tool in the future, it could be cool to
+incorporate a web scraping element to pull new reviews from Letterboxd
+and GoodReads.</p>
 </div>
 <div id="sources" class="section level4">
 <h4>Sources</h4>
@@ -403,22 +408,24 @@ recs %&gt;%
 <div id="buildingtesting-the-recommendation-tool"
 class="section level3">
 <h3>Building/testing the recommendation tool</h3>
-<pre class="r"><code>recs_1 &lt;- recs %&gt;%
+<pre class="r"><code>set.seed(123)
+recs_1 &lt;- recs %&gt;%
   filter(Type == &quot;Movie&quot;) %&gt;%
   filter(Genre == &quot;Thriller/Horror&quot;) %&gt;%
   filter(Rating &gt;= 4) %&gt;%
   filter(Length &lt;= 120) 
 
 sample(recs_1$Title, 1)</code></pre>
-<pre><code>## [1] &quot;Jennifer&#39;s Body&quot;</code></pre>
-<pre class="r"><code>recs_2 &lt;- recs %&gt;%
+<pre><code>## [1] &quot;Thoroughbreds&quot;</code></pre>
+<pre class="r"><code>set.seed(123)
+recs_2 &lt;- recs %&gt;%
   filter(Type == &quot;Book&quot;) %&gt;%
   filter(Genre == &quot;Sci-Fi&quot;) %&gt;%
   filter(Rating &gt;= 4) %&gt;%
   filter(Length &lt;= 400) 
 
 sample(recs_2$Title, 1)</code></pre>
-<pre><code>## [1] &quot;The Handmaid&#39;s Tale&quot;</code></pre>
+<pre><code>## [1] &quot;I Who Have Never Known Men&quot;</code></pre>
 <p>This is my first attempt at getting a random movie recommendation and
 book recommendation that fit my selected criteria. It is a bit
 inconvenient to have to save a new dataframe that meets each set of
@@ -438,16 +445,6 @@ create a more general template that I can refer back to later:</p>
   filter(Length &lt;= ____) 
 
 sample(new_df$Title, 1)</code></pre>
-<p>Emerson let me test out my code with her preferences too:</p>
-<pre class="r"><code>EE_df &lt;- recs %&gt;%
-  filter(Type == &quot;Movie&quot;) %&gt;%
-  filter(Genre == &quot;Comedy&quot;) %&gt;%
-  filter(Rating &gt;= 3) %&gt;%
-  filter(Length &lt;= 120)
-
-sample(EE_df$Title, 1)</code></pre>
-<pre><code>## [1] &quot;Y2K&quot;</code></pre>
-<p>Her recommended movie was Y2K!</p>
 </div>
 <div id="saving-my-progress" class="section level3">
 <h3>Saving my progress</h3>
@@ -458,7 +455,7 @@ want to save my own ratings of the movies and books to compare to my
 friends’ ratings. I will create new variables in my dataframe to save my
 progress and filter my future recommendations:</p>
 <pre class="r"><code>recs &lt;- recs %&gt;%
-  mutate(watched = 0) %&gt;%
+  mutate(watched_or_read = 0) %&gt;%
   mutate(my_rating = 0)</code></pre>
 </div>
 <div id="putting-it-all-together" class="section level3">
@@ -466,7 +463,8 @@ progress and filter my future recommendations:</p>
 <p>To test everything step-by-step, I am going to request a movie
 recommendation, watch the movie this evening, and return to update my
 dataset with my own rating.</p>
-<pre class="r"><code>test_df &lt;- recs %&gt;%
+<pre class="r"><code>set.seed(4)
+test_df &lt;- recs %&gt;%
   # Movie or book?
   filter(Type == &quot;Movie&quot;) %&gt;%
   # What genre are you in the mood for?
@@ -477,8 +475,34 @@ dataset with my own rating.</p>
   filter(Length &lt;= 120) 
 
 sample(test_df$Title, 1)</code></pre>
-<pre><code>## [1] &quot;Y2K&quot;</code></pre>
+<pre><code>## [1] &quot;This Is Spinal Tap&quot;</code></pre>
 <p>Going to watch “This Is Spinal Tap” and report back!</p>
+<p>I liked it! Now I will add my rating and indicate that I have watched
+it:</p>
+<pre class="r"><code>recs &lt;- recs %&gt;%
+  mutate(watched_or_read = case_when(
+    Title == &quot;This Is Spinal Tap&quot; ~ 1,
+    TRUE ~ 0
+  )) %&gt;%
+  mutate(my_rating = case_when(
+    Title == &quot;This Is Spinal Tap&quot; ~ 3.5,
+    TRUE ~ 0
+  ))</code></pre>
+<p>Finally, for future use, I will update my selection template to
+filter out movies I have seen/books I have read:</p>
+<pre class="r"><code>new_df &lt;- recs %&gt;%
+  # Getting rid of titles I have already watched/read
+  filter(watched_or_read == 0) %&gt;%
+  # Movie or book?
+  filter(Type == &quot;Movie&quot;) %&gt;%
+  # What genre are you in the mood for?
+  filter(Genre == &quot;Comedy&quot;) %&gt;%
+  # What is the minimum rating you trust?
+  filter(Rating &gt;= 3) %&gt;%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length &lt;= 500) 
+
+sample(new_df$Title, 1)</code></pre>
 </div>
 </div>
 

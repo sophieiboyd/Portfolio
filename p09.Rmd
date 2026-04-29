@@ -26,7 +26,7 @@ A simple set of codes that returns a recommendation for me based on my preferenc
 
 #### Interpretation
 
-** fill in later
+I ended up with a basic but useful tool for getting movie/book recommendations from my friends' data. I look forward to using it over the summer and chatting with Laura and Gabby about our thoughts/reviews. To keep improving the tool in the future, it could be cool to incorporate a web scraping element to pull new reviews from Letterboxd and GoodReads. 
 
 #### Sources
 
@@ -152,7 +152,7 @@ As I watch/read the recommended movies/books, I want to be able to keep track of
 
 ```{r my-progress}
 recs <- recs %>%
-  mutate(watched = 0) %>%
+  mutate(watched_or_read = 0) %>%
   mutate(my_rating = 0)
 ```
 
@@ -180,10 +180,33 @@ Going to watch "This Is Spinal Tap" and report back!
 I liked it! Now I will add my rating and indicate that I have watched it:
 
 ```{r update}
-
+recs <- recs %>%
+  mutate(watched_or_read = case_when(
+    Title == "This Is Spinal Tap" ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(my_rating = case_when(
+    Title == "This Is Spinal Tap" ~ 3.5,
+    TRUE ~ 0
+  ))
 ```
 
 
 Finally, for future use, I will update my selection template to filter out movies I have seen/books I have read:
 
+```{r tool-template-final, eval = FALSE}
+new_df <- recs %>%
+  # Getting rid of titles I have already watched/read
+  filter(watched_or_read == 0) %>%
+  # Movie or book?
+  filter(Type == "Movie") %>%
+  # What genre are you in the mood for?
+  filter(Genre == "Comedy") %>%
+  # What is the minimum rating you trust?
+  filter(Rating >= 3) %>%
+  # How much time do you have? (enter max length preference in minutes/pages)
+  filter(Length <= 500) 
+
+sample(new_df$Title, 1)
+```
 
