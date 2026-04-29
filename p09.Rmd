@@ -105,6 +105,7 @@ recs %>%
 ### Building/testing the recommendation tool
 
 ```{r movie-selector}
+set.seed(123)
 recs_1 <- recs %>%
   filter(Type == "Movie") %>%
   filter(Genre == "Thriller/Horror") %>%
@@ -116,6 +117,7 @@ sample(recs_1$Title, 1)
 ```
 
 ```{r book-selector}
+set.seed(123)
 recs_2 <- recs %>%
   filter(Type == "Book") %>%
   filter(Genre == "Sci-Fi") %>%
@@ -144,20 +146,6 @@ new_df <- recs %>%
 sample(new_df$Title, 1)
 ```
 
-Emerson let me test out my code with her preferences too: 
-
-```{r Emerson-pref}
-EE_df <- recs %>%
-  filter(Type == "Movie") %>%
-  filter(Genre == "Comedy") %>%
-  filter(Rating >= 3) %>%
-  filter(Length <= 120)
-
-sample(EE_df$Title, 1)
-```
-
-Her recommended movie was Y2K!
-
 ### Saving my progress
 
 As I watch/read the recommended movies/books, I want to be able to keep track of what I have watched/read already so I can continuing narrowing my recommendations down to works that are new to me. I also want to save my own ratings of the movies and books to compare to my friends' ratings. I will create new variables in my dataframe to save my progress and filter my future recommendations:
@@ -173,6 +161,7 @@ recs <- recs %>%
 To test everything step-by-step, I am going to request a movie recommendation, watch the movie this evening, and return to update my dataset with my own rating. 
 
 ```{r my-test}
+set.seed(4)
 test_df <- recs %>%
   # Movie or book?
   filter(Type == "Movie") %>%
@@ -188,7 +177,13 @@ sample(test_df$Title, 1)
 
 Going to watch "This Is Spinal Tap" and report back!
 
+I liked it! Now I will add my rating and indicate that I have watched it:
+
 ```{r update}
-  
+
 ```
+
+
+Finally, for future use, I will update my selection template to filter out movies I have seen/books I have read:
+
 
