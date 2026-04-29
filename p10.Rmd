@@ -40,12 +40,60 @@ Options include:
 library(DiagrammeR)
 ```
 
+Some starter code to see how it works:
+
 ```{r attempt1}
+DiagrammeR("graph LR;
+           A --> B;
+           B --> C;
+           B --> D")
+
 DiagrammeR("graph TB;
-           Analysis --> Writing;
-           Analysis --> Cleaning;
-           Analysis --> Hypothesis_Testing;
-           Writing --> Method;
+           A --> B;
+           B --> C;
+           B --> D")
+```
+
+Based on how the levels work/look, I think it would make sense to make a separate organizer for each project I am working on. I will start with the remaining tasks for my FYP:
+
+```{r FYP1}
+DiagrammeR("graph TB;
+           FYP --> Data;
+           FYP --> Writing;
+           Data --> Cleaning;
+           Data --> Analysis;
+           Writing --> Results;
+           Writing --> Discussion")
+```
+
+```{r nutrition1}
+DiagrammeR("graph TB;
+           NP --> Writing;
+           Writing --> Results3;
+           Writing --> Results4")
+```
+
+```{r PAC1}
+DiagrammeR("graph TB;
+           PAC --> Data;
+           PAC --> Writing;
+           Data --> Cleaning;
+           Data --> Analysis;
+           Writing --> Introduction;
+           Writing --> Discussion")
+```
+
+```{r thesis1}
+DiagrammeR("graph TB;
+           Thesis --> Planning;
+           Thesis --> Data;
+           Thesis --> Writing;
+           Planning --> Meeting;
+           Planning --> Change_groups;
+           Data --> Cleaning;
+           Data --> Analysis;
+           Writing --> Edit_intro;
+           Writing --> Edit_method;
            Writing --> Results;
            Writing --> Discussion")
 ```

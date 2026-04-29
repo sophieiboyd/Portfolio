@@ -343,15 +343,60 @@ test out.</p>
 <li></li>
 </ul>
 <pre class="r"><code>library(DiagrammeR)</code></pre>
+<p>Some starter code to see how it works:</p>
+<pre class="r"><code>DiagrammeR(&quot;graph LR;
+           A --&gt; B;
+           B --&gt; C;
+           B --&gt; D&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-93b0f73d98eb2068da8e" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-93b0f73d98eb2068da8e">{"x":{"diagram":"graph LR;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>DiagrammeR(&quot;graph TB;
-           Analysis --&gt; Writing;
-           Analysis --&gt; Cleaning;
-           Analysis --&gt; Hypothesis_Testing;
-           Writing --&gt; Method;
+           A --&gt; B;
+           B --&gt; C;
+           B --&gt; D&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-ef2370d985ac6e21b8fe" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ef2370d985ac6e21b8fe">{"x":{"diagram":"graph TB;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
+<p>Based on how the levels work/look, I think it would make sense to
+make a separate organizer for each project I am working on. I will start
+with the remaining tasks for my FYP:</p>
+<pre class="r"><code>DiagrammeR(&quot;graph TB;
+           FYP --&gt; Data;
+           FYP --&gt; Writing;
+           Data --&gt; Cleaning;
+           Data --&gt; Analysis;
            Writing --&gt; Results;
            Writing --&gt; Discussion&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-9b84e3f93dd7ab2317ff" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-9b84e3f93dd7ab2317ff">{"x":{"diagram":"graph TB;\n           Analysis --> Writing;\n           Analysis --> Cleaning;\n           Analysis --> Hypothesis_Testing;\n           Writing --> Method;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-dc5106698b101b024d20" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-dc5106698b101b024d20">{"x":{"diagram":"graph TB;\n           FYP --> Data;\n           FYP --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DiagrammeR(&quot;graph TB;
+           NP --&gt; Writing;
+           Writing --&gt; Results3;
+           Writing --&gt; Results4&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-c720bac3d4f45f365c14" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c720bac3d4f45f365c14">{"x":{"diagram":"graph TB;\n           NP --> Writing;\n           Writing --> Results3;\n           Writing --> Results4"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DiagrammeR(&quot;graph TB;
+           PAC --&gt; Data;
+           PAC --&gt; Writing;
+           Data --&gt; Cleaning;
+           Data --&gt; Analysis;
+           Writing --&gt; Introduction;
+           Writing --&gt; Discussion&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-0a020a2a2023f6c01f1a" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-0a020a2a2023f6c01f1a">{"x":{"diagram":"graph TB;\n           PAC --> Data;\n           PAC --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Introduction;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DiagrammeR(&quot;graph TB;
+           Thesis --&gt; Planning;
+           Thesis --&gt; Data;
+           Thesis --&gt; Writing;
+           Planning --&gt; Meeting;
+           Planning --&gt; Change_groups;
+           Data --&gt; Cleaning;
+           Data --&gt; Analysis;
+           Writing --&gt; Edit_intro;
+           Writing --&gt; Edit_method;
+           Writing --&gt; Results;
+           Writing --&gt; Discussion&quot;)</code></pre>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-456d470e79bd290b8161" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-456d470e79bd290b8161">{"x":{"diagram":"graph TB;\n           Thesis --> Planning;\n           Thesis --> Data;\n           Thesis --> Writing;\n           Planning --> Meeting;\n           Planning --> Change_groups;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Edit_intro;\n           Writing --> Edit_method;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
