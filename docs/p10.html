@@ -40,6 +40,8 @@
 <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="site_libs/chromatography-0.1/chromatography.js"></script>
 <script src="site_libs/DiagrammeR-binding-1.0.11/DiagrammeR.js"></script>
+<script src="site_libs/viz-1.8.2/viz.js"></script>
+<script src="site_libs/grViz-binding-1.0.11/grViz.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -348,14 +350,14 @@ test out.</p>
            A --&gt; B;
            B --&gt; C;
            B --&gt; D&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-93b0f73d98eb2068da8e" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-93b0f73d98eb2068da8e">{"x":{"diagram":"graph LR;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-26269b9fc32b5147dcd8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-26269b9fc32b5147dcd8">{"x":{"diagram":"graph LR;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>DiagrammeR(&quot;graph TB;
            A --&gt; B;
            B --&gt; C;
            B --&gt; D&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-ef2370d985ac6e21b8fe" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-ef2370d985ac6e21b8fe">{"x":{"diagram":"graph TB;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-dabc26848508573dd9f1" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-dabc26848508573dd9f1">{"x":{"diagram":"graph TB;\n           A --> B;\n           B --> C;\n           B --> D"},"evals":[],"jsHooks":[]}</script>
 <p>Based on how the levels work/look, I think it would make sense to
 make a separate organizer for each project I am working on. I will start
 with the remaining tasks for my FYP:</p>
@@ -366,14 +368,14 @@ with the remaining tasks for my FYP:</p>
            Data --&gt; Analysis;
            Writing --&gt; Results;
            Writing --&gt; Discussion&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-dc5106698b101b024d20" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-dc5106698b101b024d20">{"x":{"diagram":"graph TB;\n           FYP --> Data;\n           FYP --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-b273bb4efbe63184f1e6" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b273bb4efbe63184f1e6">{"x":{"diagram":"graph TB;\n           FYP --> Data;\n           FYP --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>DiagrammeR(&quot;graph TB;
            NP --&gt; Writing;
            Writing --&gt; Results3;
            Writing --&gt; Results4&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-c720bac3d4f45f365c14" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-c720bac3d4f45f365c14">{"x":{"diagram":"graph TB;\n           NP --> Writing;\n           Writing --> Results3;\n           Writing --> Results4"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-d2ad5cf101a600858156" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-d2ad5cf101a600858156">{"x":{"diagram":"graph TB;\n           NP --> Writing;\n           Writing --> Results3;\n           Writing --> Results4"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>DiagrammeR(&quot;graph TB;
            PAC --&gt; Data;
            PAC --&gt; Writing;
@@ -381,8 +383,8 @@ with the remaining tasks for my FYP:</p>
            Data --&gt; Analysis;
            Writing --&gt; Introduction;
            Writing --&gt; Discussion&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-0a020a2a2023f6c01f1a" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-0a020a2a2023f6c01f1a">{"x":{"diagram":"graph TB;\n           PAC --> Data;\n           PAC --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Introduction;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-1002b4c238e1cf11d2b8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-1002b4c238e1cf11d2b8">{"x":{"diagram":"graph TB;\n           PAC --> Data;\n           PAC --> Writing;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Introduction;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>DiagrammeR(&quot;graph TB;
            Thesis --&gt; Planning;
            Thesis --&gt; Data;
@@ -395,8 +397,45 @@ with the remaining tasks for my FYP:</p>
            Writing --&gt; Edit_method;
            Writing --&gt; Results;
            Writing --&gt; Discussion&quot;)</code></pre>
-<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-456d470e79bd290b8161" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-456d470e79bd290b8161">{"x":{"diagram":"graph TB;\n           Thesis --> Planning;\n           Thesis --> Data;\n           Thesis --> Writing;\n           Planning --> Meeting;\n           Planning --> Change_groups;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Edit_intro;\n           Writing --> Edit_method;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-c3d654ee9393da6da9ca" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c3d654ee9393da6da9ca">{"x":{"diagram":"graph TB;\n           Thesis --> Planning;\n           Thesis --> Data;\n           Thesis --> Writing;\n           Planning --> Meeting;\n           Planning --> Change_groups;\n           Data --> Cleaning;\n           Data --> Analysis;\n           Writing --> Edit_intro;\n           Writing --> Edit_method;\n           Writing --> Results;\n           Writing --> Discussion"},"evals":[],"jsHooks":[]}</script>
+<p>Now that I have the basic layout of tasks that need to be completed,
+I want to add some sort of timeline element to the diagrams. I am going
+to try to color code the boxes by month to reflect when I would like
+each task completed:</p>
+<pre class="r"><code>grViz(&quot;
+  digraph {
+    node [shape = circle, style = filled]
+    
+    A [fillcolor = Cyan]
+    B [fillcolor = Gold]
+    
+    A -&gt; B [color = grey]
+  }
+&quot;)</code></pre>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-29c377069f1c451e1a71" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-29c377069f1c451e1a71">{"x":{"diagram":"\n  digraph {\n    node [shape = circle, style = filled]\n    \n    A [fillcolor = Cyan]\n    B [fillcolor = Gold]\n    \n    A -> B [color = grey]\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>grViz(&quot;digraph {
+node [shape = rectangle, style = filled]
+
+FYP [fillcolor = Blue]
+Data [fillcolor = Purple]
+Writing [fillcolor = Green]
+Cleaning [fillcolor = Purple]
+Analysis [fillcolor = Purple]
+Results [fillcolor = Green]
+Discussion [fillcolor = Green]
+
+           FYP -&gt; Data [color = grey];
+           FYP -&gt; Writing [color = grey];
+           Data -&gt; Cleaning [color = grey];
+           Data -&gt; Analysis [color = grey];
+           Writing -&gt; Results [color = grey];
+           Writing -&gt; Discussion [color = grey]
+
+}&quot;)</code></pre>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-a5c02668a8edda4f01ee" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-a5c02668a8edda4f01ee">{"x":{"diagram":"digraph {\nnode [shape = rectangle, style = filled]\n\nFYP [fillcolor = Blue]\nData [fillcolor = Purple]\nWriting [fillcolor = Green]\nCleaning [fillcolor = Purple]\nAnalysis [fillcolor = Purple]\nResults [fillcolor = Green]\nDiscussion [fillcolor = Green]\n\n           FYP -> Data [color = grey];\n           FYP -> Writing [color = grey];\n           Data -> Cleaning [color = grey];\n           Data -> Analysis [color = grey];\n           Writing -> Results [color = grey];\n           Writing -> Discussion [color = grey]\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 

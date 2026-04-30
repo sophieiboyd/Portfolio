@@ -98,3 +98,40 @@ DiagrammeR("graph TB;
            Writing --> Discussion")
 ```
 
+Now that I have the basic layout of tasks that need to be completed, I want to add some sort of timeline element to the diagrams. I am going to try to color code the boxes by month to reflect when I would like each task completed:
+
+```{r FYP2}
+grViz("
+  digraph {
+    node [shape = circle, style = filled]
+    
+    A [fillcolor = Cyan]
+    B [fillcolor = Gold]
+    
+    A -> B [color = grey]
+  }
+")
+
+
+grViz("digraph {
+node [shape = rectangle, style = filled]
+
+FYP [fillcolor = Blue]
+Data [fillcolor = Purple]
+Writing [fillcolor = Green]
+Cleaning [fillcolor = Purple]
+Analysis [fillcolor = Purple]
+Results [fillcolor = Green]
+Discussion [fillcolor = Green]
+
+           FYP -> Data [color = grey];
+           FYP -> Writing [color = grey];
+           Data -> Cleaning [color = grey];
+           Data -> Analysis [color = grey];
+           Writing -> Results [color = grey];
+           Writing -> Discussion [color = grey]
+
+}")
+          
+```
+
