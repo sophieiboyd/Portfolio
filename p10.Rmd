@@ -101,37 +101,72 @@ DiagrammeR("graph TB;
 Now that I have the basic layout of tasks that need to be completed, I want to add some sort of timeline element to the diagrams. I am going to try to color code the boxes by month to reflect when I would like each task completed:
 
 ```{r FYP2}
-grViz("
-  digraph {
-    node [shape = circle, style = filled]
-    
-    A [fillcolor = Cyan]
-    B [fillcolor = Gold]
-    
-    A -> B [color = grey]
-  }
-")
-
 
 grViz("digraph {
 node [shape = rectangle, style = filled]
 
-FYP [fillcolor = Blue]
-Data [fillcolor = Purple]
-Writing [fillcolor = Green]
-Cleaning [fillcolor = Purple]
-Analysis [fillcolor = Purple]
-Results [fillcolor = Green]
-Discussion [fillcolor = Green]
+May [fillcolor = yellow]
+June [fillcolor = green]
+July [fillcolor = cyan]
+August [fillcolor = purple]
 
-           FYP -> Data [color = grey];
-           FYP -> Writing [color = grey];
-           Data -> Cleaning [color = grey];
-           Data -> Analysis [color = grey];
-           Writing -> Results [color = grey];
-           Writing -> Discussion [color = grey]
+May -> June [color = black];
+June -> July [color = black];
+July -> August [color = black]
+
+}")
+
+grViz("digraph {
+node [shape = rectangle, style = filled]
+
+FYP [fillcolor = white]
+Data [fillcolor = green]
+Writing [fillcolor = cyan]
+Finalizing [fillcolor = purple]
+Cleaning [fillcolor = yellow]
+Analysis [fillcolor = green]
+Results [fillcolor = green]
+Discussion [fillcolor = cyan]
+Editing [fillcolor = purple]
+Submission[fillcolor = purple]
+
+           FYP -> Data [color = black];
+           FYP -> Writing [color = black];
+           FYP -> Finalizing [color = black];
+           Data -> Cleaning [color = black];
+           Data -> Analysis [color = black];
+           Writing -> Results [color = black];
+           Writing -> Discussion [color = black]
+           Finalizing -> Editing [color = black]
+           Finalizing -> Submission [color = black]
 
 }")
           
+```
+
+```{r nutrition2}
+grViz("digraph {
+node [shape = rectangle, style = filled]
+
+NP [fillcolor = white]
+Results3 [fillcolor = green]
+Results4 [fillcolor = green]
+Drafting3 [fillcolor = yellow]
+Editing3 [fillcolor = green]
+Drafting4 [fillcolor = yellow]
+Editing4 [fillcolor = green]
+
+
+NP -> Results3 [color = black]
+NP -> Results4 [color = black]
+Results3 -> Drafting3 [color = black]
+Results3 -> Editing3 [color = black]
+Results4 -> Drafting4 [color = black]
+Results4 -> Editing4 [color = black]
+
+}")
+
+
+
 ```
 
