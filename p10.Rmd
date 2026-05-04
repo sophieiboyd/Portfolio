@@ -14,33 +14,31 @@ No dataset for this one- I will just be entering a list of my projects/tasks.
 
 #### Product:
 
-** fill in after completing
+A series of diagrams breaking down the tasks I hope to complete this summer, organized by project and by month.
 
 #### Interpretation:
 
-** fill in after completing
+DiagrammeR was easy to use and created pretty nice visualizations, but the results were a bit simpler than I had hoped. I think it is a good starting point for creating general timelines. 
 
 #### Sources:
 
 https://sites.temple.edu/psmgis/2017/07/30/flow-charts-in-r-using-diagrammer/
 
-https://rich-iannone.github.io/DiagrammeR/#:~:text=Any%20time%20we%20add%20a,edges%20and%20bind%20attribute%20data.
+https://rich-iannone.github.io/DiagrammeR/#
+
+https://graphviz.org/docs/attrs/rankdir/
 
 ---- 
 
-I am going to start by searching online for recommended packages/tools for creating graphic organizers and/or flow charts to test out. 
+I started by searching online for recommended packages/tools for creating graphic organizers and/or flow charts to test out. The only option that seemed to fit my goals was DiagrammeR.
 
-Options include:
+### Loading DiagrammeR
 
-- DiagrammeR
-- 
-
-
-```{r load-packages, warning=FALSE}
+```{r load-packages, warning=FALSE, message=FALSE}
 library(DiagrammeR)
 ```
 
-Some starter code to see how it works:
+### Some starter code to see how it works:
 
 ```{r attempt1}
 DiagrammeR("graph LR;
@@ -66,12 +64,16 @@ DiagrammeR("graph TB;
            Writing --> Discussion")
 ```
 
+Remaining tasks for a project that I am assisting with:
+
 ```{r nutrition1}
 DiagrammeR("graph TB;
            NP --> Writing;
            Writing --> Results3;
            Writing --> Results4")
 ```
+
+Remaining tasks for another project that I am assisting with:
 
 ```{r PAC1}
 DiagrammeR("graph TB;
@@ -82,6 +84,8 @@ DiagrammeR("graph TB;
            Writing --> Introduction;
            Writing --> Discussion")
 ```
+
+Finally, the remaining tasks for turning my thesis into a manuscript to submit for publication:
 
 ```{r thesis1}
 DiagrammeR("graph TB;
@@ -100,9 +104,9 @@ DiagrammeR("graph TB;
 
 Now that I have the basic layout of tasks that need to be completed, I want to add some sort of timeline element to the diagrams. I am going to try to color code the boxes by month to reflect when I would like each task completed:
 
-```{r FYP2}
-
+```{r color-by-month}
 grViz("digraph {
+graph [rankdir = LR]
 node [shape = rectangle, style = filled]
 
 May [fillcolor = yellow]
@@ -115,6 +119,11 @@ June -> July [color = black];
 July -> August [color = black]
 
 }")
+```
+
+### Applying the timeline to my FYP tasks:
+
+```{r FYP2}
 
 grViz("digraph {
 node [shape = rectangle, style = filled]
@@ -144,6 +153,8 @@ Submission[fillcolor = purple]
           
 ```
 
+### Applying the timeline to project #2:
+
 ```{r nutrition2}
 grViz("digraph {
 node [shape = rectangle, style = filled]
@@ -170,3 +181,66 @@ Results4 -> Editing4 [color = black]
 
 ```
 
+### Applying the timeline to project #3:
+
+```{r PAC2}
+grViz("digraph {
+node [shape = rectangle, style = filled]
+
+PAC [fillcolor = white]
+Data [fillcolor = cyan]
+Cleaning [fillcolor = green]
+Analysis [fillcolor = cyan]
+Writing [fillcolor = cyan]
+Introduction [fillcolor = green]
+Discussion [fillcolor = cyan]
+
+
+PAC -> Data [color = black]
+PAC -> Writing [color = black]
+Data -> Cleaning [color = black]
+Data -> Analysis [color = black]
+Writing -> Introduction [color = black]
+Writing -> Discussion [color = black]
+
+}")
+```
+
+### Applying the timeline to my thesis:
+
+```{r thesis2}
+grViz("digraph {
+node [shape = rectangle, style = filled]
+
+Thesis [fillcolor = white]
+Planning [fillcolor = yellow]
+Data [fillcolor = green]
+Writing [fillcolor = purple]
+Meeting [fillcolor = yellow]
+Change_groups [fillcolor = yellow]
+Cleaning [fillcolor = green]
+Analysis [fillcolor = green]
+Edit_intro [fillcolor = purple]
+Edit_method [fillcolor = cyan]
+Results [fillcolor = cyan]
+Discussion [fillcolor = purple]
+
+
+
+Thesis -> Planning [color = black]
+Thesis -> Data [color = black]
+Thesis -> Writing [color = black]
+Planning -> Meeting [color = black]
+Planning -> Change_groups [color = black]
+Data -> Cleaning [color = black]
+Data -> Analysis [color = black]
+Writing -> Edit_intro [color = black]
+Writing -> Edit_method [color = black]
+Writing -> Results [color = black]
+Writing -> Discussion [color = black]
+
+
+}")
+```
+
+All done! Hopefully I will be able to stick with this schedule over the summer... :)
