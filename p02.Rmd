@@ -19,7 +19,6 @@ This project produced a very large dataset, but for the purposes of this piece I
 
 ##### Participant info:
 - RespID: participant ID number
-- Demographic variables: Gender, Ethnicity, Race, Age
 - ExperimentalTreatment (1-4): The condition to which a participant was assigned, with 1-3 representing different types of interventions and 4 representing the control group.
 
   - Condition 1: Research-focused presentation of teen counterstereotyping information
@@ -64,7 +63,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Loading packages
 
-```{r load-packages, message=FALSE}
+```{r load-packages, warning=FALSE, message=FALSE}
 library(haven)
 library(tidyverse)
 library(car)
@@ -81,7 +80,7 @@ counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/
 
 ```{r filter-data}
 counterstereotype_filtered <- counterstereotype_data %>%
-  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %>%
+  select(RespID, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %>%
   filter(!is.na(ExperimentalTreatment))
 ```
 

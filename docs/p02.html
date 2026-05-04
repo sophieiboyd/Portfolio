@@ -333,7 +333,6 @@ this piece I subsetted it to include only the following variables:</p>
 <h5>Participant info:</h5>
 <ul>
 <li><p>RespID: participant ID number</p></li>
-<li><p>Demographic variables: Gender, Ethnicity, Race, Age</p></li>
 <li><p>ExperimentalTreatment (1-4): The condition to which a participant
 was assigned, with 1-3 representing different types of interventions and
 4 representing the control group.</p>
@@ -388,9 +387,8 @@ to represent the change in perceptions of teens over time.</p>
 <div id="interpretation" class="section level4">
 <h4>Interpretation:</h4>
 <p>Although the ANOVAs showed a consistent main effect of time on
-perceptions of teens, the plots do not necessarily show consistent,
-meaningful changes in views of teens after breaking down the results by
-condition.</p>
+perceptions of teens, the plots show some variability in the magnitude
+of change across conditions.</p>
 <div id="sources" class="section level5">
 <h5>Sources:</h5>
 <p>I followed this tutorial to complete the ANOVAs: <a
@@ -417,7 +415,7 @@ class="section level3">
 filtering out participants with missing information on
 ExperimentalTreatment (condition)</h3>
 <pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
-  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %&gt;%
+  select(RespID, ExperimentalTreatment,  VoT_MS_Antisocial,VOT_P2EB_ANTISOCIAL, VoT_MS_NEB, VOT_P2EB_NEB, VoT_MS_RT, VOT_P2EB_RT, VoT_MS_AE, VOT_P2AE, VoT_MS_ER, VOT_P2PA_ER, VoT_MS_PAL, VOT_P2PA_PATL, VoT_MS_PFI, VOT_P2_PFI, VoT_MS_NA, VOT_P2_NA, VoT_MS_PI, VOT_P2_PI) %&gt;%
   filter(!is.na(ExperimentalTreatment))</code></pre>
 </div>
 <div

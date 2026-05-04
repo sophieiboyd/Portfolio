@@ -52,7 +52,9 @@ DiagrammeR("graph TB;
            B --> D")
 ```
 
-Based on how the levels work/look, I think it would make sense to make a separate organizer for each project I am working on. I will start with the remaining tasks for my FYP:
+Based on how the levels work/look, I think it would make sense to make a separate organizer for each project I am working on. 
+
+### Remaining tasks for my FYP:
 
 ```{r FYP1}
 DiagrammeR("graph TB;
@@ -64,7 +66,7 @@ DiagrammeR("graph TB;
            Writing --> Discussion")
 ```
 
-Remaining tasks for a project that I am assisting with:
+### Remaining tasks for a project that I am assisting with:
 
 ```{r nutrition1}
 DiagrammeR("graph TB;
@@ -73,7 +75,7 @@ DiagrammeR("graph TB;
            Writing --> Results4")
 ```
 
-Remaining tasks for another project that I am assisting with:
+### Remaining tasks for another project that I am assisting with:
 
 ```{r PAC1}
 DiagrammeR("graph TB;
@@ -85,7 +87,7 @@ DiagrammeR("graph TB;
            Writing --> Discussion")
 ```
 
-Finally, the remaining tasks for turning my thesis into a manuscript to submit for publication:
+### Finally, the remaining tasks for turning my thesis into a manuscript to submit for publication:
 
 ```{r thesis1}
 DiagrammeR("graph TB;

@@ -17,7 +17,7 @@ The two conditions:
 - Identity: whether the lesson topic focused on race or gender
 - Framing: whether the lesson topic focused on social inequality or the social construction of identity
 
-I employed a mixed design, such that identity varied between subjects and framing differed within subjects. 
+I employed a mixed design, such that identity varied between subjects and framing varied within subjects. 
 
 Each teacher viewed four lesson topics in the actual study, but to simplify my simulation, I will give each teacher two lesson topics with the same identity condition and one of each framing condition.
 

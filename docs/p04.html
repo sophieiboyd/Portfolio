@@ -356,7 +356,7 @@ class="section level3">
 filtering out participants with missing information on
 ExperimentalTreatment (condition) to be consistent</h3>
 <pre class="r"><code>counterstereotype_filtered &lt;- counterstereotype_data %&gt;%
-  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI, `@2BInt_antisocial`, `@2BInt_NEB`, `@2BInt_AE`, `@2BInt_NA`, `@2BInt_PFI`, `@2BInt_NA`,`@2BInt_PR`) %&gt;%
+  select(RespID, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI, `@2BInt_antisocial`, `@2BInt_NEB`, `@2BInt_AE`, `@2BInt_NA`, `@2BInt_PFI`, `@2BInt_NA`,`@2BInt_PR`) %&gt;%
   filter(!is.na(ExperimentalTreatment))</code></pre>
 </div>
 <div id="scatterplot-examining-antisocial-behavior"
@@ -623,33 +623,6 @@ class="section level5">
 <h5>Trying a vertical layout to fit my poster better</h5>
 <pre class="r"><code>(p1 + p4) / (p2 + p5) / (p3 + p6) </code></pre>
 <p><img src="p04_files/figure-html/combine-plots3-1.png" width="1440" /></p>
-<pre class="r"><code>combined_plot &lt;- (p1 + p4) / (p2 + p5) / (p3 + p6) + plot_annotation(title = &quot;Improvements in Views of Teens Predict Positive Behavioral Intentions&quot;, theme = theme(plot.title = element_text(hjust = 0.5))
-)
-
-combined_plot</code></pre>
-<p><img src="p04_files/figure-html/save-vertical-plot-1.png" width="672" /></p>
-<pre class="r"><code># ggsave(&quot;SRA_BehInt-plot-vertical.png&quot;, plot = combined_plot, width = 15, height = 25)</code></pre>
-</div>
-<div id="breaking-up-the-plots-to-fit-the-poster"
-class="section level4">
-<h4>Breaking up the plots to fit the poster</h4>
-<pre class="r"><code>combined_plot1 &lt;- (p1 + p4) 
-
-combined_plot1</code></pre>
-<p><img src="p04_files/figure-html/save-split-plots-1.png" width="672" /></p>
-<pre class="r"><code># ggsave(&quot;SRA_BehInt-plot1.png&quot;, plot = combined_plot1, width = 15, height = 7)
-
-combined_plot2 &lt;- (p2 + p5) 
-
-# ggsave(&quot;SRA_BehInt-plot2.png&quot;, plot = combined_plot2, width = 15, height = 7)
-
-combined_plot3 &lt;- (p3 + p6)
-
-# ggsave(&quot;SRA_BehInt-plot3.png&quot;, plot = combined_plot3, width = 15, height = 7)
-
-combined_plot4 &lt;- (p2 + p5) / (p3 + p6)
-
-# ggsave(&quot;SRA_BehInt-plot4.png&quot;, plot = combined_plot4, width = 15, height = 15)</code></pre>
 </div>
 </div>
 

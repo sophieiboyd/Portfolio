@@ -45,7 +45,7 @@ counterstereotype_data <- read_sav("/Users/sophieboyd/Desktop/Research/Buchanan/
 
 ```{r filter-data}
 counterstereotype_filtered <- counterstereotype_data %>%
-  select(RespID, Gender, Ethnicity, Race, Age, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI, `@2BInt_antisocial`, `@2BInt_NEB`, `@2BInt_AE`, `@2BInt_NA`, `@2BInt_PFI`, `@2BInt_NA`,`@2BInt_PR`) %>%
+  select(RespID, ExperimentalTreatment, Change_antisocial, Change_NEB, Change_RT, Change_AE, Change_ER, Change_PAL, Change_PFI, Change_NA, Change_PI, `@2BInt_antisocial`, `@2BInt_NEB`, `@2BInt_AE`, `@2BInt_NA`, `@2BInt_PFI`, `@2BInt_NA`,`@2BInt_PR`) %>%
   filter(!is.na(ExperimentalTreatment))
 ```
 
@@ -330,38 +330,5 @@ p6 <- counterstereotype_filtered %>%
 
 ```{r combine-plots3, warning=FALSE, message=FALSE, fig.width = 15, fig.height = 20}
 (p1 + p4) / (p2 + p5) / (p3 + p6) 
-```
-
-```{r save-vertical-plot, warning=FALSE, message=FALSE}
-combined_plot <- (p1 + p4) / (p2 + p5) / (p3 + p6) + plot_annotation(title = "Improvements in Views of Teens Predict Positive Behavioral Intentions", theme = theme(plot.title = element_text(hjust = 0.5))
-)
-
-combined_plot
-
-# ggsave("SRA_BehInt-plot-vertical.png", plot = combined_plot, width = 15, height = 25)
-```
-
-#### Breaking up the plots to fit the poster
-
-```{r save-split-plots, warning=FALSE, message=FALSE}
-combined_plot1 <- (p1 + p4) 
-
-combined_plot1
-
-# ggsave("SRA_BehInt-plot1.png", plot = combined_plot1, width = 15, height = 7)
-
-combined_plot2 <- (p2 + p5) 
-
-# ggsave("SRA_BehInt-plot2.png", plot = combined_plot2, width = 15, height = 7)
-
-combined_plot3 <- (p3 + p6)
-
-# ggsave("SRA_BehInt-plot3.png", plot = combined_plot3, width = 15, height = 7)
-
-combined_plot4 <- (p2 + p5) / (p3 + p6)
-
-# ggsave("SRA_BehInt-plot4.png", plot = combined_plot4, width = 15, height = 15)
-
-
 ```
 
